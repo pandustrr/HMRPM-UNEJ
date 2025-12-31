@@ -16,7 +16,7 @@ const Home = () => {
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
                     <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8">
                         <span className="block text-foreground mb-2">Mewujudkan Sinergi</span>
-                        <span className="bg-gradient-to-r from-brand-red via-brand-yellow to-brand-red bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                        <span className="bg-linear-to-r from-brand-red via-brand-yellow to-brand-red bg-clip-text text-transparent bg-size-[200%_auto] animate-gradient">
                             Mahasiswa Unggulan
                         </span>
                     </h1>

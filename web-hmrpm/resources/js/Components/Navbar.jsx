@@ -37,8 +37,9 @@ const Navbar = () => {
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
-                    <div className="flex-shrink-0 flex items-center gap-2">
-                        <span className="text-2xl font-bold bg-gradient-to-r from-brand-red to-brand-yellow bg-clip-text text-transparent">
+                    <div className="shrink-0 flex items-center gap-2">
+                        <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
+                        <span className="text-2xl font-bold bg-linear-to-r from-brand-maroon to-red-600 bg-clip-text text-transparent">
                             HMRPM
                         </span>
                     </div>
@@ -50,10 +51,10 @@ const Navbar = () => {
                                 key={item.name}
                                 href={item.href}
                                 className={cn(
-                                    "text-sm font-medium transition-colors duration-200 hover:text-brand-yellow",
+                                    "text-sm font-medium transition-colors duration-200 hover:text-brand-red",
                                     url === item.href
-                                        ? "text-brand-yellow"
-                                        : "text-muted-foreground hover:text-foreground"
+                                        ? "text-brand-red"
+                                        : "text-brand-maroon dark:text-muted-foreground hover:text-brand-red dark:hover:text-foreground"
                                 )}
                             >
                                 {item.name}
@@ -67,7 +68,7 @@ const Navbar = () => {
                         <ThemeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="text-foreground hover:text-brand-yellow focus:outline-none"
+                            className="text-foreground hover:text-brand-red focus:outline-none"
                         >
                             {isOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
@@ -85,9 +86,9 @@ const Navbar = () => {
                                 href={item.href}
                                 onClick={() => setIsOpen(false)}
                                 className={cn(
-                                    "block px-3 py-2 rounded-md text-base font-medium hover:bg-muted hover:text-brand-yellow transition-colors",
+                                    "block px-3 py-2 rounded-md text-base font-medium hover:bg-muted hover:text-brand-red transition-colors",
                                     url === item.href
-                                        ? "text-brand-yellow"
+                                        ? "text-brand-red"
                                         : "text-muted-foreground"
                                 )}
                             >
