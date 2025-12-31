@@ -39,8 +39,8 @@ const Navbar = () => {
                 <div className="flex justify-between items-center h-20">
                     <div className="shrink-0 flex items-center gap-2">
                         <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
-                        <span className="text-2xl font-bold bg-linear-to-r from-brand-maroon to-red-600 bg-clip-text text-transparent">
-                            HMRPM
+                        <span className="text-xs md:text-lg font-bold bg-linear-to-r from-brand-maroon to-red-600 bg-clip-text text-transparent truncate max-w-[200px] md:max-w-none">
+                            Himpunan Mahasiswa Rekayasa Perancangan Mekanik
                         </span>
                     </div>
 
