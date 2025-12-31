@@ -10,12 +10,11 @@ const appName = import.meta.env.VITE_APP_NAME || 'Himpunan Mahasiswa Rekayasa Pe
 
 createInertiaApp({
     title: (title) => title ? `${title} - ${appName}` : appName,
-    resolve: (name) => {
-        const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true });
-        let page = pages[`./Pages/${name}.jsx`];
-        page.default.layout = page.default.layout || (page => <MainLayout children={page} />);
-        return page;
-    },
+    resolve: (name) => resolvePageComponent(`./Pages/${name}.jsx`, import.meta.glob('./Pages/**/*.jsx')).then((module) => {
+        const page = module.default;
+        page.layout = page.layout || (page => <MainLayout children={page} />);
+        return module;
+    }),
     setup({ el, App, props }) {
         const root = createRoot(el);
         root.render(<App {...props} />);
