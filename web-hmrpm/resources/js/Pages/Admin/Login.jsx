@@ -4,11 +4,12 @@ import { User, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import ThemeToggle from "../../Components/ThemeToggle";
 
 export default function Login() {
     useEffect(() => {
         AOS.init({ duration: 1000, once: true });
+        // Force Light Mode for Admin
+        document.documentElement.classList.remove("dark");
     }, []);
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -24,7 +25,7 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-background flex items-center justify-center p-4 selection:bg-brand-red selection:text-white overflow-hidden relative transition-colors duration-300">
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 selection:bg-brand-red selection:text-white overflow-hidden relative">
             <Head title="Admin Login | HMRPM" />
 
             {/* Background Decorations */}
@@ -39,33 +40,29 @@ export default function Login() {
                 transition={{ duration: 0.8 }}
                 className="w-full max-w-md z-10"
             >
-                <div className="bg-white/5 dark:bg-white/5 backdrop-blur-2xl border border-border/50 dark:border-white/10 p-8 md:p-12 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                    {/* Theme Toggle in Login Container */}
-                    <div className="absolute top-6 right-6 z-20">
-                        <ThemeToggle />
-                    </div>
+                <div className="bg-white backdrop-blur-2xl border border-slate-200 p-8 md:p-12 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
 
                     {/* Glassmorphism Shine */}
                     <div className="absolute inset-0 bg-linear-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
 
                     <div className="text-center mb-10" data-aos="fade-down">
                         <img src="/logo.png" alt="HMRPM Logo" className="w-20 h-20 mx-auto mb-6 drop-shadow-2xl" />
-                        <h1 className="text-3xl font-black text-foreground tracking-tighter mb-2">ADMIN LOGIN</h1>
-                        <p className="text-muted-foreground text-sm font-medium">Himpunan Mahasiswa Rekayasa Perancangan Mekanik</p>
+                        <h1 className="text-3xl font-black text-slate-900 tracking-tighter mb-2">ADMIN LOGIN</h1>
+                        <p className="text-slate-500 text-sm font-medium">Himpunan Mahasiswa Rekayasa Perancangan Mekanik</p>
                     </div>
 
                     <form onSubmit={submit} className="space-y-6">
                         <div data-aos="fade-up" data-aos-delay="100">
-                            <label className="block text-muted-foreground text-xs font-bold uppercase tracking-widest mb-3 ml-1">Username</label>
+                            <label className="block text-slate-600 text-xs font-bold uppercase tracking-widest mb-3 ml-1">Username</label>
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <User className="h-5 w-5 text-muted-foreground/30 group-focus-within:text-brand-red transition-colors" />
+                                    <User className="h-5 w-5 text-slate-400 group-focus-within:text-brand-red transition-colors" />
                                 </div>
                                 <input
                                     type="text"
                                     value={data.username}
                                     onChange={(e) => setData("username", e.target.value)}
-                                    className="block w-full pl-12 pr-4 py-4 bg-muted/50 border border-border rounded-2xl text-foreground placeholder-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-brand-red/50 focus:border-brand-red transition-all"
+                                    className="block w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-red/50 focus:border-brand-red transition-all"
                                     placeholder="Masukkan username Anda"
                                     autoFocus
                                 />
@@ -74,16 +71,16 @@ export default function Login() {
                         </div>
 
                         <div data-aos="fade-up" data-aos-delay="200">
-                            <label className="block text-muted-foreground text-xs font-bold uppercase tracking-widest mb-3 ml-1">Password</label>
+                            <label className="block text-slate-600 text-xs font-bold uppercase tracking-widest mb-3 ml-1">Password</label>
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Lock className="h-5 w-5 text-muted-foreground/30 group-focus-within:text-brand-red transition-colors" />
+                                    <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-brand-red transition-colors" />
                                 </div>
                                 <input
                                     type="password"
                                     value={data.password}
                                     onChange={(e) => setData("password", e.target.value)}
-                                    className="block w-full pl-12 pr-4 py-4 bg-muted/50 border border-border rounded-2xl text-foreground placeholder-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-brand-red/50 focus:border-brand-red transition-all"
+                                    className="block w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-red/50 focus:border-brand-red transition-all"
                                     placeholder="••••••••"
                                 />
                             </div>
