@@ -1,9 +1,21 @@
 import { useState, useEffect } from "react";
+import { usePage } from "@inertiajs/react";
 import AdminSidebar from "../Components/AdminSidebar";
+import Toast from "../Components/Toast";
 import { cn } from "../lib/utils";
 
 const AdminLayout = ({ children }) => {
+    const { flash } = usePage().props;
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [toast, setToast] = useState(null);
+
+    useEffect(() => {
+        if (flash?.success) {
+            setToast({ message: flash.success, type: "success" });
+        } else if (flash?.error) {
+            setToast({ message: flash.error, type: "error" });
+        }
+    }, [flash]);
 
     useEffect(() => {
         // Force Light Mode for Admin
@@ -31,6 +43,14 @@ const AdminLayout = ({ children }) => {
                     {children}
                 </main>
             </div>
+
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
         </div>
     );
 };

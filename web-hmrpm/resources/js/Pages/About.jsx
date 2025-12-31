@@ -15,13 +15,13 @@ import {
 import InteractiveLogo from "../Components/InteractiveLogo";
 import { cn } from "../lib/utils";
 
-const About = () => {
+const About = ({ background }) => {
     useEffect(() => {
         AOS.init({
             duration: 1500, // Durasi diperlambat menjadi 1.5 detik
             once: true,
             easing: 'ease-out-cubic',
-            offset: 120, 
+            offset: 120,
         });
     }, []);
 
@@ -123,11 +123,22 @@ const About = () => {
                     transition={{ duration: 10, ease: "easeOut" }}
                     className="absolute inset-0 z-0"
                 >
-                    <img
-                        src="/storage/logo/about-hero-bg.png"
-                        alt="HMRPM Team Background"
-                        className="w-full h-full object-cover"
-                    />
+                    {background?.type === 'video' ? (
+                        <video
+                            src={background.value}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <img
+                            src={background?.value || "/storage/logo/about-hero-bg.png"}
+                            alt="HMRPM Team Background"
+                            className="w-full h-full object-cover"
+                        />
+                    )}
                     <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black"></div>
                 </motion.div>
 
