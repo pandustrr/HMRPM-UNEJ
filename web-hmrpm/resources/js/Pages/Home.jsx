@@ -43,9 +43,9 @@ const Home = () => {
                             <span>Official Website HMRPM UNEJ</span>
                         </div>
 
-                        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-10 leading-[0.9]">
-                            <span className="block text-white drop-shadow-2xl">MEWUJUDKAN</span>
-                            <span className="bg-linear-to-r from-brand-red via-brand-yellow to-brand-red bg-clip-text text-transparent bg-size-[200%_auto] animate-gradient block mt-2">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 leading-tight">
+                            <span className="block text-white drop-shadow-xl">MEWUJUDKAN</span>
+                            <span className="bg-linear-to-r from-brand-red via-brand-yellow to-brand-red bg-clip-text text-transparent bg-size-[200%_auto] animate-gradient block mt-1">
                                 SINERGI NYATA
                             </span>
                         </h1>

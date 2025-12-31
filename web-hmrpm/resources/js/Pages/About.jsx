@@ -148,7 +148,7 @@ const About = ({ background }) => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter mb-6 drop-shadow-2xl">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tighter mb-6 drop-shadow-xl">
                             MENGENAL <span className="text-brand-yellow">HMRPM</span>
                         </h1>
                         <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
