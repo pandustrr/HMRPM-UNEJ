@@ -1,4 +1,7 @@
 import { motion, useScroll, useSpring } from "framer-motion";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import {
     Target,
     Palette,
@@ -13,6 +16,14 @@ import InteractiveLogo from "../Components/InteractiveLogo";
 import { cn } from "../lib/utils";
 
 const About = () => {
+    useEffect(() => {
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-out-cubic',
+        });
+    }, []);
+
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
@@ -31,42 +42,67 @@ const About = () => {
 
     const logoElements = [
         {
-            icon: Hexagon,
-            title: "Bentuk Heksagonal",
-            description: "Melambangkan efisiensi, stabilitas, dan keteraturan dalam perancangan mekanik."
+            image: "",
+            title: "Huruf M",
+            description: "Huruf M menandakan bahwa mahasiswa Rekayasa Perancangan Mekanik mempelajari keilmuan tentang Teknik Mesin pada bidang Desain Mekanik"
         },
         {
-            icon: Cpu,
-            title: "Roda Gears (Roda Gigi)",
-            description: "Menyimbolkan sinergi, pergerakan dinamis, dan inti dari teknik mesin."
+            image: "",
+            title: "Gerigi Berjumlah 4",
+            description: "Gerigi berjumlah 4 menandakan Himpunan Mahasiswa Rekayasa Perancangan Mekanik lahir pada tanggal 4"
         },
         {
-            icon: Shield,
-            title: "Perisai",
-            description: "Mewakili perlindungan, kekuatan organisasi, dan integritas pengurus."
+            image: "",
+            title: "HMRPM",
+            description: "Tulisan HMRPM pada logo merupakan Akronim dari Himpunan Mahasiswa Rekayasa Perancangan Mekanik"
         },
         {
-            icon: Zap,
-            title: "Petir Dinamis",
-            description: "Menggambarkan energi kreatif dan kecepatan dalam berinovasi."
+            image: "",
+            title: "Lingkaran",
+            description: "Logo berbentuk lingkaran melambangkan kesatuan antar pengurus, anggota, dan juga alumni yang cukup kuat untuk memajukan prodi"
+        },
+        {
+            image: "",
+            title: "Huruf V",
+            description: "Huruf V pada potongan logo menandakan bahwasanya Prodi D4 RPM bertempat pada Kampus yang bakal Calon Kampus/Fakultas Vokasi"
+        },
+        {
+            image: "",
+            title: "Roda Gigi & Huruf M/V",
+            description: "Roda Gigi yang mengelilingi huruf M dan V melambangkan Kesolidan antar sesama mahasiswa dan lingkungan kampus"
+        },
+        {
+            image: "",
+            title: "Lubang Berjumlah 3",
+            description: "Lubang yang berjumlah 3 menandakan bulan lahir Himpunan Mahasiswa Rekayasa Perancangan Mekanik lahir pada bulan maret"
+        },
+        {
+            image: "",
+            title: "Garis Potongan Huruf M",
+            description: "Garis potongan pada huruf M merupakan angka Romawi yang berjumlah 2 melambangkan tahun berdiri Himpunan Rekayasa Perancangan Mekanik yaitu 2022"
         }
     ];
 
     const logoColors = [
         {
-            name: "Merah",
-            hex: "#AC190D",
-            meaning: "Keberanian, Semangat Membara, dan Tekad yang Kuat dalam setiap aksi."
+            name: "Hitam",
+            hex: "#0F0F0F",
+            meaning: "Melambangkan ketegasan, profesionalisme, dan ketangguhan dalam menghadapi tantangan teknik."
         },
         {
-            name: "Kuning",
-            hex: "#F8F222",
-            meaning: "Inovasi, Kecemerlangan Pikiran, dan Kegembiraan dalam Berorganisasi."
+            name: "Merah",
+            hex: "#AC190D",
+            meaning: "Melambangkan semangat juang, inovasi, serta keberanian dalam menghadapi tantangan di dunia perancangan mekanik."
         },
         {
             name: "Maroon",
             hex: "#8D0A01",
-            meaning: "Kedewasaan, Kebijaksanaan, dan Stabilitas dalam mengambil keputusan."
+            meaning: "Melambangkan kedalaman ilmu, kedewasaan berpikir, dan dedikasi tinggi terhadap bidang rekayasa."
+        },
+        {
+            name: "Kuning",
+            hex: "#F8F223",
+            meaning: "Mencerminkan kecerdasan, kreativitas dalam desain, serta harapan untuk masa depan yang lebih maju."
         }
     ];
 
@@ -147,15 +183,15 @@ const About = () => {
                             className="flex flex-col items-center lg:items-start text-center lg:text-left"
                         >
                             <span className="py-1 px-4 bg-brand-red/10 text-brand-red rounded-full text-xs font-black uppercase tracking-widest mb-6">Filosofi Eksklusif</span>
-                            <h3 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-8 leading-none tracking-tighter">
-                                Tentang <span className="text-brand-red">Logo</span> Kami
+                            <h3 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4 leading-none tracking-tighter">
+                                Tentang <span className="text-brand-red">Logo</span>
                             </h3>
+                            <h4 className="text-xl md:text-2xl font-bold text-foreground/80 mb-8">
+                                Himpunan Mahasiswa Rekayasa Perancangan Mekanik
+                            </h4>
                             <div className="space-y-6">
                                 <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                                    Logo HMRPM bukan sekadar simbol visual, melainkan representasi jiwa dan jati diri organisasi. Setiap garis, lekukan, dan elemen di dalamnya menyimpan pesan mendalam tentang cita-cita kami.
-                                </p>
-                                <p className="text-lg text-muted-foreground/80 leading-relaxed italic border-l-4 border-brand-yellow pl-6 py-2">
-                                    &quot;Menyatukan konsep teknis presisi dengan semangat organisasi yang inklusif untuk menjadi penggerak inovasi.&quot;
+                                    Semua yang ada di dalam logo Himpunan ini merepresentasikan sejarah terbentuknya Prodi D4 Rekayasa Perancangan Mekanik serta kondisi Mahasiswa dan logo ini dibuat sebagai identitas dari himpunan
                                 </p>
                             </div>
                         </motion.div>
@@ -175,34 +211,38 @@ const About = () => {
 
                 {/* Arti Elemen Section */}
                 <section className="relative">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
-                        <div className="lg:sticky lg:top-32 lg:pr-10">
-                            <h2 className="text-brand-red font-black tracking-widest uppercase mb-4 text-sm">Visual Identity</h2>
-                            <h3 className="text-4xl sm:text-5xl font-black mb-8 leading-tight tracking-tighter">Arti <span className="text-brand-yellow">Elemen</span> Visual</h3>
-                            <p className="text-muted-foreground text-lg leading-relaxed">
-                                Setiap bagian dari logo kami dirancang dengan ketelitian teknis, mencerminkan aspek fundamental dari rekayasa perancangan mekanik.
-                            </p>
-                            <div className="mt-8 h-1 w-20 bg-linear-to-r from-brand-red to-brand-maroon rounded-full"></div>
-                        </div>
+                    <div className="mb-16">
+                        <h2 className="text-brand-red font-black tracking-widest uppercase mb-4 text-sm">Visual Identity</h2>
+                        <h3 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-8 leading-tight tracking-tighter">Arti-Arti <span className="text-brand-yellow">Elemen</span> Yang Ada Pada Logo</h3>
+                        <p className="text-muted-foreground text-lg leading-relaxed max-w-3xl">
+                            Setiap bagian dari logo kami dirancang dengan ketelitian teknis, mencerminkan aspek fundamental dari rekayasa perancangan mekanik serta sejarah organisasi.
+                        </p>
+                        <div className="mt-8 h-1 w-20 bg-linear-to-r from-brand-red to-brand-maroon rounded-full"></div>
+                    </div>
 
-                        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            {logoElements.map((element, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="group bg-card hover:bg-muted/30 p-8 rounded-4xl border border-border/50 hover:border-brand-red/30 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-brand-red/5"
-                                >
-                                    <div className="w-16 h-16 bg-brand-red/5 group-hover:bg-brand-red/10 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-500">
-                                        <element.icon className="text-brand-red w-8 h-8 group-hover:scale-110 transition-transform duration-500" />
-                                    </div>
-                                    <h4 className="text-xl font-bold mb-4 group-hover:text-brand-red transition-colors">{element.title}</h4>
-                                    <p className="text-muted-foreground text-sm leading-relaxed leading-6">{element.description}</p>
-                                </motion.div>
-                            ))}
-                        </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {logoElements.map((element, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                data-aos="fade-up"
+                                data-aos-delay={index * 100}
+                                className="group bg-card hover:bg-muted/30 p-8 rounded-4xl border border-border/50 hover:border-brand-red/30 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-brand-red/5 flex flex-col h-full"
+                            >
+                                <div className="w-full aspect-square bg-brand-red/5 group-hover:bg-brand-red/10 rounded-2xl flex items-center justify-center mb-8 transition-colors duration-500 overflow-hidden shrink-0">
+                                    {element.image ? (
+                                        <img src={element.image} alt={element.title} className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-500" />
+                                    ) : (
+                                        <div className="text-brand-red/20 font-black text-xl uppercase tracking-tighter">Placeholder</div>
+                                    )}
+                                </div>
+                                <h4 className="text-xl font-bold mb-4 group-hover:text-brand-red transition-colors">{element.title}</h4>
+                                <p className="text-muted-foreground text-sm leading-relaxed outline-none grow">{element.description}</p>
+                            </motion.div>
+                        ))}
                     </div>
                 </section>
 
@@ -213,37 +253,40 @@ const About = () => {
                     </div>
 
                     <div className="relative z-10">
-                        <div className="max-w-2xl mb-16">
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6 tracking-tighter">
-                                Makna <span className="text-brand-red underline decoration-brand-yellow/30 underline-offset-8">Warna</span> Identitas
+                        <div className="max-w-3xl mb-16">
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6 tracking-tighter uppercase">
+                                Arti <span className="text-brand-red underline decoration-brand-yellow/30 underline-offset-8">Warna</span>
                             </h2>
+                            <h3 className="text-xl font-bold text-foreground/80 mb-6 font-black uppercase tracking-widest">Warna-Warna Yang Digunakan Pada Logo</h3>
                             <p className="text-muted-foreground text-lg leading-relaxed">
-                                Penggunaan palet warna kami tidak hanya untuk estetika, tetapi untuk mengomunikasikan energi, kecerdasan, dan kearifan organisasi.
+                                Warna-warna pada logo Himpunan Mahasiswa Rekayasa Perancangan Mekanik memiliki makna mendalam yang mencerminkan identitas dan nilai yang dijunjung.
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                             {logoColors.map((color, index) => (
                                 <motion.div
                                     key={index}
                                     whileHover={{ y: -10 }}
-                                    className="flex flex-col gap-6 bg-background p-8 rounded-3xl border border-border shadow-sm hover:shadow-2xl hover:shadow-black/10 transition-all duration-500 group"
+                                    data-aos="zoom-in"
+                                    data-aos-delay={index * 150}
+                                    className="flex flex-col gap-6 bg-background p-8 rounded-3xl border border-border shadow-sm hover:shadow-2xl hover:shadow-black/10 transition-all duration-500 group h-full"
                                 >
                                     <div
-                                        className="w-full h-32 rounded-2xl shadow-inner relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500"
+                                        className="w-full h-32 rounded-2xl shadow-inner relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500 shrink-0"
                                         style={{ backgroundColor: color.hex }}
                                     >
                                         <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent"></div>
-                                        <div className="absolute bottom-4 right-4 text-white/40 font-black text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 tracking-tighter">
+                                        <div className="absolute bottom-4 right-4 text-white/40 font-black text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 tracking-tighter">
                                             {color.hex}
                                         </div>
                                     </div>
-                                    <div>
+                                    <div className="flex flex-col grow">
                                         <h4 className="font-black text-2xl mb-3 flex items-center gap-2">
                                             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color.hex }}></span>
                                             {color.name}
                                         </h4>
-                                        <p className="text-muted-foreground text-sm leading-relaxed font-medium">{color.meaning}</p>
+                                        <p className="text-muted-foreground text-sm leading-relaxed font-medium grow">{color.meaning}</p>
                                     </div>
                                 </motion.div>
                             ))}
