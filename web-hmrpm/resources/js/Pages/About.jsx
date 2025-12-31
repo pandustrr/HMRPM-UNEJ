@@ -18,9 +18,10 @@ import { cn } from "../lib/utils";
 const About = () => {
     useEffect(() => {
         AOS.init({
-            duration: 1000,
+            duration: 1500, // Durasi diperlambat menjadi 1.5 detik
             once: true,
             easing: 'ease-out-cubic',
+            offset: 120, 
         });
     }, []);
 
@@ -42,42 +43,42 @@ const About = () => {
 
     const logoElements = [
         {
-            image: "",
+            image: "/storage/logo/huruf-m.png",
             title: "Huruf M",
             description: "Huruf M menandakan bahwa mahasiswa Rekayasa Perancangan Mekanik mempelajari keilmuan tentang Teknik Mesin pada bidang Desain Mekanik"
         },
         {
-            image: "",
+            image: "/storage/logo/gerigi-4.png",
             title: "Gerigi Berjumlah 4",
             description: "Gerigi berjumlah 4 menandakan Himpunan Mahasiswa Rekayasa Perancangan Mekanik lahir pada tanggal 4"
         },
         {
-            image: "",
+            image: "/storage/logo/hmrpm.png",
             title: "HMRPM",
             description: "Tulisan HMRPM pada logo merupakan Akronim dari Himpunan Mahasiswa Rekayasa Perancangan Mekanik"
         },
         {
-            image: "",
+            image: "/storage/logo/lingkaran.png",
             title: "Lingkaran",
             description: "Logo berbentuk lingkaran melambangkan kesatuan antar pengurus, anggota, dan juga alumni yang cukup kuat untuk memajukan prodi"
         },
         {
-            image: "",
+            image: "/storage/logo/huruf-v.png",
             title: "Huruf V",
             description: "Huruf V pada potongan logo menandakan bahwasanya Prodi D4 RPM bertempat pada Kampus yang bakal Calon Kampus/Fakultas Vokasi"
         },
         {
-            image: "",
+            image: "/storage/logo/roda-gigi.png",
             title: "Roda Gigi & Huruf M/V",
             description: "Roda Gigi yang mengelilingi huruf M dan V melambangkan Kesolidan antar sesama mahasiswa dan lingkungan kampus"
         },
         {
-            image: "",
+            image: "/storage/logo/lubang.png",
             title: "Lubang Berjumlah 3",
             description: "Lubang yang berjumlah 3 menandakan bulan lahir Himpunan Mahasiswa Rekayasa Perancangan Mekanik lahir pada bulan maret"
         },
         {
-            image: "",
+            image: "/storage/logo/garis-potong.png",
             title: "Garis Potongan Huruf M",
             description: "Garis potongan pada huruf M merupakan angka Romawi yang berjumlah 2 melambangkan tahun berdiri Himpunan Rekayasa Perancangan Mekanik yaitu 2022"
         }
