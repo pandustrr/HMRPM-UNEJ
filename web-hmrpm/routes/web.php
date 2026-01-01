@@ -23,7 +23,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Periods
     Route::resource('periods', PeriodController::class);
-    Route::post('periods/{period}/set-active', [PeriodController::class, 'setActive'])->name('periods.setActive');
+    Route::post('periods/{period}/toggle-active', [PeriodController::class, 'toggleActive'])->name('periods.toggleActive');
 
     // Divisions & Members Dashboard
     Route::get('divisions-dashboard', [AdminDivisionController::class, 'dashboard'])->name('divisions.dashboard');

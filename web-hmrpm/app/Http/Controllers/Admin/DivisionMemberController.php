@@ -14,7 +14,7 @@ class DivisionMemberController extends Controller
 {
     public function index(Request $request)
     {
-        $periods = Period::orderBy('year', 'desc')->get();
+        $periods = Period::orderBy('created_at', 'desc')->get();
         $selectedPeriodId = $request->query('period_id');
         $selectedDivisionId = $request->query('division_id');
         $search = $request->query('search');
@@ -59,7 +59,7 @@ class DivisionMemberController extends Controller
 
     public function create(Request $request)
     {
-        $periods = Period::with('divisions')->orderBy('year', 'desc')->get();
+        $periods = Period::with('divisions')->orderBy('created_at', 'desc')->get();
         $divisionId = $request->query('division_id');
         $periodId = $request->query('period_id');
 
@@ -80,7 +80,8 @@ class DivisionMemberController extends Controller
 
         return Inertia::render('Admin/Members/Create-Member', [
             'periods' => $periods,
-            'prefill' => $prefill
+            'prefill' => $prefill,
+            'filter_division_id' => $request->query('filter_division_id'),
         ]);
     }
 
@@ -111,7 +112,10 @@ class DivisionMemberController extends Controller
 
         DivisionMember::create($validated);
 
-        return redirect()->back()->with('success', 'Anggota berhasil ditambahkan.');
+        return redirect()->route('admin.members.index', [
+            'period_id' => $request->period_id,
+            'division_id' => $request->filter_division_id
+        ])->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     public function show(DivisionMember $member)
@@ -122,10 +126,11 @@ class DivisionMemberController extends Controller
     public function edit(DivisionMember $member)
     {
         $member->load('division.period');
-        $periods = Period::with('divisions')->orderBy('year', 'desc')->get();
+        $periods = Period::with('divisions')->orderBy('created_at', 'desc')->get();
         return Inertia::render('Admin/Members/Edit-Member', [
             'member' => $member,
             'periods' => $periods,
+            'filter_division_id' => request()->query('filter_division_id'),
         ]);
     }
 
@@ -144,26 +149,34 @@ class DivisionMemberController extends Controller
             'email' => 'nullable|email',
         ]);
 
-        // Remove photo and video from validated data initially
-        // Only add them back if new files are uploaded
-        unset($validated['photo']);
-        unset($validated['video']);
-
+        // Only update photo/video if new ones are uploaded
         if ($request->hasFile('photo')) {
-            if ($member->photo) Storage::disk('public')->delete(str_replace('/storage/', '', $member->photo));
+            // Never delete the default logo
+            if ($member->photo && !str_contains($member->photo, '/logo/')) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $member->photo));
+            }
             $path = $request->file('photo')->store('members/photos', 'public');
             $validated['photo'] = '/storage/' . $path;
+        } else {
+            unset($validated['photo']);
         }
 
         if ($request->hasFile('video')) {
-            if ($member->video) Storage::disk('public')->delete(str_replace('/storage/', '', $member->video));
+            if ($member->video && !str_contains($member->video, 'http')) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $member->video));
+            }
             $path = $request->file('video')->store('members/videos', 'public');
             $validated['video'] = '/storage/' . $path;
+        } else {
+            unset($validated['video']);
         }
 
         $member->update($validated);
 
-        return redirect()->back()->with('success', 'Anggota berhasil diperbarui.');
+        return redirect()->route('admin.members.index', [
+            'period_id' => $request->period_id,
+            'division_id' => $request->filter_division_id
+        ])->with('success', 'Anggota berhasil diperbarui.');
     }
 
     public function destroy(DivisionMember $member)

@@ -91,12 +91,12 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                         {divisions.map(division => (
                             <div key={division.id} className="bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-shadow">
                                 {/* Division Image */}
-                                <div className="h-40 bg-linear-to-br from-brand-red to-brand-maroon relative overflow-hidden">
+                                <div className="h-40 bg-slate-100 relative overflow-hidden">
                                     {division.image && (
-                                        <img src={division.image} alt={division.name} className="w-full h-full object-cover opacity-50" />
+                                        <img src={division.image} alt={division.name} className="w-full h-full object-cover" />
                                     )}
-                                    <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
-                                    <h3 className="absolute bottom-4 left-4 text-white font-black text-xl">{division.name}</h3>
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+                                    <h3 className="absolute bottom-4 left-4 text-white font-black text-xl drop-shadow-lg">{division.name}</h3>
                                 </div>
 
                                 {/* Division Info */}

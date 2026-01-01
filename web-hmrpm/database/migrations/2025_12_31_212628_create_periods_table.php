@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('year'); // e.g. "2024/2025"
             $table->boolean('is_active')->default(false);
+            $table->boolean('is_archived')->default(false);
             $table->string('hero_image')->nullable();
+            $table->string('hero_type')->default('image');
             $table->string('theme_color')->nullable();
             $table->timestamps();
         });

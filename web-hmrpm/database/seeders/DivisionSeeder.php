@@ -2,34 +2,26 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Period;
+use App\Models\Division;
 use Illuminate\Database\Seeder;
 
-class InitialDataSeeder extends Seeder
+class DivisionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // 1. Create Active Period
-        $period = \App\Models\Period::create([
-            'year' => '2024/2025',
-            'is_active' => true,
-            'hero_image' => '/storage/logo/about-hero-bg.png',
-            'hero_type' => 'image',
-            'theme_color' => 'bg-brand-red'
-        ]);
+        $activePeriod = Period::where('is_active', true)->first();
 
-        // 2. Create About Setting
-        \App\Models\AboutSetting::create([
-            'key' => 'about_hero_bg',
-            'type' => 'image',
-            'value' => '/storage/logo/about-hero-bg.png',
-            'is_active' => true
-        ]);
+        if (!$activePeriod) {
+            $activePeriod = Period::create([
+                'year' => '2024/2025',
+                'is_active' => true,
+                'hero_image' => '/storage/logo/about-hero-bg.png',
+                'hero_type' => 'image',
+                'theme_color' => 'bg-brand-red'
+            ]);
+        }
 
-        // 3. Define Divisions Data
         $divisions = [
             [
                 'name' => 'Pengurus Harian',
@@ -38,12 +30,6 @@ class InitialDataSeeder extends Seeder
                 'icon_image' => 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400',
                 'image' => 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800',
                 'color' => 'from-brand-red to-brand-maroon',
-                'members' => [
-                    ['name' => 'Antigravity', 'role' => 'Ketua Umum HMRPM 2024', 'prodi' => 'TRPM', 'angkatan' => '22', 'photo' => '/storage/logo/hmrpm.png', 'video' => 'https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4'],
-                    ['name' => 'Fulan bin Fulan', 'role' => 'Wakil Ketua Umum', 'prodi' => 'TRPM', 'angkatan' => '22', 'photo' => '/storage/logo/hmrpm.png', 'video' => null],
-                    ['name' => 'Fulanah binti Fulan', 'role' => 'Sekretaris Umum', 'prodi' => 'TRPM', 'angkatan' => '23', 'photo' => '/storage/logo/hmrpm.png', 'video' => null],
-                    ['name' => 'Fulanah binti Fulan', 'role' => 'Bendahara Umum', 'prodi' => 'TRPM', 'angkatan' => '23', 'photo' => '/storage/logo/hmrpm.png', 'video' => null],
-                ]
             ],
             [
                 'name' => 'Divisi PSDM',
@@ -52,11 +38,6 @@ class InitialDataSeeder extends Seeder
                 'icon_image' => 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=400',
                 'image' => 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=800',
                 'color' => 'from-brand-maroon to-black',
-                'members' => [
-                    ['name' => 'Koordinator Divisi', 'role' => 'Coordinator', 'prodi' => 'TRPM', 'angkatan' => '22'],
-                    ['name' => 'Staf Pengembangan', 'role' => 'Skill Development', 'prodi' => 'TRPM', 'angkatan' => '23'],
-                    ['name' => 'Staf Kaderisasi', 'role' => 'Growth & Culture', 'prodi' => 'TRPM', 'angkatan' => '23'],
-                ]
             ],
             [
                 'name' => 'Divisi Kominfo',
@@ -65,12 +46,6 @@ class InitialDataSeeder extends Seeder
                 'icon_image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400',
                 'image' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
                 'color' => 'from-brand-red to-orange-900',
-                'members' => [
-                    ['name' => 'Koordinator Divisi', 'role' => 'Coordinator'],
-                    ['name' => 'Staf Media', 'role' => 'Media Production'],
-                    ['name' => 'Staf Publikasi', 'role' => 'Public Relations'],
-                    ['name' => 'Staf Website', 'role' => 'Digital Infrastructure'],
-                ]
             ],
             [
                 'name' => 'Divisi Hubungan Luar',
@@ -79,11 +54,6 @@ class InitialDataSeeder extends Seeder
                 'icon_image' => 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=400',
                 'image' => 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800',
                 'color' => 'from-black via-brand-maroon to-brand-red',
-                'members' => [
-                    ['name' => 'Koordinator Divisi', 'role' => 'Coordinator'],
-                    ['name' => 'Staf Humas', 'role' => 'Public Relations'],
-                    ['name' => 'Staf Kerjasama', 'role' => 'Partnership'],
-                ]
             ],
             [
                 'name' => 'Divisi Kewirausahaan',
@@ -92,11 +62,6 @@ class InitialDataSeeder extends Seeder
                 'icon_image' => 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=400',
                 'image' => 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800',
                 'color' => 'from-amber-600 to-brand-maroon',
-                'members' => [
-                    ['name' => 'Koordinator Divisi', 'role' => 'Coordinator'],
-                    ['name' => 'Staf Produksi', 'role' => 'Product Development'],
-                    ['name' => 'Staf Pemasaran', 'role' => 'Marketing'],
-                ]
             ],
             [
                 'name' => 'Divisi Minat Bakat',
@@ -105,11 +70,6 @@ class InitialDataSeeder extends Seeder
                 'icon_image' => 'https://images.unsplash.com/photo-1511267671478-45c7e002ea48?auto=format&fit=crop&q=80&w=400',
                 'image' => 'https://images.unsplash.com/photo-1511267671478-45c7e002ea48?auto=format&fit=crop&q=80&w=800',
                 'color' => 'from-brand-red to-rose-900',
-                'members' => [
-                    ['name' => 'Koordinator Divisi', 'role' => 'Coordinator'],
-                    ['name' => 'Staf Olahraga', 'role' => 'Sports'],
-                    ['name' => 'Staf Seni & Kreatif', 'role' => 'Arts & Culture'],
-                ]
             ],
             [
                 'name' => 'Divisi Keilmuan',
@@ -118,35 +78,14 @@ class InitialDataSeeder extends Seeder
                 'icon_image' => 'https://images.unsplash.com/photo-1454165833767-0275080064f7?auto=format&fit=crop&q=80&w=400',
                 'image' => 'https://images.unsplash.com/photo-1454165833767-0275080064f7?auto=format&fit=crop&q=80&w=800',
                 'color' => 'from-brand-maroon to-zinc-900',
-                'members' => [
-                    ['name' => 'Koordinator Divisi', 'role' => 'Coordinator'],
-                    ['name' => 'Staf Riset', 'role' => 'Research'],
-                    ['name' => 'Staf Kompetisi', 'role' => 'Academic Awards'],
-                ]
             ]
         ];
 
-        // 3. Insert Divisions & Members
-        foreach ($divisions as $divData) {
-            $members = $divData['members'];
-            unset($divData['members']);
-
-            $division = $period->divisions()->create($divData);
-
-            foreach ($members as $memberData) {
-                // Default fallback for missing fields
-                if (!isset($memberData['prodi'])) {
-                    $memberData['prodi'] = 'TRPM';
-                }
-                if (!isset($memberData['angkatan'])) {
-                    $memberData['angkatan'] = '23';
-                }
-                if (!isset($memberData['photo'])) {
-                    $memberData['photo'] = '/storage/logo/hmrpm.png';
-                }
-
-                $division->members()->create($memberData);
-            }
+        foreach ($divisions as $div) {
+            $activePeriod->divisions()->updateOrCreate(
+                ['name' => $div['name']],
+                $div
+            );
         }
     }
 }

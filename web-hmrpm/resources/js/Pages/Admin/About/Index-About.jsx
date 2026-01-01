@@ -53,11 +53,10 @@ const AboutIndex = ({ settings }) => {
                         {/* Type Selection */}
                         <div className="space-y-4">
                             <label className="block text-slate-700 text-sm font-black uppercase tracking-widest">Tipe Background</label>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {[
                                     { id: 'image', label: 'Gambar', icon: ImageIcon },
-                                    { id: 'video', label: 'Video (MP4)', icon: Film },
-                                    { id: 'gif', label: 'GIF', icon: ImageIcon },
+                                    { id: 'video', label: 'Video (MP4/GIF)', icon: Film },
                                 ].map((type) => (
                                     <button
                                         key={type.id}

@@ -90,7 +90,7 @@ export default function Index({
                     </div>
 
                     <Link
-                        href={`/admin/members/create?period_id=${selectedPeriodId}${selectedDivisionId ? `&division_id=${selectedDivisionId}` : ''}`}
+                        href={`/admin/members/create?period_id=${selectedPeriodId}&filter_division_id=${selectedDivisionId || ''}`}
                         className="flex items-center justify-center sm:justify-start gap-2 bg-brand-red text-white px-4 py-2.5 rounded-xl font-bold hover:bg-brand-red/90 transition-colors w-full sm:w-auto"
                     >
                         <Plus size={18} />
@@ -226,7 +226,7 @@ export default function Index({
                                                         <Eye size={18} />
                                                     </button>
                                                     <Link
-                                                        href={`/admin/members/${member.id}/edit`}
+                                                        href={`/admin/members/${member.id}/edit?period_id=${selectedPeriodId}&filter_division_id=${selectedDivisionId || ''}`}
                                                         className="p-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors duration-200"
                                                         title="Edit"
                                                     >
@@ -338,7 +338,7 @@ export default function Index({
                                             Detail
                                         </button>
                                         <Link
-                                            href={`/admin/members/${member.id}/edit`}
+                                            href={`/admin/members/${member.id}/edit?period_id=${selectedPeriodId}&filter_division_id=${selectedDivisionId || ''}`}
                                             className="flex-1 flex items-center justify-center gap-2 p-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors duration-200 font-medium text-sm"
                                             title="Edit"
                                         >

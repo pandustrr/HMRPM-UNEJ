@@ -55,6 +55,8 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
 
     return (
         <div className="bg-background min-h-screen selection:bg-brand-red selection:text-white pb-20">
+            <Head title={`Divisi & Kepengurusan ${currentPeriod} | HMRPM`} />
+
             {/* Hero Section - Referring to About Style */}
             <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
                 <motion.div
@@ -63,11 +65,22 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                     transition={{ duration: 10, ease: "easeOut" }}
                     className="absolute inset-0 z-0"
                 >
-                    <img
-                        src={activePeriodData?.hero_image || "/storage/logo/about-hero-bg.png"}
-                        alt="HMRPM Background"
-                        className="w-full h-full object-cover"
-                    />
+                    {activePeriodData?.hero_type === 'video' ? (
+                        <video
+                            src={activePeriodData.hero_image}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <img
+                            src={activePeriodData?.hero_image || "/storage/logo/about-hero-bg.png"}
+                            alt="HMRPM Background"
+                            className="w-full h-full object-cover"
+                        />
+                    )}
                     <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black"></div>
                 </motion.div>
 
@@ -166,7 +179,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                             {/* Floating Glass Icon */}
                             <div className="absolute top-5 right-5 w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-lg z-20 group-hover:scale-110 transition-transform">
                                 <img
-                                    src={div.iconImage}
+                                    src={div.icon_image}
                                     alt="icon"
                                     className="w-full h-full object-cover rounded-xl opacity-90"
                                 />
@@ -178,7 +191,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                                     {div.name}
                                 </h3>
                                 <p className="text-white/80 text-sm sm:text-base font-medium leading-relaxed mb-4 max-w-xl line-clamp-2 drop-shadow-md">
-                                    {div.shortDesc}
+                                    {div.short_desc}
                                 </p>
 
                                 <div className="flex items-center gap-2 text-brand-red font-black text-[10px] sm:text-xs uppercase tracking-widest group-hover:gap-4 transition-all">
@@ -351,7 +364,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full max-w-4xl bg-card rounded-[3.5rem] shadow-2xl overflow-hidden border border-white/10"
+                            className="relative w-full max-w-4xl bg-card h-88 sm:h-112 rounded-4xl shadow-2xl overflow-hidden border-4 border-white/10"
                         >
                             {/* Close Button */}
                             <button
@@ -369,7 +382,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                                         "border border-white/10"
                                     )}>
                                         <img
-                                            src={selectedDivision.iconImage}
+                                            src={selectedDivision.icon_image}
                                             alt={selectedDivision.name}
                                             className="w-full h-full object-cover"
                                         />
@@ -418,11 +431,11 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                                     )}></div>
                                     <div className="absolute inset-0 flex items-center justify-center p-12">
                                         <div className="text-white text-center">
-                                            <div className="w-32 h-32 rounded-3xl overflow-hidden mx-auto mb-8 bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
+                                            <div className="w-32 h-32 rounded-4xl overflow-hidden mx-auto mb-8 bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
                                                 <img
-                                                    src={selectedDivision.iconImage}
+                                                    src={selectedDivision.icon_image}
                                                     alt={selectedDivision.name}
-                                                    className="w-full h-full object-cover opacity-80"
+                                                    className="w-full h-full object-cover rounded-4xl"
                                                 />
                                             </div>
                                             <h3 className="text-4xl font-black tracking-tighter drop-shadow-lg">

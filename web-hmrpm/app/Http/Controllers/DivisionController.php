@@ -12,15 +12,16 @@ class DivisionController extends Controller
     public function index(Request $request)
     {
         // 1. Get all periods (descending order)
-        $periods = Period::orderBy('year', 'desc')->get();
+        $periods = Period::where('is_active', true)->orderBy('created_at', 'desc')->get();
 
-        // 2. Determine active period (Query param OR Active flag OR Lastest)
+        // 2. Determine active period (Query param OR Most Recent)
         $selectedYear = $request->query('period');
 
         if ($selectedYear) {
             $activePeriod = $periods->firstWhere('year', $selectedYear);
         } else {
-            $activePeriod = $periods->firstWhere('is_active', true) ?? $periods->first();
+            // Pick the latest created active period
+            $activePeriod = $periods->first();
         }
 
         // 3. Get Divisions with Members for the active period

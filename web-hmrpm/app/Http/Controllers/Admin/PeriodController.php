@@ -12,7 +12,7 @@ class PeriodController extends Controller
 {
     public function index()
     {
-        $periods = Period::orderBy('year', 'desc')->get();
+        $periods = Period::orderBy('created_at', 'desc')->get();
         return Inertia::render('Admin/Periods/Index-Period', [
             'periods' => $periods
         ]);
@@ -22,20 +22,37 @@ class PeriodController extends Controller
     {
         $validated = $request->validate([
             'year' => 'required|string|unique:periods,year',
-            'hero_image' => 'nullable|image|max:2048',
+            'hero_image' => 'nullable|file|max:20480', // 20MB
+            'hero_type' => 'nullable|in:image,video',
             'theme_color' => 'nullable|string',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
         ]);
+
+        if (isset($validated['is_active'])) {
+            $validated['is_archived'] = !$validated['is_active'];
+        } else {
+            $validated['is_active'] = false;
+            $validated['is_archived'] = true;
+        }
+
+        // Multi-period active supported: no longer deactivating others
 
         if ($request->hasFile('hero_image')) {
             $path = $request->file('hero_image')->store('periods', 'public');
             $validated['hero_image'] = '/storage/' . $path;
+
+            // Auto detect type if not provided
+            if (!isset($validated['hero_type'])) {
+                $extension = strtolower($request->file('hero_image')->getClientOriginalExtension());
+                if (in_array($extension, ['mp4', 'webm', 'ogg', 'mov'])) {
+                    $validated['hero_type'] = 'video';
+                } else {
+                    $validated['hero_type'] = 'image';
+                }
+            }
         }
 
-        if ($validated['is_active'] ?? false) {
-            // Deactivate others
-            Period::where('is_active', true)->update(['is_active' => false]);
-        }
+        // Multi-period active supported: no longer deactivating others
 
         Period::create($validated);
 
@@ -46,25 +63,36 @@ class PeriodController extends Controller
     {
         $validated = $request->validate([
             'year' => 'required|string|unique:periods,year,' . $period->id,
-            'hero_image' => 'nullable|image|max:2048', // optional on update
-            'theme_color' => 'nullable|string',
-            'is_active' => 'boolean'
+            'hero_image' => 'nullable|file|max:20480', // 20MB
+            'hero_type' => 'nullable|in:image,video',
+            'is_active' => 'boolean',
         ]);
+
+        if (isset($validated['is_active'])) {
+            $validated['is_archived'] = !$validated['is_active'];
+        }
 
         if ($request->hasFile('hero_image')) {
             // Delete old
             if ($period->hero_image) {
-                // remove /storage/ prefix
                 $oldPath = str_replace('/storage/', '', $period->hero_image);
                 Storage::disk('public')->delete($oldPath);
             }
             $path = $request->file('hero_image')->store('periods', 'public');
             $validated['hero_image'] = '/storage/' . $path;
+
+            // Auto detect type if not provided
+            if (!isset($validated['hero_type']) || $validated['hero_type'] == $period->hero_type) {
+                $extension = strtolower($request->file('hero_image')->getClientOriginalExtension());
+                if (in_array($extension, ['mp4', 'webm', 'ogg', 'mov'])) {
+                    $validated['hero_type'] = 'video';
+                } else {
+                    $validated['hero_type'] = 'image';
+                }
+            }
         }
 
-        if ($validated['is_active'] ?? false) {
-            Period::where('id', '!=', $period->id)->update(['is_active' => false]);
-        }
+        // Multi-period active supported: no longer deactivating others
 
         $period->update($validated);
 
@@ -81,10 +109,14 @@ class PeriodController extends Controller
         return redirect()->route('admin.periods.index')->with('success', 'Periode berhasil dihapus.');
     }
 
-    public function setActive(Period $period)
+    public function toggleActive(Period $period)
     {
-        Period::where('is_active', true)->update(['is_active' => false]);
-        $period->update(['is_active' => true]);
-        return back()->with('success', 'Periode aktif diperbarui.');
+        $newState = !$period->is_active;
+        $period->update([
+            'is_active' => $newState,
+            'is_archived' => !$newState
+        ]);
+
+        return back()->with('success', 'Status periode diperbarui.');
     }
 }

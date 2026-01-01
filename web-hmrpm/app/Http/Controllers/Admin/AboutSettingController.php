@@ -22,7 +22,7 @@ class AboutSettingController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'type' => 'required|in:image,video,gif',
+            'type' => 'required|in:image,video',
             'file' => 'nullable|file|max:20480', // 20MB max
         ]);
 

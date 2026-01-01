@@ -14,7 +14,9 @@ export default function Index({ periods }) {
     const { data, setData, post, put, processing, errors, reset } = useForm({
         year: '',
         is_active: false,
+        is_archived: false,
         hero_image: null,
+        hero_type: 'image',
         theme_color: 'bg-brand-red'
     });
 
@@ -28,11 +30,40 @@ export default function Index({ periods }) {
         setData({
             year: period.year,
             is_active: period.is_active,
+            is_archived: period.is_archived,
             hero_image: null,
+            hero_type: period.hero_type || 'image',
             theme_color: period.theme_color || 'bg-brand-red'
         });
         setEditingPeriod(period);
         setShowModal(true);
+    };
+
+    const toggleArchive = (period) => {
+        router.put(`/admin/periods/${period.id}`, {
+            year: period.year,
+            is_archived: !period.is_archived,
+            is_active: !period.is_archived ? false : period.is_active, // Deactivate if archiving
+            theme_color: period.theme_color,
+            hero_type: period.hero_type
+        });
+    };
+
+    const toggleActive = (period) => {
+        router.post(`/admin/periods/${period.id}/toggle-active`, {}, {
+            preserveScroll: true
+        });
+    };
+
+    const setAsActive = (period) => {
+        // Now it's just a toggle or activation, doesn't deactivate others
+        router.put(`/admin/periods/${period.id}`, {
+            year: period.year,
+            is_active: !period.is_active,
+            is_archived: false,
+            theme_color: period.theme_color,
+            hero_type: period.hero_type
+        });
     };
 
     const handleSubmit = (e) => {
@@ -41,6 +72,8 @@ export default function Index({ periods }) {
         const formData = new FormData();
         formData.append('year', data.year);
         formData.append('is_active', data.is_active ? '1' : '0');
+        formData.append('is_archived', data.is_archived ? '1' : '0');
+        formData.append('hero_type', data.hero_type);
         formData.append('theme_color', data.theme_color);
 
         if (data.hero_image instanceof File) {
@@ -131,7 +164,7 @@ export default function Index({ periods }) {
                             </thead>
                             <tbody className="divide-y divide-border">
                                 {periods.map(period => (
-                                    <tr key={period.id} className="hover:bg-gradient-to-r hover:from-brand-red/5 hover:to-transparent transition-colors duration-200">
+                                    <tr key={period.id} className="hover:bg-linear-to-r hover:from-brand-red/5 hover:to-transparent transition-colors duration-200">
                                         <td className="px-4 sm:px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="p-2.5 bg-brand-red/10 rounded-lg">
@@ -142,34 +175,49 @@ export default function Index({ periods }) {
                                         </td>
                                         <td className="px-4 sm:px-6 py-4">
                                             {period.hero_image ? (
-                                                <img
-                                                    src={period.hero_image}
-                                                    alt="Hero"
-                                                    className="h-12 w-20 object-cover rounded-lg border border-border shadow-sm hover:shadow-md transition-shadow"
-                                                />
+                                                <div className="h-12 w-20 rounded-lg overflow-hidden border border-border shadow-sm">
+                                                    {period.hero_type === 'video' ? (
+                                                        <video src={period.hero_image} className="w-full h-full object-cover" muted />
+                                                    ) : (
+                                                        <img
+                                                            src={period.hero_image}
+                                                            alt="Hero"
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    )}
+                                                </div>
                                             ) : (
                                                 <div className="h-12 w-20 rounded-lg bg-muted/50 flex items-center justify-center border border-dashed border-border">
                                                     <span className="text-xs text-muted-foreground font-medium">Kosong</span>
                                                 </div>
                                             )}
                                         </td>
-                                        <td className="px-4 sm:px-6 py-4 text-center">
-                                            {period.is_active ? (
-                                                <span className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full text-sm font-bold shadow-sm">
-                                                    <Check size={14} />
-                                                    Aktif
-                                                </span>
-                                            ) : (
-                                                <button
-                                                    onClick={() => setActive(period)}
-                                                    className="text-muted-foreground hover:text-brand-red text-sm font-bold transition-colors duration-200 hover:underline"
-                                                >
-                                                    Aktifkan
-                                                </button>
-                                            )}
+                                        <td className="px-4 sm:px-6 py-4">
+                                            <div className="flex flex-col items-center gap-1">
+                                                {period.is_active ? (
+                                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 uppercase tracking-widest border border-emerald-200 shadow-sm">
+                                                        AKTIF
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black bg-brand-red/10 text-brand-red uppercase tracking-widest border border-brand-red/20 shadow-sm">
+                                                        DIARSIPKAN
+                                                    </span>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-4 sm:px-6 py-4">
-                                            <div className="flex items-center justify-end gap-1.5">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={() => toggleActive(period)}
+                                                    className={`px-3 py-1.5 text-[10px] font-black rounded-lg transition-all uppercase tracking-widest shadow-lg active:scale-95 ${period.is_active
+                                                        ? 'border-brand-red bg-brand-red text-white shadow-brand-red/20'
+                                                        : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-200'
+                                                        }`}
+                                                    title={period.is_active ? "Arsipkan periode" : "Aktifkan periode"}
+                                                >
+                                                    {period.is_active ? 'ARSIPKAN' : 'AKTIFKAN'}
+                                                </button>
+                                                <div className="w-px h-6 bg-border mx-1" />
                                                 <button
                                                     onClick={() => handleShowDetail(period)}
                                                     className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors duration-200"
@@ -234,21 +282,19 @@ export default function Index({ periods }) {
 
                                 {/* Status & Actions */}
                                 <div className="flex items-center justify-between pt-2">
-                                    <div>
-                                        <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">Status</p>
-                                        {period.is_active ? (
-                                            <span className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
-                                                <Check size={12} />
-                                                Aktif
-                                            </span>
-                                        ) : (
+                                    <div className="flex flex-col gap-2">
+                                        <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Status & Aksi</p>
+                                        <div className="flex flex-wrap gap-2">
                                             <button
-                                                onClick={() => setActive(period)}
-                                                className="text-muted-foreground hover:text-brand-red text-xs font-bold transition-colors duration-200 hover:underline"
+                                                onClick={() => toggleActive(period)}
+                                                className={`px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest shadow-md ${period.is_active
+                                                    ? 'bg-brand-red text-white'
+                                                    : 'bg-emerald-500 text-white'
+                                                    }`}
                                             >
-                                                Aktifkan
+                                                {period.is_active ? 'ARSIPKAN' : 'AKTIFKAN'}
                                             </button>
-                                        )}
+                                        </div>
                                     </div>
 
                                     {/* Actions */}
@@ -304,20 +350,72 @@ export default function Index({ periods }) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium mb-2">Hero Background Image</label>
+                                <label className="block text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3">Tipe Background</label>
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    {[
+                                        { id: 'image', label: 'Gambar' },
+                                        { id: 'video', label: 'Video (MP4/GIF)' },
+                                    ].map((type) => (
+                                        <button
+                                            key={type.id}
+                                            type="button"
+                                            onClick={() => setData('hero_type', type.id)}
+                                            className={`py-2 px-4 rounded-xl border-2 font-bold text-sm transition-all ${data.hero_type === type.id
+                                                ? 'border-brand-red bg-brand-red/5 text-brand-red'
+                                                : 'border-border bg-muted/30 text-muted-foreground hover:border-muted-foreground/30'
+                                                }`}
+                                        >
+                                            {type.label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <label className="block text-sm font-bold text-muted-foreground uppercase tracking-widest mb-3">File Background</label>
 
                                 {/* Preview gambar yang sudah ada saat edit */}
                                 {editingPeriod && editingPeriod.hero_image && !data.hero_image && (
-                                    <div className="space-y-2 mb-3">
-                                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                                            Gambar Saat Ini
-                                        </label>
-                                        <div className="relative w-full rounded-xl overflow-hidden border-2 border-border shadow-sm">
-                                            <img
-                                                src={editingPeriod.hero_image}
-                                                alt="Hero Current"
-                                                className="w-full h-48 object-cover"
-                                            />
+                                    <div className="space-y-2 mb-4">
+                                        <div className="relative w-full rounded-2xl overflow-hidden border-2 border-border shadow-md aspect-video bg-muted/30">
+                                            {editingPeriod.hero_type === 'video' ? (
+                                                <video
+                                                    src={editingPeriod.hero_image}
+                                                    className="w-full h-full object-cover"
+                                                    autoPlay muted loop playsInline
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={editingPeriod.hero_image}
+                                                    alt="Hero Current"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            )}
+                                            <div className="absolute top-3 left-3 px-3 py-1 bg-brand-red/90 text-white text-[10px] font-black uppercase tracking-widest rounded-full">
+                                                Aktif
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* File Preview for new selection */}
+                                {data.hero_image && (
+                                    <div className="space-y-2 mb-4">
+                                        <div className="relative w-full rounded-2xl overflow-hidden border-2 border-brand-red/30 shadow-md aspect-video bg-muted/30">
+                                            {data.hero_type === 'video' ? (
+                                                <video
+                                                    src={URL.createObjectURL(data.hero_image)}
+                                                    className="w-full h-full object-cover"
+                                                    autoPlay muted loop playsInline
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={URL.createObjectURL(data.hero_image)}
+                                                    alt="Preview"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            )}
+                                            <div className="absolute top-3 left-3 px-3 py-1 bg-emerald-500/90 text-white text-[10px] font-black uppercase tracking-widest rounded-full">
+                                                Baru
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -325,35 +423,42 @@ export default function Index({ periods }) {
                                 <div className="relative">
                                     <input
                                         type="file"
-                                        accept="image/*"
+                                        accept={data.hero_type === 'video' ? 'video/mp4' : 'image/*'}
                                         onChange={e => setData('hero_image', e.target.files[0])}
                                         className="hidden"
                                         id="hero-upload"
                                     />
                                     <label
                                         htmlFor="hero-upload"
-                                        className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-border rounded-xl cursor-pointer hover:bg-muted/30 transition-colors"
+                                        className="flex items-center justify-center gap-3 w-full px-6 py-4 border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-brand-red/5 hover:border-brand-red/30 transition-all group"
                                     >
-                                        <Upload size={20} className="text-muted-foreground" />
-                                        <span className="text-sm font-medium text-muted-foreground">
-                                            {data.hero_image ? data.hero_image.name : editingPeriod ? 'Ganti Gambar Hero' : 'Upload gambar'}
-                                        </span>
+                                        <Upload size={20} className="text-muted-foreground group-hover:text-brand-red" />
+                                        <div className="text-left">
+                                            <p className="text-sm font-bold text-foreground group-hover:text-brand-red">
+                                                {data.hero_image ? 'Ganti file terpilih' : 'Unggah file baru'}
+                                            </p>
+                                            <p className="text-[10px] text-muted-foreground font-medium">
+                                                Maksimal 20MB (.mp4, .jpg, .png, .gif)
+                                            </p>
+                                        </div>
                                     </label>
                                 </div>
-                                {errors.hero_image && <p className="text-red-600 text-sm mt-1">{errors.hero_image}</p>}
+                                {errors.hero_image && <p className="text-red-600 text-sm mt-2 font-bold italic">{errors.hero_image}</p>}
                             </div>
 
-                            <div className="flex items-center gap-3">
-                                <input
-                                    type="checkbox"
-                                    id="is_active"
-                                    checked={data.is_active}
-                                    onChange={e => setData('is_active', e.target.checked)}
-                                    className="w-5 h-5 text-brand-red rounded focus:ring-brand-red/20"
-                                />
-                                <label htmlFor="is_active" className="text-sm font-medium">
-                                    Jadikan periode aktif
-                                </label>
+                            <div className="flex flex-col gap-3">
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        id="is_active"
+                                        checked={data.is_active}
+                                        onChange={e => setData('is_active', e.target.checked)}
+                                        className="w-5 h-5 text-brand-red rounded focus:ring-brand-red/20"
+                                    />
+                                    <label htmlFor="is_active" className="text-sm font-bold text-foreground">
+                                        Aktifkan Periode <span className="text-xs text-muted-foreground font-medium">(Muncul di dropdown publik)</span>
+                                    </label>
+                                </div>
                             </div>
 
                             <div className="flex gap-3 pt-4">
@@ -424,15 +529,24 @@ export default function Index({ periods }) {
 
                             {/* Hero Image */}
                             <div>
-                                <label className="block text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Hero Background Image</label>
+                                <label className="block text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Hero Background ({selectedPeriod.hero_type})</label>
                                 {selectedPeriod.hero_image ? (
                                     <div className="space-y-2">
-                                        <img
-                                            src={selectedPeriod.hero_image}
-                                            alt="Hero"
-                                            className="w-full h-48 object-cover rounded-xl border border-border shadow-md"
-                                        />
-                                        <p className="text-xs text-muted-foreground">Gambar hero untuk halaman periode ini</p>
+                                        <div className="w-full aspect-video rounded-2xl overflow-hidden border border-border shadow-md bg-muted/30">
+                                            {selectedPeriod.hero_type === 'video' ? (
+                                                <video
+                                                    src={selectedPeriod.hero_image}
+                                                    className="w-full h-full object-cover"
+                                                    autoPlay muted loop playsInline
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={selectedPeriod.hero_image}
+                                                    alt="Hero"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            )}
+                                        </div>
                                     </div>
                                 ) : (
                                     <div className="h-48 rounded-xl bg-muted/50 border border-dashed border-border flex items-center justify-center">
@@ -442,21 +556,29 @@ export default function Index({ periods }) {
                             </div>
 
                             {/* Status */}
-                            <div>
+                            {/* <div>
                                 <label className="block text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">Status</label>
-                                <div>
+                                <div className="flex flex-col gap-1">
                                     {selectedPeriod.is_active ? (
-                                        <span className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-lg font-bold">
-                                            <Check size={16} />
-                                            Periode Aktif
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 uppercase tracking-widest border border-emerald-200">
+                                            AKTIF
                                         </span>
                                     ) : (
-                                        <span className="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-bold">
-                                            Periode Tidak Aktif
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black bg-brand-red/10 text-brand-red uppercase tracking-widest border border-brand-red/20">
+                                            DIARSIPKAN
                                         </span>
                                     )}
                                 </div>
-                            </div>
+                                <button
+                                    onClick={() => toggleActive(selectedPeriod)}
+                                    className={`px-3 py-1.5 text-[10px] font-black rounded-lg transition-all uppercase tracking-widest shadow-md active:scale-95 ${selectedPeriod.is_active
+                                        ? 'bg-brand-red text-white'
+                                        : 'bg-emerald-500 text-white'
+                                        }`}
+                                >
+                                    {selectedPeriod.is_active ? 'ARSIPKAN' : 'AKTIFKAN'}
+                                </button>
+                            </div> */}
 
                             {/* Created At */}
                             <div>

@@ -13,15 +13,16 @@ import {
     ChevronDown
 } from "lucide-react";
 
-export default function Create({ periods, prefill }) {
+export default function Create({ periods, prefill, filter_division_id }) {
     // Gunakan periode dari prefill, atau periode aktif, atau periode pertama sebagai fallback
     const defaultPeriodId = prefill?.period_id ||
-                           periods.find(p => p.is_active)?.id ||
-                           periods[0]?.id || '';
+        periods.find(p => p.is_active)?.id ||
+        periods[0]?.id || '';
 
     const { data, setData, post, processing, errors } = useForm({
         division_id: prefill?.division_id || '',
         period_id: defaultPeriodId,
+        filter_division_id: filter_division_id || '',
         name: '',
         role: '',
         prodi: '',
@@ -46,7 +47,9 @@ export default function Create({ periods, prefill }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/admin/members');
+        post('/admin/members', {
+            forceFormData: true,
+        });
     };
 
     return (
@@ -56,7 +59,7 @@ export default function Create({ periods, prefill }) {
             <div className="p-6 space-y-6">
                 <div className="flex items-center gap-4">
                     <Link
-                        href="/admin/members"
+                        href={`/admin/members?period_id=${data.period_id}${filter_division_id ? `&division_id=${filter_division_id}` : ''}`}
                         className="p-2 hover:bg-muted rounded-lg transition-colors"
                     >
                         <ArrowLeft size={20} />

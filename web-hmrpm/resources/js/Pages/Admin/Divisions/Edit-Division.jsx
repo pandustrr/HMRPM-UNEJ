@@ -50,9 +50,6 @@ export default function Edit({ division }) {
         router.post(`/admin/divisions/${division.id}`, formData, {
             preserveScroll: true,
             forceFormData: true,
-            onSuccess: () => {
-                router.visit(`/admin/divisions?period_id=${division.period_id}`);
-            },
             onError: (errors) => {
                 console.error('Update errors:', errors);
             }
@@ -116,7 +113,7 @@ export default function Edit({ division }) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium mb-2">Deskripsi Singkat</label>
+                                <label className="block text-sm font-medium mb-2">Nama Lengkap Depertemen</label>
                                 <input
                                     type="text"
                                     value={data.short_desc}

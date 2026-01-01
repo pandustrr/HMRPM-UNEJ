@@ -14,11 +14,12 @@ import {
     Trash2
 } from "lucide-react";
 
-export default function Edit({ member, periods }) {
+export default function Edit({ member, periods, filter_division_id }) {
     const { data, setData, post, processing, errors } = useForm({
         _method: 'PUT',
         division_id: member.division_id || '',
         period_id: member.division?.period_id || periods[0]?.id || '',
+        filter_division_id: filter_division_id || '',
         name: member.name || '',
         role: member.role || '',
         prodi: member.prodi || '',
@@ -43,33 +44,9 @@ export default function Edit({ member, periods }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const formData = new FormData();
-        formData.append('_method', 'PUT');
-        formData.append('division_id', data.division_id ?? '');
-        formData.append('name', data.name ?? '');
-        formData.append('role', data.role ?? '');
-        formData.append('prodi', data.prodi ?? '');
-        formData.append('angkatan', data.angkatan ?? '');
-        formData.append('instagram', data.instagram ?? '');
-        formData.append('linkedin', data.linkedin ?? '');
-        formData.append('email', data.email ?? '');
-
-        // IMPORTANT: only send new files if user picked them.
-        if (data.photo instanceof File) {
-            formData.append('photo', data.photo);
-        }
-        if (data.video instanceof File) {
-            formData.append('video', data.video);
-        }
-
         post(`/admin/members/${member.id}`, {
-            data: formData,
             forceFormData: true,
             preserveScroll: true,
-            onSuccess: () => {
-                router.visit('/admin/members');
-            },
         });
     };
 
@@ -80,7 +57,7 @@ export default function Edit({ member, periods }) {
             <div className="p-6 space-y-6">
                 <div className="flex items-center gap-4">
                     <Link
-                        href="/admin/members"
+                        href={`/admin/members?period_id=${data.period_id}${data.filter_division_id ? `&division_id=${data.filter_division_id}` : ''}`}
                         className="p-2 hover:bg-muted rounded-lg transition-colors"
                     >
                         <ArrowLeft size={20} />

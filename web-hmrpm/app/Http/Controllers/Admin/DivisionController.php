@@ -26,7 +26,7 @@ class DivisionController extends Controller
 
     public function index(Request $request)
     {
-        $periods = Period::orderBy('year', 'desc')->get();
+        $periods = Period::orderBy('created_at', 'desc')->get();
         $selectedPeriodId = $request->query('period_id');
 
         if (!$selectedPeriodId) {
@@ -48,7 +48,7 @@ class DivisionController extends Controller
 
     public function create(Request $request)
     {
-        $periods = Period::orderBy('year', 'desc')->get();
+        $periods = Period::orderBy('created_at', 'desc')->get();
         $selectedPeriodId = $request->query('period_id');
         return Inertia::render('Admin/Divisions/Create-Division', [
             'periods' => $periods,
@@ -114,7 +114,7 @@ class DivisionController extends Controller
 
         $division->update($validated);
 
-        return redirect()->back()->with('success', 'Divisi berhasil diperbarui.');
+        return redirect()->route('admin.divisions.index', ['period_id' => $division->period_id])->with('success', 'Divisi berhasil diperbarui.');
     }
 
     public function destroy(Division $division)
