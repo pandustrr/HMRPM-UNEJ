@@ -14,9 +14,14 @@ import {
 } from "lucide-react";
 
 export default function Create({ periods, prefill }) {
+    // Gunakan periode dari prefill, atau periode aktif, atau periode pertama sebagai fallback
+    const defaultPeriodId = prefill?.period_id ||
+                           periods.find(p => p.is_active)?.id ||
+                           periods[0]?.id || '';
+
     const { data, setData, post, processing, errors } = useForm({
         division_id: prefill?.division_id || '',
-        period_id: prefill?.period_id || periods[0]?.id || '',
+        period_id: defaultPeriodId,
         name: '',
         role: '',
         prodi: '',
@@ -179,47 +184,48 @@ export default function Create({ periods, prefill }) {
 
                     {/* Organization & Media */}
                     <div className="space-y-6">
-                        {!prefill?.division_id && !prefill?.period_id && (
-                            <div className="bg-white rounded-2xl border border-border p-6 shadow-sm space-y-4">
-                                <h2 className="font-bold text-foreground">Organisasi</h2>
+                        <div className="bg-white rounded-2xl border border-border p-6 shadow-sm space-y-4">
+                            <h2 className="font-bold text-foreground">Organisasi</h2>
 
-                                <div className="space-y-4">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-muted-foreground">Periode</label>
-                                        <div className="relative">
-                                            <select
-                                                value={data.period_id}
-                                                onChange={e => setData('period_id', e.target.value)}
-                                                className="w-full appearance-none bg-muted/30 border border-border rounded-xl px-4 py-2.5 pr-10 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all"
-                                            >
-                                                {periods.map(p => (
-                                                    <option key={p.id} value={p.id}>{p.year}</option>
-                                                ))}
-                                            </select>
-                                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" size={16} />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-muted-foreground">Divisi</label>
-                                        <div className="relative">
-                                            <select
-                                                value={data.division_id}
-                                                onChange={e => setData('division_id', e.target.value)}
-                                                className="w-full appearance-none bg-muted/30 border border-border rounded-xl px-4 py-2.5 pr-10 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all"
-                                            >
-                                                <option value="">Pilih Divisi</option>
-                                                {availableDivisions.map(d => (
-                                                    <option key={d.id} value={d.id}>{d.name}</option>
-                                                ))}
-                                            </select>
-                                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" size={16} />
-                                        </div>
-                                        {errors.division_id && <p className="text-red-600 text-xs font-medium">{errors.division_id}</p>}
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground">Periode</label>
+                                    <div className="relative">
+                                        <select
+                                            value={data.period_id}
+                                            onChange={e => {
+                                                setData('period_id', e.target.value);
+                                                setData('division_id', ''); // Reset division saat periode berubah
+                                            }}
+                                            className="w-full appearance-none bg-muted/30 border border-border rounded-xl px-4 py-2.5 pr-10 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all"
+                                        >
+                                            {periods.map(p => (
+                                                <option key={p.id} value={p.id}>{p.year}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" size={16} />
                                     </div>
                                 </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground">Divisi</label>
+                                    <div className="relative">
+                                        <select
+                                            value={data.division_id}
+                                            onChange={e => setData('division_id', e.target.value)}
+                                            className="w-full appearance-none bg-muted/30 border border-border rounded-xl px-4 py-2.5 pr-10 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all"
+                                        >
+                                            <option value="">Pilih Divisi</option>
+                                            {availableDivisions.map(d => (
+                                                <option key={d.id} value={d.id}>{d.name}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" size={16} />
+                                    </div>
+                                    {errors.division_id && <p className="text-red-600 text-xs font-medium">{errors.division_id}</p>}
+                                </div>
                             </div>
-                        )}
+                        </div>
 
                         <div className="bg-white rounded-2xl border border-border p-6 shadow-sm space-y-4">
                             <h2 className="font-bold text-foreground">Media</h2>

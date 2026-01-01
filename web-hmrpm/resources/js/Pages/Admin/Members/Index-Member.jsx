@@ -81,25 +81,26 @@ export default function Index({
         <>
             <Head title="Kelola Pengurus" />
 
-            <div className="p-6 space-y-6">
+            <div className="p-4 sm:p-6 space-y-6">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-black text-foreground">Daftar Pengurus</h1>
-                        <p className="text-muted-foreground mt-1">Kelola data seluruh anggota pengurus HMRPM</p>
+                        <h1 className="text-2xl sm:text-3xl font-black text-foreground">Daftar Pengurus</h1>
+                        <p className="text-muted-foreground text-sm sm:text-base mt-1">Kelola data seluruh anggota pengurus HMRPM</p>
                     </div>
 
                     <Link
-                        href={`/admin/members/create`}
-                        className="flex items-center justify-center gap-2 bg-brand-red text-white px-4 py-2.5 rounded-xl font-bold hover:bg-brand-red/90 transition-colors"
+                        href={`/admin/members/create?period_id=${selectedPeriodId}${selectedDivisionId ? `&division_id=${selectedDivisionId}` : ''}`}
+                        className="flex items-center justify-center sm:justify-start gap-2 bg-brand-red text-white px-4 py-2.5 rounded-xl font-bold hover:bg-brand-red/90 transition-colors w-full sm:w-auto"
                     >
                         <Plus size={18} />
-                        Tambah Pengurus
+                        <span className="hidden sm:inline">Tambah Pengurus</span>
+                        <span className="sm:hidden">Tambah</span>
                     </Link>
                 </div>
 
                 {/* Filters & Search */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Period Filter */}
                     <div className="relative">
                         <select
@@ -130,7 +131,7 @@ export default function Index({
                     </div>
 
                     {/* Search Search */}
-                    <form onSubmit={handleSearch} className="lg:col-span-2 relative">
+                    <form onSubmit={handleSearch} className="sm:col-span-2 lg:col-span-2 relative">
                         <input
                             type="text"
                             placeholder="Cari nama pengurus..."
@@ -143,26 +144,27 @@ export default function Index({
                     </form>
                 </div>
 
-                {/* Members Table */}
-                <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-sm">
-                    <div className="overflow-x-auto">
+                {/* Members Table/Cards */}
+                <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                    {/* Desktop View */}
+                    <div className="hidden lg:block overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-muted/50 border-b border-border">
-                                    <th className="px-6 py-4 font-bold text-sm text-foreground">Pengurus</th>
-                                    <th className="px-6 py-4 font-bold text-sm text-foreground">Role & Divisi</th>
-                                    <th className="px-6 py-4 font-bold text-sm text-foreground">Prodi & Angkatan</th>
-                                    <th className="px-6 py-4 font-bold text-sm text-foreground">Media Sosial</th>
-                                    <th className="px-6 py-4 font-bold text-sm text-foreground text-right">Aksi</th>
+                                <tr className="bg-gradient-to-r from-muted/50 to-muted/30 border-b border-border">
+                                    <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Pengurus</th>
+                                    <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Role & Divisi</th>
+                                    <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Prodi & Angkatan</th>
+                                    <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Media Sosial</th>
+                                    <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground text-right">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
                                 {members.length > 0 ? (
                                     members.map((member) => (
-                                        <tr key={member.id} className="hover:bg-muted/30 transition-colors">
-                                            <td className="px-6 py-4">
+                                        <tr key={member.id} className="hover:bg-gradient-to-r hover:from-brand-red/5 hover:to-transparent transition-colors duration-200">
+                                            <td className="px-4 sm:px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-muted border border-border">
+                                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-muted border-2 border-brand-red/20 shadow-sm flex-shrink-0">
                                                         <img
                                                             src={member.photo || '/storage/logo/hmrpm.png'}
                                                             alt={member.name}
@@ -170,63 +172,69 @@ export default function Index({
                                                             onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
                                                         />
                                                     </div>
-                                                    <div>
+                                                    <div className="min-w-0">
                                                         <p className="font-bold text-foreground line-clamp-1">{member.name}</p>
+                                                        {member.email && <p className="text-xs text-muted-foreground line-clamp-1">{member.email}</p>}
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <div className="space-y-0.5">
-                                                    <p className="font-semibold text-sm text-brand-red">{member.role}</p>
+                                            <td className="px-4 sm:px-6 py-4">
+                                                <div className="space-y-1.5">
+                                                    <p className="inline-flex items-center gap-1.5 bg-brand-red/10 text-brand-red px-2.5 py-1 rounded-full font-bold text-xs">
+                                                        {member.role}
+                                                    </p>
                                                     <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">
                                                         {member.division?.name}
                                                     </p>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-4 sm:px-6 py-4">
                                                 <div className="space-y-0.5">
-                                                    <p className="text-sm font-medium">{member.prodi || '-'}</p>
+                                                    <p className="text-sm font-medium text-foreground">{member.prodi || '-'}</p>
                                                     <p className="text-xs text-muted-foreground">Angkatan {member.angkatan || '-'}</p>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-2">
+                                            <td className="px-4 sm:px-6 py-4">
+                                                <div className="flex items-center gap-1.5">
                                                     {member.instagram && (
-                                                        <a href={member.instagram} target="_blank" className="p-1.5 rounded-lg bg-pink-50 text-pink-600 hover:bg-pink-100 transition-colors">
+                                                        <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-pink-50 text-pink-600 hover:bg-pink-100 transition-colors duration-200 shadow-sm hover:shadow-md" title="Instagram">
                                                             <Instagram size={16} />
                                                         </a>
                                                     )}
                                                     {member.linkedin && (
-                                                        <a href={member.linkedin} target="_blank" className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                                                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-200 shadow-sm hover:shadow-md" title="LinkedIn">
                                                             <Linkedin size={16} />
                                                         </a>
                                                     )}
                                                     {member.email && (
-                                                        <a href={`mailto:${member.email}`} className="p-1.5 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
+                                                        <a href={`mailto:${member.email}`} className="p-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors duration-200 shadow-sm hover:shadow-md" title="Email">
                                                             <Mail size={16} />
                                                         </a>
                                                     )}
+                                                    {!member.instagram && !member.linkedin && !member.email && (
+                                                        <span className="text-xs text-muted-foreground">Tidak ada</span>
+                                                    )}
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center justify-end gap-2">
+                                            <td className="px-4 sm:px-6 py-4">
+                                                <div className="flex items-center justify-end gap-1.5">
                                                     <button
                                                         onClick={() => handleShowDetail(member)}
-                                                        className="p-2 hover:bg-blue-50 rounded-lg transition-colors text-muted-foreground hover:text-blue-600"
+                                                        className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors duration-200"
                                                         title="Detail"
                                                     >
                                                         <Eye size={18} />
                                                     </button>
                                                     <Link
                                                         href={`/admin/members/${member.id}/edit`}
-                                                        className="p-2 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+                                                        className="p-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors duration-200"
                                                         title="Edit"
                                                     >
                                                         <Edit size={18} />
                                                     </Link>
                                                     <button
                                                         onClick={() => handleDelete(member)}
-                                                        className="p-2 hover:bg-red-50 rounded-lg transition-colors text-muted-foreground hover:text-red-600"
+                                                        className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors duration-200"
                                                         title="Hapus"
                                                     >
                                                         <Trash2 size={18} />
@@ -237,7 +245,7 @@ export default function Index({
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="5" className="px-6 py-12 text-center text-muted-foreground">
+                                        <td colSpan="5" className="px-4 sm:px-6 py-12 text-center text-muted-foreground">
                                             <Users size={48} className="mx-auto opacity-20 mb-4" />
                                             <p className="font-medium">Tidak ada data pengurus ditemukan</p>
                                         </td>
@@ -245,6 +253,115 @@ export default function Index({
                                 )}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Mobile View - Card Layout */}
+                    <div className="lg:hidden divide-y divide-border">
+                        {members.length > 0 ? (
+                            members.map((member) => (
+                                <div key={member.id} className="p-4 space-y-4 hover:bg-brand-red/5 transition-colors duration-200">
+                                    {/* Name & Photo */}
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-full overflow-hidden bg-muted border-2 border-brand-red/20 shadow-sm flex-shrink-0">
+                                            <img
+                                                src={member.photo || '/storage/logo/hmrpm.png'}
+                                                alt={member.name}
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
+                                            />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <p className="font-bold text-foreground line-clamp-1">{member.name}</p>
+                                            {member.email && <p className="text-xs text-muted-foreground line-clamp-1">{member.email}</p>}
+                                        </div>
+                                    </div>
+
+                                    {/* Role & Division */}
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">Role</p>
+                                            <p className="inline-flex items-center gap-1 bg-brand-red/10 text-brand-red px-2 py-0.5 rounded-full font-bold text-xs">
+                                                {member.role}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">Divisi</p>
+                                            <p className="text-xs text-foreground font-medium truncate">{member.division?.name}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Education */}
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">Prodi</p>
+                                            <p className="text-xs text-foreground font-medium truncate">{member.prodi || '-'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">Angkatan</p>
+                                            <p className="text-xs text-foreground font-medium">{member.angkatan || '-'}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Social Media */}
+                                    <div>
+                                        <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-2">Media Sosial</p>
+                                        <div className="flex items-center gap-1.5">
+                                            {member.instagram && (
+                                                <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-pink-50 text-pink-600 hover:bg-pink-100 transition-colors duration-200 shadow-sm hover:shadow-md" title="Instagram">
+                                                    <Instagram size={16} />
+                                                </a>
+                                            )}
+                                            {member.linkedin && (
+                                                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-200 shadow-sm hover:shadow-md" title="LinkedIn">
+                                                    <Linkedin size={16} />
+                                                </a>
+                                            )}
+                                            {member.email && (
+                                                <a href={`mailto:${member.email}`} className="p-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors duration-200 shadow-sm hover:shadow-md" title="Email">
+                                                    <Mail size={16} />
+                                                </a>
+                                            )}
+                                            {!member.instagram && !member.linkedin && !member.email && (
+                                                <span className="text-xs text-muted-foreground">Tidak ada</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="flex items-center gap-1.5 pt-2 border-t border-border">
+                                        <button
+                                            onClick={() => handleShowDetail(member)}
+                                            className="flex-1 flex items-center justify-center gap-2 p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors duration-200 font-medium text-sm"
+                                            title="Detail"
+                                        >
+                                            <Eye size={16} />
+                                            Detail
+                                        </button>
+                                        <Link
+                                            href={`/admin/members/${member.id}/edit`}
+                                            className="flex-1 flex items-center justify-center gap-2 p-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors duration-200 font-medium text-sm"
+                                            title="Edit"
+                                        >
+                                            <Edit size={16} />
+                                            Edit
+                                        </Link>
+                                        <button
+                                            onClick={() => handleDelete(member)}
+                                            className="flex-1 flex items-center justify-center gap-2 p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors duration-200 font-medium text-sm"
+                                            title="Hapus"
+                                        >
+                                            <Trash2 size={16} />
+                                            Hapus
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="p-8 text-center text-muted-foreground">
+                                <Users size={48} className="mx-auto opacity-20 mb-4" />
+                                <p className="font-medium">Tidak ada data pengurus ditemukan</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -132,6 +132,7 @@ class DivisionMemberController extends Controller
     public function update(Request $request, DivisionMember $member)
     {
         $validated = $request->validate([
+            'division_id' => 'required|exists:divisions,id',
             'name' => 'required|string',
             'role' => 'required|string',
             'prodi' => 'nullable|string',
@@ -142,6 +143,11 @@ class DivisionMemberController extends Controller
             'linkedin' => 'nullable|url',
             'email' => 'nullable|email',
         ]);
+
+        // Remove photo and video from validated data initially
+        // Only add them back if new files are uploaded
+        unset($validated['photo']);
+        unset($validated['video']);
 
         if ($request->hasFile('photo')) {
             if ($member->photo) Storage::disk('public')->delete(str_replace('/storage/', '', $member->photo));

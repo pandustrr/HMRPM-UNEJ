@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import {
     ArrowLeft,
@@ -43,8 +43,34 @@ export default function Edit({ member, periods }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Use POST with _method: PUT for file upload support in Laravel/Inertia
-        post(`/admin/members/${member.id}`);
+
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('division_id', data.division_id ?? '');
+        formData.append('name', data.name ?? '');
+        formData.append('role', data.role ?? '');
+        formData.append('prodi', data.prodi ?? '');
+        formData.append('angkatan', data.angkatan ?? '');
+        formData.append('instagram', data.instagram ?? '');
+        formData.append('linkedin', data.linkedin ?? '');
+        formData.append('email', data.email ?? '');
+
+        // IMPORTANT: only send new files if user picked them.
+        if (data.photo instanceof File) {
+            formData.append('photo', data.photo);
+        }
+        if (data.video instanceof File) {
+            formData.append('video', data.video);
+        }
+
+        post(`/admin/members/${member.id}`, {
+            data: formData,
+            forceFormData: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                router.visit('/admin/members');
+            },
+        });
     };
 
     return (
@@ -213,9 +239,13 @@ export default function Edit({ member, periods }) {
                             <h2 className="font-bold text-foreground">Media</h2>
 
                             <div className="space-y-4">
+                                {/* Photo Preview */}
                                 {member.photo && (
-                                    <div className="relative aspect-square w-32 mx-auto rounded-xl overflow-hidden border border-border">
-                                        <img src={member.photo} alt={member.name} className="w-full h-full object-cover" />
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Foto Profil Saat Ini</label>
+                                        <div className="relative aspect-square w-32 mx-auto rounded-xl overflow-hidden border-2 border-border shadow-sm">
+                                            <img src={member.photo} alt={member.name} className="w-full h-full object-cover" />
+                                        </div>
                                     </div>
                                 )}
 
@@ -227,10 +257,25 @@ export default function Edit({ member, periods }) {
                                         type="file"
                                         accept="image/*"
                                         onChange={e => setData('photo', e.target.files[0])}
-                                        className="w-full text-xs text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-red/10 file:text-brand-red hover:file:bg-brand-red/20 cursor-pointer"
+                                        className="w-full text-xs text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-red/10 file:text-brand-red hover:file:bg-brand-red/20 hover:file:text-brand-red cursor-pointer transition-colors"
                                     />
                                     {errors.photo && <p className="text-red-600 text-xs font-medium">{errors.photo}</p>}
                                 </div>
+
+                                {/* Video Preview */}
+                                {member.video && (
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Video Hover Saat Ini</label>
+                                        <div className="relative w-full rounded-xl overflow-hidden border-2 border-border shadow-sm bg-black">
+                                            <video
+                                                src={member.video}
+                                                controls
+                                                className="w-full h-auto"
+                                                style={{ maxHeight: '200px' }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
@@ -240,7 +285,7 @@ export default function Edit({ member, periods }) {
                                         type="file"
                                         accept="video/*"
                                         onChange={e => setData('video', e.target.files[0])}
-                                        className="w-full text-xs text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-red/10 file:text-brand-red hover:file:bg-brand-red/20 cursor-pointer"
+                                        className="w-full text-xs text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-red/10 file:text-brand-red hover:file:bg-brand-red/20 hover:file:text-brand-red cursor-pointer transition-colors"
                                     />
                                     {errors.video && <p className="text-red-600 text-xs font-medium">{errors.video}</p>}
                                 </div>

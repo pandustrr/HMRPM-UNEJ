@@ -8,36 +8,37 @@ export default function Detail({ show, onClose, member }) {
     return (
         <Modal show={show} onClose={onClose} customHeader maxWidth="2xl">
             {/* Modal Header */}
-            <div className="relative h-48 bg-linear-to-br from-brand-red to-brand-maroon">
+            <div className="relative px-8 pt-8 pb-4">
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors z-10"
+                    className="absolute top-4 right-4 p-2 hover:bg-muted text-foreground rounded-full transition-colors z-10"
                 >
                     <X size={20} />
                 </button>
-                <div className="absolute -bottom-16 left-8 p-1 bg-white rounded-full shadow-xl">
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white">
-                        <img
-                            src={member.photo || '/storage/logo/hmrpm.png'}
-                            alt={member.name}
-                            className="w-full h-full object-cover"
-                            onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
-                        />
+                <div className="flex items-start gap-6">
+                    <div className="flex-shrink-0">
+                        <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-border shadow-lg">
+                            <img
+                                src={member.photo || '/storage/logo/hmrpm.png'}
+                                alt={member.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex-1 pt-2">
+                        <h2 className="text-2xl font-black text-foreground">{member.name}</h2>
+                        <p className="text-brand-red font-bold text-base mt-1">{member.role}</p>
+                        <p className="text-muted-foreground uppercase tracking-widest text-xs font-black mt-1">
+                            {member.division?.name}
+                        </p>
                     </div>
                 </div>
             </div>
 
             {/* Modal Body */}
-            <div className="pt-20 px-8 pb-8 overflow-y-auto max-h-[calc(90vh-12rem)]">
+            <div className="px-8 pb-8 overflow-y-auto max-h-[calc(90vh-12rem)]">
                 <div className="space-y-6">
-                    <div>
-                        <h2 className="text-3xl font-black text-foreground">{member.name}</h2>
-                        <p className="text-brand-red font-bold text-lg">{member.role}</p>
-                        <p className="text-muted-foreground uppercase tracking-widest text-xs font-black mt-1">
-                            {member.division?.name}
-                        </p>
-                    </div>
-
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="space-y-1">
                             <p className="text-xs font-bold text-muted-foreground uppercase">Program Studi</p>
@@ -49,7 +50,7 @@ export default function Detail({ show, onClose, member }) {
                         </div>
                         <div className="space-y-1">
                             <p className="text-xs font-bold text-muted-foreground uppercase">Email</p>
-                            <p className="font-semibold break-all">{member.email || '-'}</p>
+                            {member.email && <p className="font-semibold break-all">{member.email}</p>}
                         </div>
                         <div className="space-y-1">
                             <p className="text-xs font-bold text-muted-foreground uppercase">Media Sosial</p>

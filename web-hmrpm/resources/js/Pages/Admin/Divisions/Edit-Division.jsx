@@ -9,7 +9,7 @@ export default function Edit({ division }) {
         name: division.name || '',
         short_desc: division.short_desc || '',
         description: division.description || '',
-        color: '#dc2626', // Standardize to Brand Red
+        color: division.color || '#dc2626',
         icon_image: null,
         image: null,
     });
@@ -18,7 +18,6 @@ export default function Edit({ division }) {
     const [showMemberModal, setShowMemberModal] = useState(false);
     const memberForm = useForm({
         division_id: division.id,
-        period_id: division.period_id,
         name: '',
         role: '',
         prodi: '',
@@ -40,16 +39,23 @@ export default function Edit({ division }) {
         formData.append('description', data.description);
         formData.append('color', data.color);
 
-        if (data.icon_image) {
+        if (data.icon_image instanceof File) {
             formData.append('icon_image', data.icon_image);
         }
-        if (data.image) {
+        if (data.image instanceof File) {
             formData.append('image', data.image);
         }
 
-        post(`/admin/divisions/${division.id}`, {
-            data: formData,
+        // Use router.post directly with proper headers
+        router.post(`/admin/divisions/${division.id}`, formData, {
+            preserveScroll: true,
             forceFormData: true,
+            onSuccess: () => {
+                router.visit(`/admin/divisions?period_id=${division.period_id}`);
+            },
+            onError: (errors) => {
+                console.error('Update errors:', errors);
+            }
         });
     };
 
