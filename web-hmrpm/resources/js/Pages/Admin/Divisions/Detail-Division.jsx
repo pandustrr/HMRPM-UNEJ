@@ -8,11 +8,12 @@ export default function Detail({ show, onClose, division, periodYear }) {
     return (
         <Modal show={show} onClose={onClose} customHeader maxWidth="2xl">
             {/* Custom Header with Image/Gradient */}
-            <div className="relative h-48 bg-linear-to-br from-brand-red to-brand-maroon shrink-0">
+            {/* Header with Neutral Background */}
+            <div className="relative h-48 bg-zinc-100 dark:bg-zinc-800 shrink-0">
                 {division.image && (
-                    <img src={division.image} alt={division.name} className="w-full h-full object-cover opacity-50" />
+                    <img src={division.image} alt={division.name} className="w-full h-full object-cover" />
                 )}
-                <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors z-10"
@@ -21,7 +22,7 @@ export default function Detail({ show, onClose, division, periodYear }) {
                 </button>
                 <div className="absolute bottom-6 left-8 flex items-end gap-4">
                     {division.icon_image && (
-                        <div className="w-16 h-16 bg-white rounded-2xl p-2 shadow-xl border border-border">
+                        <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20 shrink-0">
                             <img src={division.icon_image} alt="icon" className="w-full h-full object-contain" />
                         </div>
                     )}
@@ -34,11 +35,21 @@ export default function Detail({ show, onClose, division, periodYear }) {
 
             {/* Modal Body */}
             <div className="p-8">
-                <div className="space-y-8">
-                    <div className="space-y-3">
-                        <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest">Tentang Divisi</h3>
-                        <p className="font-bold text-lg text-foreground leading-snug">{division.short_desc}</p>
-                        <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{division.description}</p>
+                <div className="space-y-10">
+                    <div className="space-y-8">
+                        {/* Nama Lengkap Departemen Section */}
+                        <div className="space-y-2">
+                            <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Nama Lengkap Departemen</h3>
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{division.short_desc}</p>
+                        </div>
+
+                        {/* Deskripsi Divisi Section */}
+                        <div className="space-y-3">
+                            <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Deskripsi Divisi</h3>
+                            <div className="space-y-2">
+                                <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{division.description}</p>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="space-y-4">

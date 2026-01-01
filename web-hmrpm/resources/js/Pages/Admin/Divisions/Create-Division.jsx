@@ -1,6 +1,8 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { ArrowLeft, Save, Upload, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import ImageCropper from "@/Components/ImageCropper";
 
 export default function Create({ periods, selectedPeriodId }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -12,6 +14,40 @@ export default function Create({ periods, selectedPeriodId }) {
         icon_image: null,
         image: null,
     });
+
+    const [showCropper, setShowCropper] = useState(false);
+    const [masterBackgroundSource, setMasterBackgroundSource] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const [cropperKey, setCropperKey] = useState(0);
+
+    // Update previewUrl whenever data.image changes (to show result in form)
+    useEffect(() => {
+        if (!data.image) {
+            setPreviewUrl(null);
+            return;
+        }
+        const url = URL.createObjectURL(data.image);
+        setPreviewUrl(url);
+        return () => URL.revokeObjectURL(url);
+    }, [data.image]);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setMasterBackgroundSource(reader.result);
+                setCropperKey(prev => prev + 1);
+                setShowCropper(true);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleCropComplete = (croppedFile) => {
+        setData('image', croppedFile);
+        setShowCropper(false);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -41,7 +77,7 @@ export default function Create({ periods, selectedPeriodId }) {
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="max-w-4xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <form onSubmit={handleSubmit} className="max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Main Form */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="bg-white rounded-2xl border border-border p-6 space-y-6 shadow-sm">
@@ -108,11 +144,11 @@ export default function Create({ periods, selectedPeriodId }) {
                     {/* Sidebar / Uploads */}
                     <div className="space-y-6">
                         <div className="bg-white rounded-2xl border border-border p-6 space-y-6 shadow-sm">
-                            <h2 className="text-xl font-bold">Media & Gaya</h2>
+                            <h2 className="text-xl font-bold text-foreground">Media & Gaya</h2>
 
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label className="block text-sm font-medium">Icon Divisi (Transparent PNG)</label>
+                                    <label className="block text-sm font-medium text-foreground">Icon Divisi (Transparent PNG)</label>
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -122,16 +158,14 @@ export default function Create({ periods, selectedPeriodId }) {
                                     />
                                     <label
                                         htmlFor="icon-upload"
-                                        className="flex flex-col items-center justify-center gap-2 w-full aspect-square border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-muted/30 transition-colors group"
+                                        className="flex flex-col items-center justify-center gap-2 w-full aspect-square border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-muted/30 transition-colors group overflow-hidden"
                                     >
                                         {data.icon_image ? (
-                                            <div className="relative w-full h-full p-4">
-                                                <img
-                                                    src={URL.createObjectURL(data.icon_image)}
-                                                    className="w-full h-full object-contain"
-                                                    alt="Preview"
-                                                />
-                                            </div>
+                                            <img
+                                                src={URL.createObjectURL(data.icon_image)}
+                                                className="w-full h-full object-contain p-4"
+                                                alt="Preview"
+                                            />
                                         ) : (
                                             <>
                                                 <Upload size={24} className="text-muted-foreground group-hover:scale-110 transition-transform" />
@@ -143,39 +177,61 @@ export default function Create({ periods, selectedPeriodId }) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="block text-sm font-medium">Background Image</label>
+                                    <label className="block text-sm font-medium text-foreground">Background Image</label>
                                     <input
                                         type="file"
                                         accept="image/*"
-                                        onChange={e => setData('image', e.target.files[0])}
+                                        onChange={handleImageChange}
                                         className="hidden"
                                         id="image-upload"
                                     />
-                                    <label
-                                        htmlFor="image-upload"
-                                        className="flex flex-col items-center justify-center gap-2 w-full aspect-video border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-muted/30 transition-colors group overflow-hidden"
-                                    >
+                                    <div className="relative group overflow-hidden rounded-2xl border-2 border-dashed border-border aspect-video bg-muted/5">
                                         {data.image ? (
-                                            <img
-                                                src={URL.createObjectURL(data.image)}
-                                                className="w-full h-full object-cover"
-                                                alt="Preview"
-                                            />
-                                        ) : (
                                             <>
-                                                <Upload size={24} className="text-muted-foreground group-hover:scale-110 transition-transform" />
-                                                <span className="text-xs font-bold text-muted-foreground">Upload Background</span>
+                                                <img
+                                                    src={previewUrl}
+                                                    className="w-full h-full object-cover cursor-pointer transition-transform duration-500 group-hover:scale-105"
+                                                    alt="Preview"
+                                                    onClick={() => {
+                                                        if (masterBackgroundSource) {
+                                                            setCropperKey(prev => prev + 1);
+                                                            setShowCropper(true);
+                                                        }
+                                                    }}
+                                                />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center pointer-events-none">
+                                                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 flex flex-col items-center gap-1 scale-90 group-hover:scale-100 transition-transform">
+                                                        <Save size={24} className="text-white" />
+                                                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Klik untuk Re-crop</span>
+                                                    </div>
+                                                </div>
+                                                <label
+                                                    htmlFor="image-upload"
+                                                    className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/btn"
+                                                    title="Ganti Gambar"
+                                                >
+                                                    <Upload size={16} className="group-hover/btn:rotate-12 transition-transform" />
+                                                </label>
                                             </>
+                                        ) : (
+                                            <label
+                                                htmlFor="image-upload"
+                                                className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer hover:bg-muted/30 transition-colors group"
+                                            >
+                                                <Upload size={24} className="text-muted-foreground group-hover:scale-110 transition-transform" />
+                                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest font-black">Upload Background</span>
+                                            </label>
                                         )}
-                                    </label>
-                                    {errors.image && <p className="text-red-600 text-sm mt-1">{errors.image}</p>}
+                                    </div>
+                                    <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:8 untuk tampilan bg di website</p>
+                                    {errors.image && <p className="text-red-600 text-sm mt-1 font-bold">{errors.image}</p>}
                                 </div>
                             </div>
 
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-red hover:bg-brand-red/90 text-white rounded-2xl font-black transition-all disabled:opacity-50 shadow-xl shadow-red-100 uppercase tracking-wider"
+                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-red hover:bg-brand-red/90 text-white rounded-2xl font-black transition-all disabled:opacity-50 shadow-xl shadow-red-100 uppercase tracking-wider font-black"
                             >
                                 <Save size={20} />
                                 {processing ? 'Menyimpan...' : 'Tambah Divisi'}
@@ -183,6 +239,18 @@ export default function Create({ periods, selectedPeriodId }) {
                         </div>
                     </div>
                 </form>
+
+                {showCropper && (
+                    <ImageCropper
+                        key={`cropper-${cropperKey}`}
+                        image={masterBackgroundSource}
+                        aspectRatio={16 / 8}
+                        onCropComplete={handleCropComplete}
+                        onCancel={() => {
+                            setShowCropper(false);
+                        }}
+                    />
+                )}
             </div>
         </>
     );

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Head, Link, useForm, router } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { ArrowLeft, Save, Plus, Trash2, Upload, Users, Edit as EditIcon } from "lucide-react";
 import MemberModal from "../Members/Modal-Member";
+import ImageCropper from "@/Components/ImageCropper";
 
 export default function Edit({ division }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -28,6 +29,40 @@ export default function Edit({ division }) {
         linkedin: '',
         email: '',
     });
+
+    const [showCropper, setShowCropper] = useState(false);
+    const [masterBackgroundSource, setMasterBackgroundSource] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const [cropperKey, setCropperKey] = useState(0);
+
+    // Update previewUrl whenever data.image changes (to show result in form)
+    useEffect(() => {
+        if (!data.image) {
+            setPreviewUrl(null);
+            return;
+        }
+        const url = URL.createObjectURL(data.image);
+        setPreviewUrl(url);
+        return () => URL.revokeObjectURL(url);
+    }, [data.image]);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setMasterBackgroundSource(reader.result);
+                setCropperKey(prev => prev + 1);
+                setShowCropper(true);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleCropComplete = (croppedFile) => {
+        setData('image', croppedFile);
+        setShowCropper(false);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -95,121 +130,61 @@ export default function Edit({ division }) {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Form Divisi */}
-                    <div className="lg:col-span-2">
-                        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-border p-6 space-y-6 shadow-sm">
-                            <h2 className="text-xl font-bold">Informasi Divisi</h2>
+                <form onSubmit={handleSubmit} className="max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Main Content (Left) */}
+                    <div className="lg:col-span-2 space-y-6">
+                        {/* Informasi Divisi */}
+                        <div className="bg-white rounded-2xl border border-border p-6 space-y-6 shadow-sm">
+                            <h2 className="text-xl font-bold text-foreground">Informasi Divisi</h2>
 
-                            <div>
-                                <label className="block text-sm font-medium mb-2">Nama Divisi</label>
-                                <input
-                                    type="text"
-                                    value={data.name}
-                                    onChange={e => setData('name', e.target.value)}
-                                    className="w-full px-4 py-2.5 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20"
-                                />
-                                {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium mb-2">Nama Lengkap Depertemen</label>
-                                <input
-                                    type="text"
-                                    value={data.short_desc}
-                                    onChange={e => setData('short_desc', e.target.value)}
-                                    className="w-full px-4 py-2.5 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20"
-                                />
-                                {errors.short_desc && <p className="text-red-600 text-sm mt-1">{errors.short_desc}</p>}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium mb-2">Deskripsi Lengkap</label>
-                                <textarea
-                                    value={data.description}
-                                    onChange={e => setData('description', e.target.value)}
-                                    rows={4}
-                                    className="w-full px-4 py-2.5 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20"
-                                />
-                                {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium mb-2">Icon Image</label>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-foreground">Nama Divisi</label>
                                     <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={e => setData('icon_image', e.target.files[0])}
-                                        className="hidden"
-                                        id="icon-upload"
+                                        type="text"
+                                        value={data.name}
+                                        onChange={e => setData('name', e.target.value)}
+                                        className="w-full px-4 py-2.5 bg-white border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 text-foreground"
+                                        placeholder="Nama divisi"
                                     />
-                                    <label
-                                        htmlFor="icon-upload"
-                                        className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-border rounded-xl cursor-pointer hover:bg-muted/30 transition-colors"
-                                    >
-                                        <Upload size={20} className="text-muted-foreground" />
-                                        <span className="text-sm font-medium text-muted-foreground">
-                                            {data.icon_image ? data.icon_image.name : 'Upload icon'}
-                                        </span>
-                                    </label>
-                                    {division.icon_image && !data.icon_image && (
-                                        <img src={division.icon_image} alt="Current icon" className="mt-2 h-16 w-16 object-cover rounded-lg shadow-sm border border-border" />
-                                    )}
+                                    {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium mb-2">Background Image</label>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-foreground">Deskripsi Singkat</label>
                                     <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={e => setData('image', e.target.files[0])}
-                                        className="hidden"
-                                        id="image-upload"
+                                        type="text"
+                                        value={data.short_desc}
+                                        onChange={e => setData('short_desc', e.target.value)}
+                                        className="w-full px-4 py-2.5 bg-white border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 text-foreground"
+                                        placeholder="Penjelasan singkat fokus divisi"
                                     />
-                                    <label
-                                        htmlFor="image-upload"
-                                        className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-border rounded-xl cursor-pointer hover:bg-muted/30 transition-colors"
-                                    >
-                                        <Upload size={20} className="text-muted-foreground" />
-                                        <span className="text-sm font-medium text-muted-foreground">
-                                            {data.image ? data.image.name : 'Upload background'}
-                                        </span>
-                                    </label>
-                                    {division.image && !data.image && (
-                                        <img src={division.image} alt="Current bg" className="mt-2 h-16 w-auto object-cover rounded-lg shadow-sm border border-border" />
-                                    )}
+                                    {errors.short_desc && <p className="text-red-600 text-sm mt-1">{errors.short_desc}</p>}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-foreground">Deskripsi Lengkap</label>
+                                    <textarea
+                                        value={data.description}
+                                        onChange={e => setData('description', e.target.value)}
+                                        rows={5}
+                                        className="w-full px-4 py-2.5 bg-white border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 text-foreground"
+                                        placeholder="Tuliskan tujuan, program kerja, atau detail lain dari divisi ini..."
+                                    />
+                                    {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
                                 </div>
                             </div>
+                        </div>
 
-                            <div className="flex gap-3 pt-4">
-                                <Link
-                                    href={`/admin/divisions?period_id=${division.period_id}`}
-                                    className="flex-1 px-4 py-2.5 bg-muted hover:bg-muted/80 rounded-xl font-medium text-center transition-colors"
-                                >
-                                    Batal
-                                </Link>
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-red hover:bg-brand-red/90 text-white rounded-xl font-medium transition-colors disabled:opacity-50 shadow-lg shadow-red-100"
-                                >
-                                    <Save size={18} />
-                                    {processing ? 'Menyimpan...' : 'Simpan Perubahan'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    {/* Anggota Divisi */}
-                    <div className="lg:col-span-1">
+                        {/* Anggota Divisi */}
                         <div className="bg-white rounded-2xl border border-border p-6 space-y-4 shadow-sm">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xl font-bold flex items-center gap-2">
+                                <h2 className="text-xl font-bold flex items-center gap-2 text-foreground">
                                     <Users size={24} className="text-brand-red" />
                                     Anggota Divisi
                                 </h2>
                                 <button
+                                    type="button"
                                     onClick={() => setShowMemberModal(true)}
                                     className="p-2 bg-brand-red text-white rounded-lg hover:bg-brand-red/90 transition-all hover:scale-110 active:scale-95 shadow-lg shadow-red-100"
                                     title="Tambah Anggota"
@@ -218,12 +193,12 @@ export default function Edit({ division }) {
                                 </button>
                             </div>
 
-                            <div className="space-y-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {division.members && division.members.length > 0 ? (
                                     division.members.map(member => (
-                                        <div key={member.id} className="group flex items-center justify-between p-3 bg-muted/40 hover:bg-muted/70 border border-border/50 rounded-2xl transition-all duration-300">
+                                        <div key={member.id} className="group flex items-center justify-between p-3 bg-muted/20 hover:bg-muted/40 border border-border/50 rounded-2xl transition-all duration-300">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-white shadow-sm ring-1 ring-border/50">
+                                                <div className="w-11 h-11 rounded-full overflow-hidden border border-border bg-white shrink-0">
                                                     <img
                                                         src={member.photo || '/storage/logo/hmrpm.png'}
                                                         alt={member.name}
@@ -231,20 +206,21 @@ export default function Edit({ division }) {
                                                         onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
                                                     />
                                                 </div>
-                                                <div>
-                                                    <p className="font-bold text-sm text-foreground leading-tight">{member.name}</p>
+                                                <div className="min-w-0">
+                                                    <p className="font-bold text-sm text-foreground leading-tight truncate">{member.name}</p>
                                                     <p className="text-[10px] font-bold text-brand-red uppercase tracking-wider mt-0.5">{member.role}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <Link
                                                     href={`/admin/members/${member.id}/edit`}
-                                                    className="p-2 hover:bg-white/80 rounded-xl transition-colors text-muted-foreground hover:text-foreground"
+                                                    className="p-2 hover:bg-white rounded-xl transition-colors text-muted-foreground hover:text-foreground"
                                                     title="Edit Anggota"
                                                 >
                                                     <EditIcon size={16} />
                                                 </Link>
                                                 <button
+                                                    type="button"
                                                     onClick={() => handleDeleteMember(member)}
                                                     className="p-2 hover:bg-red-50 rounded-xl transition-colors text-muted-foreground hover:text-red-600"
                                                     title="Hapus"
@@ -255,7 +231,7 @@ export default function Edit({ division }) {
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-center py-10 px-4">
+                                    <div className="col-span-full text-center py-10 px-4">
                                         <Users size={40} className="mx-auto text-muted-foreground opacity-20 mb-3" />
                                         <p className="text-sm text-muted-foreground font-medium underline underline-offset-4 decoration-muted/30">Belum ada anggota</p>
                                     </div>
@@ -263,7 +239,133 @@ export default function Edit({ division }) {
                             </div>
                         </div>
                     </div>
-                </div>
+
+                    {/* Sidebar / Uploads (Right) */}
+                    <div className="space-y-6">
+                        <div className="bg-white rounded-2xl border border-border p-6 space-y-6 shadow-sm">
+                            <h2 className="text-xl font-bold text-foreground">Media & Gaya</h2>
+
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-foreground">Icon Divisi (Transparent PNG)</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={e => setData('icon_image', e.target.files[0])}
+                                        className="hidden"
+                                        id="icon-upload"
+                                    />
+                                    <label
+                                        htmlFor="icon-upload"
+                                        className="flex flex-col items-center justify-center gap-2 w-full aspect-square border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-muted/30 transition-colors group overflow-hidden"
+                                    >
+                                        {data.icon_image ? (
+                                            <img
+                                                src={URL.createObjectURL(data.icon_image)}
+                                                className="w-full h-full object-contain p-4"
+                                                alt="Preview"
+                                            />
+                                        ) : division.icon_image ? (
+                                            <img
+                                                src={division.icon_image}
+                                                className="w-full h-full object-contain p-4"
+                                                alt="Current"
+                                            />
+                                        ) : (
+                                            <>
+                                                <Upload size={24} className="text-muted-foreground group-hover:scale-110 transition-transform" />
+                                                <span className="text-xs font-bold text-muted-foreground">Upload Icon</span>
+                                            </>
+                                        )}
+                                    </label>
+                                    {errors.icon_image && <p className="text-red-600 text-sm mt-1">{errors.icon_image}</p>}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-foreground">Background Image</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className="hidden"
+                                        id="image-upload"
+                                    />
+                                    <div className="relative group overflow-hidden rounded-2xl border-2 border-dashed border-border aspect-video bg-muted/5">
+                                        {(data.image || division.image) ? (
+                                            <>
+                                                <img
+                                                    src={previewUrl || division.image}
+                                                    className="w-full h-full object-cover cursor-pointer transition-transform duration-500 group-hover:scale-105"
+                                                    alt="Preview"
+                                                    onClick={() => {
+                                                        const imgSrc = masterBackgroundSource || division.image;
+                                                        if (imgSrc) {
+                                                            setMasterBackgroundSource(imgSrc);
+                                                            setCropperKey(prev => prev + 1);
+                                                            setShowCropper(true);
+                                                        }
+                                                    }}
+                                                />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center pointer-events-none">
+                                                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 flex flex-col items-center gap-1 scale-90 group-hover:scale-100 transition-transform">
+                                                        <EditIcon size={24} className="text-white" />
+                                                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Klik untuk Re-crop</span>
+                                                    </div>
+                                                </div>
+                                                <label
+                                                    htmlFor="image-upload"
+                                                    className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/btn"
+                                                    title="Ganti Gambar"
+                                                >
+                                                    <Upload size={16} className="group-hover/btn:rotate-12 transition-transform" />
+                                                </label>
+                                            </>
+                                        ) : (
+                                            <label
+                                                htmlFor="image-upload"
+                                                className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer hover:bg-muted/30 transition-colors group"
+                                            >
+                                                <Upload size={24} className="text-muted-foreground group-hover:scale-110 transition-transform" />
+                                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest font-black">Upload Background</span>
+                                            </label>
+                                        )}
+                                    </div>
+                                    <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:8 untuk tampilan hero di website</p>
+                                    {errors.image && <p className="text-red-600 text-sm mt-1 font-bold">{errors.image}</p>}
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-4">
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-red hover:bg-brand-red/90 text-white rounded-2xl font-black transition-all disabled:opacity-50 shadow-xl shadow-red-100 uppercase tracking-wider"
+                                >
+                                    <Save size={20} />
+                                    {processing ? 'Menyimpan...' : 'Simpan Perubahan'}
+                                </button>
+                                <Link
+                                    href={`/admin/divisions?period_id=${division.period_id}`}
+                                    className="w-full block px-6 py-3 bg-muted hover:bg-muted/80 text-foreground rounded-2xl font-bold text-center transition-all"
+                                >
+                                    Batal
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                {showCropper && (
+                    <ImageCropper
+                        key={`cropper-${cropperKey}`}
+                        image={masterBackgroundSource}
+                        aspectRatio={16 / 8}
+                        onCropComplete={handleCropComplete}
+                        onCancel={() => {
+                            setShowCropper(false);
+                        }}
+                    />
+                )}
             </div>
 
             {/* Modal Tambah Anggota */}

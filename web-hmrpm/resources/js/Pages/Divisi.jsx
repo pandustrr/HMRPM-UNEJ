@@ -348,102 +348,105 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                 </div>
             </section>
 
-            {/* Division Detail Modal */}
+            {/* Division Detail Modal - Replicated from Detail-Division.jsx */}
             <AnimatePresence>
                 {selectedDivision && (
-                    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6 pb-20 sm:pb-6 overflow-y-auto">
+                    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6 overflow-hidden">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setSelectedDivision(null)}
-                            className="fixed inset-0 bg-black/40 backdrop-blur-md"
+                            className="fixed inset-0 bg-white/60 dark:bg-black/60 backdrop-blur-md"
                         />
 
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            initial={{ opacity: 0, scale: 0.95, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full max-w-4xl bg-card h-88 sm:h-112 rounded-4xl shadow-2xl overflow-hidden border-4 border-white/10"
+                            exit={{ opacity: 0, scale: 0.95, y: 30 }}
+                            className="relative w-full max-w-2xl bg-card rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col border border-border/50"
                         >
-                            {/* Close Button */}
-                            <button
-                                onClick={() => setSelectedDivision(null)}
-                                className="absolute top-8 right-8 z-20 w-12 h-12 rounded-full bg-black/50 hover:bg-brand-red text-white flex items-center justify-center transition-all hover:rotate-90 active:scale-95 shadow-xl"
-                            >
-                                <X size={24} />
-                            </button>
-
-                            <div className="grid grid-cols-1 lg:grid-cols-5 h-full">
-                                {/* Left Side - Info */}
-                                <div className="lg:col-span-3 p-8 sm:p-12 lg:p-16">
-                                    <div className={cn(
-                                        "w-12 h-12 rounded-xl flex items-center justify-center mb-10 overflow-hidden bg-muted shadow-lg",
-                                        "border border-white/10"
-                                    )}>
-                                        <img
-                                            src={selectedDivision.icon_image}
-                                            alt={selectedDivision.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-
-                                    <h2 className="text-4xl sm:text-5xl font-black tracking-tighter mb-8 leading-none">
-                                        {selectedDivision.name}
-                                    </h2>
-
-                                    <div className="space-y-10">
-                                        <section>
-                                            <div className="flex items-center gap-2 text-brand-red font-black text-xs uppercase tracking-widest mb-4">
-                                                <Info size={14} /> Description
-                                            </div>
-                                            <p className="text-foreground/80 leading-relaxed text-lg font-medium">
-                                                {selectedDivision.description}
-                                            </p>
-                                        </section>
-
-                                        <section>
-                                            <div className="flex items-center gap-2 text-brand-red font-black text-xs uppercase tracking-widest mb-6">
-                                                <Users size={14} /> Anggota & Role
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                                                {selectedDivision.members.map((member, mIdx) => (
-                                                    <div key={mIdx} className="flex flex-col p-4 rounded-2xl bg-muted/50 border border-border/50">
-                                                        <span className="font-black text-sm text-foreground">{member.name}</span>
-                                                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">{member.role}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </section>
+                            {/* Custom Header with Image/Gradient */}
+                            <div className="relative h-48 bg-muted shrink-0">
+                                {selectedDivision.image && (
+                                    <img src={selectedDivision.image} alt={selectedDivision.name} className="w-full h-full object-cover" />
+                                )}
+                                <div className="absolute inset-0 bg-linear-to-t from-white via-white/40 dark:from-zinc-900 dark:via-zinc-900/40 to-transparent" />
+                                <button
+                                    onClick={() => setSelectedDivision(null)}
+                                    className="absolute top-4 right-4 p-2 bg-zinc-900/10 dark:bg-white/10 hover:bg-zinc-900/20 dark:hover:bg-white/20 text-zinc-900 dark:text-white rounded-full transition-colors z-10"
+                                >
+                                    <X size={20} />
+                                </button>
+                                <div className="absolute bottom-6 left-8 flex items-end gap-4">
+                                    {selectedDivision.icon_image && (
+                                        <div className="w-16 h-16 bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-zinc-200 dark:border-white/20 shrink-0 shadow-sm">
+                                            <img src={selectedDivision.icon_image} alt="icon" className="w-full h-full object-contain" />
+                                        </div>
+                                    )}
+                                    <div>
+                                        <h2 className="text-3xl font-black text-zinc-900 dark:text-white">{selectedDivision.name}</h2>
+                                        <p className="text-zinc-600 dark:text-zinc-400 text-sm font-bold">Periode {currentPeriod}</p>
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Right Side - Image/Decoration */}
-                                <div className="lg:col-span-2 relative hidden lg:block overflow-hidden">
-                                    <img
-                                        src={selectedDivision.image}
-                                        alt={selectedDivision.name}
-                                        className="w-full h-full object-cover scale-110"
-                                    />
-                                    <div className={cn(
-                                        "absolute inset-0 bg-linear-to-br opacity-60",
-                                        selectedDivision.color
-                                    )}></div>
-                                    <div className="absolute inset-0 flex items-center justify-center p-12">
-                                        <div className="text-white text-center">
-                                            <div className="w-32 h-32 rounded-4xl overflow-hidden mx-auto mb-8 bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
-                                                <img
-                                                    src={selectedDivision.icon_image}
-                                                    alt={selectedDivision.name}
-                                                    className="w-full h-full object-cover rounded-4xl"
-                                                />
+                            {/* Modal Body */}
+                            <div className="p-8 overflow-y-auto max-h-[60vh] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-zinc-200 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700 [&::-webkit-scrollbar-thumb]:rounded-full">
+                                <div className="space-y-10">
+                                    <div className="space-y-8">
+                                        {/* Nama Lengkap Departemen Section */}
+                                        <div className="space-y-2">
+                                            <h3 className="text-[10px] font-black text-brand-red uppercase tracking-[0.2em]">Nama Lengkap Departemen</h3>
+                                            <p className="text-foreground/80 leading-relaxed font-bold text-lg whitespace-pre-wrap">{selectedDivision.short_desc}</p>
+                                        </div>
+
+                                        {/* Deskripsi Divisi Section */}
+                                        <div className="space-y-3">
+                                            <h3 className="text-[10px] font-black text-brand-red uppercase tracking-[0.2em]">Deskripsi Divisi</h3>
+                                            <div className="space-y-2">
+                                                <p className="text-foreground/80 leading-relaxed font-medium whitespace-pre-wrap">{selectedDivision.description}</p>
                                             </div>
-                                            <h3 className="text-4xl font-black tracking-tighter drop-shadow-lg">
-                                                {selectedDivision.name}
-                                            </h3>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <h3 className="text-xs font-black text-brand-red uppercase tracking-widest flex items-center gap-2">
+                                            <Users size={14} /> Anggota Divisi
+                                        </h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            {selectedDivision.members && selectedDivision.members.length > 0 ? (
+                                                selectedDivision.members.map(member => (
+                                                    <div key={member.id} className="flex items-center gap-3 p-3 bg-muted/50 rounded-2xl border border-border/50">
+                                                        <div className="w-10 h-10 rounded-full overflow-hidden border border-border bg-white shrink-0">
+                                                            <img
+                                                                src={member.photo || '/storage/logo/hmrpm.png'}
+                                                                alt={member.name}
+                                                                className="w-full h-full object-cover"
+                                                                onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
+                                                            />
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <p className="font-bold text-sm text-foreground line-clamp-1">{member.name}</p>
+                                                            <p className="text-[10px] font-bold text-brand-red uppercase tracking-wider">{member.role}</p>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="col-span-2 text-center py-8 text-muted-foreground text-sm italic">Belum ada anggota yang terdaftar</p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div className="p-6 bg-zinc-50 dark:bg-zinc-800/50 border-t border-zinc-100 dark:border-white/5 flex justify-end shrink-0">
+                                <button
+                                    onClick={() => setSelectedDivision(null)}
+                                    className="px-6 py-2 bg-zinc-100 dark:bg-brand-red border border-zinc-200 dark:border-brand-red rounded-xl font-black transition-all duration-300 text-sm text-zinc-900 dark:text-white hover:bg-zinc-200 dark:hover:bg-brand-red/80 hover:scale-105 active:scale-95 shadow-sm"
+                                >
+                                    Tutup
+                                </button>
                             </div>
                         </motion.div>
                     </div>
@@ -454,4 +457,3 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
 };
 
 export default Divisi;
-
