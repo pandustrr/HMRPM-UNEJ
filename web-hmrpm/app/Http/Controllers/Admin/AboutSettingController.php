@@ -14,7 +14,7 @@ class AboutSettingController extends Controller
     public function index()
     {
         $settings = AboutSetting::where('key', 'about_hero_bg')->first();
-        return Inertia::render('Admin/About/Index', [
+        return Inertia::render('Admin/About/Index-About', [
             'settings' => $settings
         ]);
     }

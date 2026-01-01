@@ -1,4 +1,4 @@
-import { Link, usePage } from "@inertiajs/react";
+import { Link, usePage, router } from "@inertiajs/react";
 import {
     LayoutDashboard,
     FileText,
@@ -7,6 +7,7 @@ import {
     LogOut,
     ChevronLeft,
     ChevronRight,
+    ChevronDown,
     Trophy,
     Info,
     GraduationCap,
@@ -18,16 +19,34 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
     const { url } = usePage();
+    const [openSubmenu, setOpenSubmenu] = useState("Divisi & Pengurus"); // Default open
 
     const menuItems = [
         { name: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
         { name: "Beranda", icon: Home, href: "/admin/beranda" },
         { name: "About", icon: Info, href: "/admin/about" },
-        { name: "Divisi & Pengurus", icon: Users, href: "/admin/divisi" },
-        { name: "Proker", icon: Calendar, href: "/admin/proker" },
+        {
+            name: "Divisi & Pengurus",
+            icon: Users,
+            href: "/admin/divisions-dashboard",
+            submenu: [
+                { name: "Kelola Periode", href: "/admin/periods" },
+                { name: "Kelola Divisi", href: "/admin/divisions" },
+                { name: "Kelola Pengurus", href: "/admin/members" },
+            ]
+        },
+        { name: "Proker", icon: Trophy, href: "/admin/proker" },
         { name: "Blog", icon: FileText, href: "/admin/blog" },
         { name: "Akademisi Prodi", icon: GraduationCap, href: "/admin/akademisi" },
     ];
+
+    const toggleSubmenu = (itemName) => {
+        setOpenSubmenu(openSubmenu === itemName ? null : itemName);
+    };
+
+    const isActiveSubmenu = (submenu) => {
+        return submenu.some(sub => url.startsWith(sub.href));
+    };
 
     return (
         <aside
@@ -64,41 +83,125 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
             {/* Navigation */}
             <nav className="px-3 py-4 space-y-1">
                 {menuItems.map((item) => (
-                    <Link
-                        key={item.name}
-                        href={item.href}
-                        className={cn(
-                            "flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
-                            url === item.href
-                                ? "bg-brand-red/10 text-brand-red font-bold"
-                                : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                        )}
-                    >
-                        <item.icon size={22} className={cn(
-                            "shrink-0 transition-transform duration-300 group-hover:scale-110",
-                            url === item.href ? "text-brand-red" : "text-muted-foreground"
-                        )} />
+                    <div key={item.name}>
+                        {/* Main Menu Item */}
+                        {item.submenu ? (
+                            <button
+                                onClick={() => {
+                                    if (item.href && !isCollapsed) {
+                                        router.get(item.href);
+                                    } else if (!isCollapsed) {
+                                        toggleSubmenu(item.name);
+                                    }
+                                }}
+                                className={cn(
+                                    "w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
+                                    isActiveSubmenu(item.submenu)
+                                        ? "bg-brand-red/10 text-brand-red font-bold"
+                                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                )}
+                            >
+                                <item.icon size={22} className={cn(
+                                    "shrink-0 transition-transform duration-300 group-hover:scale-110",
+                                    isActiveSubmenu(item.submenu) ? "text-brand-red" : "text-muted-foreground"
+                                )} />
 
-                        <AnimatePresence>
-                            {!isCollapsed && (
-                                <motion.span
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -10 }}
-                                    className="whitespace-nowrap overflow-hidden"
-                                >
-                                    {item.name}
-                                </motion.span>
-                            )}
-                        </AnimatePresence>
+                                <AnimatePresence>
+                                    {!isCollapsed && (
+                                        <motion.span
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -10 }}
+                                            className="flex-1 text-left whitespace-nowrap overflow-hidden"
+                                        >
+                                            {item.name}
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
 
-                        {url === item.href && (
-                            <motion.div
-                                layoutId="active-pill"
-                                className="absolute left-0 w-1 h-8 bg-brand-red rounded-r-full"
-                            />
+                                {!isCollapsed && (
+                                    <ChevronDown
+                                        size={16}
+                                        className={cn(
+                                            "transition-transform duration-300",
+                                            openSubmenu === item.name && "rotate-180"
+                                        )}
+                                    />
+                                )}
+                            </button>
+                        ) : (
+                            <Link
+                                href={item.href}
+                                className={cn(
+                                    "flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
+                                    url === item.href
+                                        ? "bg-brand-red/10 text-brand-red font-bold"
+                                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                )}
+                            >
+                                <item.icon size={22} className={cn(
+                                    "shrink-0 transition-transform duration-300 group-hover:scale-110",
+                                    url === item.href ? "text-brand-red" : "text-muted-foreground"
+                                )} />
+
+                                <AnimatePresence>
+                                    {!isCollapsed && (
+                                        <motion.span
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -10 }}
+                                            className="whitespace-nowrap overflow-hidden"
+                                        >
+                                            {item.name}
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+
+                                {url === item.href && (
+                                    <motion.div
+                                        layoutId="active-pill"
+                                        className="absolute left-0 w-1 h-8 bg-brand-red rounded-r-full"
+                                    />
+                                )}
+                            </Link>
                         )}
-                    </Link>
+
+                        {/* Submenu Items */}
+                        {item.submenu && !isCollapsed && (
+                            <AnimatePresence>
+                                {openSubmenu === item.name && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="ml-4 mt-1 space-y-1 border-l-2 border-muted pl-4">
+                                            {item.submenu.map((subItem) => (
+                                                <Link
+                                                    key={subItem.name}
+                                                    href={subItem.href}
+                                                    className={cn(
+                                                        "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm",
+                                                        url.startsWith(subItem.href)
+                                                            ? "bg-brand-red/10 text-brand-red font-semibold"
+                                                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                                    )}
+                                                >
+                                                    <div className={cn(
+                                                        "w-1.5 h-1.5 rounded-full transition-colors",
+                                                        url.startsWith(subItem.href) ? "bg-brand-red" : "bg-muted-foreground/30"
+                                                    )} />
+                                                    {subItem.name}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        )}
+                    </div>
                 ))}
             </nav>
 

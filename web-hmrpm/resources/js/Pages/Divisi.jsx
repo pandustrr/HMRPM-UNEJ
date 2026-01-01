@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { Head, Link, router } from "@inertiajs/react";
 import {
     ChevronDown,
     X,
@@ -17,9 +18,9 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { cn } from "../lib/utils";
 
-const Divisi = () => {
+const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
     const [selectedDivision, setSelectedDivision] = useState(null);
-    const [currentPeriod, setCurrentPeriod] = useState("2024/2025");
+    // const [currentPeriod, setCurrentPeriod] = useState("2024/2025"); // Now from props
     const [activeFilter, setActiveFilter] = useState("Semua");
 
     useEffect(() => {
@@ -30,138 +31,21 @@ const Divisi = () => {
         });
     }, []);
 
-    const periods = ["2024/2025", "2023/2024", "2022/2023"];
-
-    const divisions = [
-        {
-            id: 1,
-            name: "Pengurus Harian",
-            shortDesc: "Jantung organisasi yang mengelola administrasi, keuangan, dan koordinasi internal.",
-            description: "Pengurus Harian (PH) bertanggung jawab atas stabilitas dan jalannya roda organisasi secara keseluruhan. PH bertugas memastikan visi dan misi HMRPM tercapai melalui koordinasi yang efektif antar divisi.",
-            members: [
-                { name: "Ketua Umum", role: "Leader", prodi: "TRPM", angkatan: "22" },
-                { name: "Wakil Ketua", role: "Co-Leader", prodi: "TRPM", angkatan: "22" },
-                { name: "Sekretaris I & II", role: "Administration", prodi: "TRPM", angkatan: "23" },
-                { name: "Bendahara I & II", role: "Financial Control", prodi: "TRPM", angkatan: "23" },
-            ],
-            iconImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400",
-            color: "from-brand-red to-brand-maroon",
-            image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800",
-        },
-        {
-            id: 2,
-            name: "Divisi PSDM",
-            shortDesc: "Pengembangan Sumber Daya Mahasiswa untuk mencetak kader unggul.",
-            description: "Divisi PSDM berfokus pada pengembangan kualitas internal anggota HMRPM melalui berbagai pelatihan, kaderisasi, dan kegiatan yang membangun karakter serta kompetensi teknis.",
-            members: [
-                { name: "Koordinator Divisi", role: "Coordinator", prodi: "TRPM", angkatan: "22" },
-                { name: "Staf Pengembangan", role: "Skill Development", prodi: "TRPM", angkatan: "23" },
-                { name: "Staf Kaderisasi", role: "Growth & Culture", prodi: "TRPM", angkatan: "23" },
-            ],
-            iconImage: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=400",
-            color: "from-brand-maroon to-black",
-            image: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=800",
-        },
-        {
-            id: 3,
-            name: "Divisi Kominfo",
-            shortDesc: "Pusat komunikasi dan informasi digital HMRPM.",
-            description: "Divisi Komunikasi dan Informasi bertanggung jawab dalam mengelola citra organisasi, media sosial, website, serta publikasi informasi penting kepada seluruh anggota dan publik.",
-            members: [
-                { name: "Koordinator Divisi", role: "Coordinator", prodi: "TRPM", angkatan: "22" },
-                { name: "Staf Media", role: "Media Production", prodi: "TRPM", angkatan: "23" },
-                { name: "Staf Publikasi", role: "Public Relations", prodi: "TRPM", angkatan: "23" },
-                { name: "Staf Website", role: "Digital Infrastructure", prodi: "TRPM", angkatan: "22" },
-            ],
-            iconImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400",
-            color: "from-brand-red to-orange-900",
-            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
-        },
-        {
-            id: 4,
-            name: "Divisi Hubungan Luar",
-            shortDesc: "Menjalin sinergi dan kolaborasi dengan pihak eksternal.",
-            description: "Divisi Hubungan Luar berperan sebagai jembatan antara HMRPM dengan organisasi mahasiswa lain, alumni, dunia industri, serta instansi terkait untuk menciptakan kolaborasi yang bermanfaat.",
-            members: [
-                { name: "Koordinator Divisi", role: "Coordinator", prodi: "TRPM", angkatan: "22" },
-                { name: "Staf Humas", role: "Public Relations", prodi: "TRPM", angkatan: "23" },
-                { name: "Staf Kerjasama", role: "Partnership", prodi: "TRPM", angkatan: "23" },
-            ],
-            iconImage: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=400",
-            color: "from-black via-brand-maroon to-brand-red",
-            image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800",
-        },
-        {
-            id: 5,
-            name: "Divisi Kewirausahaan",
-            shortDesc: "Membangun kemandirian finansial dan jiwa usaha mahasiswa.",
-            description: "Divisi Kewirausahaan fokus pada pengembangan unit bisnis organisasi dan pelatihan soft skill entrepreneurship bagi anggota untuk meningkatkan kemandirian dana.",
-            members: [
-                { name: "Koordinator Divisi", role: "Coordinator", prodi: "TRPM", angkatan: "22" },
-                { name: "Staf Produksi", role: "Product Development", prodi: "TRPM", angkatan: "23" },
-                { name: "Staf Pemasaran", role: "Marketing", prodi: "TRPM", angkatan: "23" },
-            ],
-            iconImage: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=400",
-            color: "from-amber-600 to-brand-maroon",
-            image: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800",
-        },
-        {
-            id: 6,
-            name: "Divisi Minat Bakat",
-            shortDesc: "Wadah kreativitas, seni, dan olahraga mahasiswa RPM.",
-            description: "Divisi ini bertujuan menggali dan menyalurkan potensi non-akademik mahasiswa RPM di bidang olahraga, seni, dan kreativitas lainnya untuk meningkatkan prestasi non-akademik.",
-            members: [
-                { name: "Koordinator Divisi", role: "Coordinator", prodi: "TRPM", angkatan: "22" },
-                { name: "Staf Olahraga", role: "Sports", prodi: "TRPM", angkatan: "23" },
-                { name: "Staf Seni & Kreatif", role: "Arts & Culture", prodi: "TRPM", angkatan: "23" },
-            ],
-            iconImage: "https://images.unsplash.com/photo-1511267671478-45c7e002ea48?auto=format&fit=crop&q=80&w=400",
-            color: "from-brand-red to-rose-900",
-            image: "https://images.unsplash.com/photo-1511267671478-45c7e002ea48?auto=format&fit=crop&q=80&w=800",
-        },
-        {
-            id: 7,
-            name: "Divisi Keilmuan",
-            shortDesc: "Meningkatkan wawasan dan prestasi akademik mahasiswa.",
-            description: "Divisi Keilmuan bertanggung jawab dalam menyelenggarakan kegiatan yang menunjang prestasi akademik mahasiswa, seperti lomba karya tulis, riset, dan workshop teknik.",
-            members: [
-                { name: "Koordinator Divisi", role: "Coordinator", prodi: "TRPM", angkatan: "22" },
-                { name: "Staf Riset", role: "Research", prodi: "TRPM", angkatan: "23" },
-                { name: "Staf Kompetisi", role: "Academic Awards", prodi: "TRPM", angkatan: "23" },
-            ],
-            iconImage: "https://images.unsplash.com/photo-1454165833767-0275080064f7?auto=format&fit=crop&q=80&w=400",
-            color: "from-brand-maroon to-zinc-900",
-            image: "https://images.unsplash.com/photo-1454165833767-0275080064f7?auto=format&fit=crop&q=80&w=800",
-        },
-    ];
-
-    const officials = [
-        {
-            name: "Antigravity",
-            role: "Ketua Umum HMRPM 2024",
-            photo: "/storage/logo/hmrpm.png",
-            video: "https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4", // Placeholder video
-            prodi: "TRPM",
-            angkatan: "22"
-        },
-        {
-            name: "Fulan bin Fulan",
-            role: "Wakil Ketua Umum",
-            photo: "/storage/logo/hmrpm.png",
-            video: null, // No video fallback
-            prodi: "TRPM",
-            angkatan: "22"
-        },
-        { name: "Fulanah binti Fulan", role: "Sekretaris Umum", photo: "/storage/logo/hmrpm.png" },
-        { name: "Fulanah binti Fulan", role: "Bendahara Umum", photo: "/storage/logo/hmrpm.png" },
-    ];
+    // Helper for Period Change
+    const handlePeriodChange = (e) => {
+        router.get('/divisi', { period: e.target.value }, { preserveState: true });
+    };
 
     // Derived state for filtered members
-    const allMembers = divisions.flatMap(d =>
+    // Ensure divisions is an array (fallback if empty)
+    const safeDivisions = divisions || [];
+
+    const allMembers = safeDivisions.flatMap(d =>
         d.members.map(m => ({
             ...m,
             division: d.name,
-            photo: "/storage/logo/hmrpm.png"
+            // Fallbacks handled in backend or here
+            photo: m.photo || "/storage/logo/hmrpm.png"
         }))
     );
 
@@ -180,7 +64,7 @@ const Divisi = () => {
                     className="absolute inset-0 z-0"
                 >
                     <img
-                        src="/storage/logo/about-hero-bg.png"
+                        src={activePeriodData?.hero_image || "/storage/logo/about-hero-bg.png"}
                         alt="HMRPM Background"
                         className="w-full h-full object-cover"
                     />
@@ -207,7 +91,7 @@ const Divisi = () => {
                                 <div className="relative flex items-center">
                                     <select
                                         value={currentPeriod}
-                                        onChange={(e) => setCurrentPeriod(e.target.value)}
+                                        onChange={handlePeriodChange}
                                         className="appearance-none bg-transparent text-white/90 font-bold text-sm tracking-wide outline-none cursor-pointer pr-8 pl-1 transition-colors"
                                     >
                                         {periods.map(p => (
@@ -332,7 +216,7 @@ const Divisi = () => {
                                 <div className="relative flex items-center">
                                     <select
                                         value={currentPeriod}
-                                        onChange={(e) => setCurrentPeriod(e.target.value)}
+                                        onChange={handlePeriodChange}
                                         className="appearance-none bg-transparent text-white font-bold text-sm tracking-wide outline-none cursor-pointer pr-8 pl-1 transition-colors"
                                     >
                                         {periods.map(p => (
