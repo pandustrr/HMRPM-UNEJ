@@ -82,6 +82,7 @@ export default function Index({ periods }) {
                 onSuccess: () => {
                     setShowModal(false);
                     reset();
+                    setHasUploadedNewImage(false);
                 }
             });
         } else {
@@ -91,6 +92,7 @@ export default function Index({ periods }) {
                 onSuccess: () => {
                     setShowModal(false);
                     reset();
+                    setHasUploadedNewImage(false);
                 }
             });
         }
@@ -342,8 +344,17 @@ export default function Index({ periods }) {
                                         <div className="absolute top-3 left-3 px-3 py-1 bg-brand-red/90 text-white text-[10px] font-black uppercase tracking-widest rounded-full">
                                             {data.hero_image ? 'Baru' : 'Aktif Saat Ini'}
                                         </div>
+                                        <label
+                                            htmlFor="hero-upload"
+                                            className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/btn"
+                                            title="Ganti Gambar"
+                                        >
+                                            <Upload size={16} className="group-hover/btn:rotate-12 transition-transform" />
+                                        </label>
                                     </div>
                                 )}
+                                <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:9 untuk tampilan hero di website.</p>
+                                <p className="text-[10px] text-muted-foreground font-medium italic">Untuk crop ulang gambar yang sudah disimpan, silakan upload ulang background terlebih dahulu.</p>
 
                                 <div className="relative">
                                     <input
@@ -369,20 +380,13 @@ export default function Index({ periods }) {
                                     />
                                     <label
                                         htmlFor="hero-upload"
-                                        className="flex flex-col items-center justify-center gap-3 w-full p-8 border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-brand-red/5 hover:border-brand-red/30 transition-all group"
+                                        className="block text-center py-8 border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-brand-red/5 hover:border-brand-red/30 transition-all"
                                     >
-                                        <div className="p-3 bg-muted group-hover:bg-brand-red/10 rounded-full transition-colors">
-                                            <Upload size={24} className="text-muted-foreground group-hover:text-brand-red" />
-                                        </div>
-                                        <div className="text-center">
-                                            <p className="text-sm font-bold text-foreground">
-                                                {data.hero_image ? 'Ganti file terpilih' : 'Unggah file baru'}
-                                            </p>
-                                            <p className="text-xs text-muted-foreground mt-1">
-                                                Maksimal 20MB (.mp4, .jpg, .png, .gif)
-                                            </p>
-                                        </div>
+                                        <p className="text-sm font-bold text-foreground">
+                                            {data.hero_image ? 'Ganti file terpilih' : 'Unggah file baru'}
+                                        </p>
                                     </label>
+                                    <p className="text-[10px] text-muted-foreground font-medium italic">Maksimal 20MB (.mp4, .jpg, .png, .gif)</p>
                                 </div>
                                 {errors.hero_image && <p className="text-red-600 text-sm font-bold italic">{errors.hero_image}</p>}
                             </div>
@@ -524,7 +528,7 @@ export default function Index({ periods }) {
                                 onClick={() => setShowDetailModal(false)}
                                 className="w-full px-4 py-4 bg-brand-red hover:bg-brand-red/90 text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-brand-red/20 transition-all"
                             >
-                                Tutup Detail
+                                Tutup
                             </button>
                         </div>
                     </div>

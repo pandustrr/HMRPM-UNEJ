@@ -116,7 +116,7 @@ export default function Create({ periods, selectedPeriodId }) {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="block text-sm font-medium">Deskripsi Singkat</label>
+                                <label className="block text-sm font-medium">Nama Lengkap Departemen</label>
                                 <input
                                     type="text"
                                     value={data.short_desc}
@@ -190,21 +190,9 @@ export default function Create({ periods, selectedPeriodId }) {
                                             <>
                                                 <img
                                                     src={previewUrl}
-                                                    className="w-full h-full object-cover cursor-pointer transition-transform duration-500 group-hover:scale-105"
+                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                     alt="Preview"
-                                                    onClick={() => {
-                                                        if (masterBackgroundSource) {
-                                                            setCropperKey(prev => prev + 1);
-                                                            setShowCropper(true);
-                                                        }
-                                                    }}
                                                 />
-                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center pointer-events-none">
-                                                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 flex flex-col items-center gap-1 scale-90 group-hover:scale-100 transition-transform">
-                                                        <Save size={24} className="text-white" />
-                                                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Klik untuk Re-crop</span>
-                                                    </div>
-                                                </div>
                                                 <label
                                                     htmlFor="image-upload"
                                                     className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/btn"
@@ -223,7 +211,8 @@ export default function Create({ periods, selectedPeriodId }) {
                                             </label>
                                         )}
                                     </div>
-                                    <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:8 untuk tampilan bg di website</p>
+                                    <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:8 untuk tampilan bg di website.</p>
+                                    <p className="text-[10px] text-muted-foreground font-medium italic">Untuk crop ulang gambar yang sudah disimpan, silakan upload ulang background terlebih dahulu.</p>
                                     {errors.image && <p className="text-red-600 text-sm mt-1 font-bold">{errors.image}</p>}
                                 </div>
                             </div>

@@ -46,12 +46,18 @@ export default function Edit({ division }) {
         return () => URL.revokeObjectURL(url);
     }, [data.image]);
 
+    // Initialize originalImageSource from division.image on mount
+    useEffect(() => {
+        // Cleanup if needed
+    }, []);
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
-                setMasterBackgroundSource(reader.result);
+                const result = reader.result;
+                setMasterBackgroundSource(result);
                 setCropperKey(prev => prev + 1);
                 setShowCropper(true);
             };
@@ -77,6 +83,7 @@ export default function Edit({ division }) {
         if (data.icon_image instanceof File) {
             formData.append('icon_image', data.icon_image);
         }
+
         if (data.image instanceof File) {
             formData.append('image', data.image);
         }
@@ -151,7 +158,7 @@ export default function Edit({ division }) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-foreground">Deskripsi Singkat</label>
+                                    <label className="block text-sm font-medium text-foreground">Nama Lengkap Departemen</label>
                                     <input
                                         type="text"
                                         value={data.short_desc}
@@ -295,23 +302,9 @@ export default function Edit({ division }) {
                                             <>
                                                 <img
                                                     src={previewUrl || division.image}
-                                                    className="w-full h-full object-cover cursor-pointer transition-transform duration-500 group-hover:scale-105"
+                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                     alt="Preview"
-                                                    onClick={() => {
-                                                        const imgSrc = masterBackgroundSource || division.image;
-                                                        if (imgSrc) {
-                                                            setMasterBackgroundSource(imgSrc);
-                                                            setCropperKey(prev => prev + 1);
-                                                            setShowCropper(true);
-                                                        }
-                                                    }}
                                                 />
-                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center pointer-events-none">
-                                                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 flex flex-col items-center gap-1 scale-90 group-hover:scale-100 transition-transform">
-                                                        <EditIcon size={24} className="text-white" />
-                                                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Klik untuk Re-crop</span>
-                                                    </div>
-                                                </div>
                                                 <label
                                                     htmlFor="image-upload"
                                                     className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/btn"
@@ -330,7 +323,8 @@ export default function Edit({ division }) {
                                             </label>
                                         )}
                                     </div>
-                                    <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:8 untuk tampilan hero di website</p>
+                                    <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:8 untuk tampilan bg di website.</p>
+                                    <p className="text-[10px] text-muted-foreground font-medium italic">Untuk crop ulang gambar yang sudah disimpan, silakan upload ulang background terlebih dahulu.</p>
                                     {errors.image && <p className="text-red-600 text-sm mt-1 font-bold">{errors.image}</p>}
                                 </div>
                             </div>
