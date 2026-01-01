@@ -143,7 +143,7 @@ export default function Index({ periods }) {
                 <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-md hover:shadow-lg transition-shadow">
                     <div className="hidden md:block overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-gradient-to-r from-muted/50 to-muted/30 border-b border-border">
+                            <thead className="bg-linear-to-r from-muted/50 to-muted/30 border-b border-border">
                                 <tr>
                                     <th className="text-left px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Periode</th>
                                     <th className="text-left px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Hero Image</th>

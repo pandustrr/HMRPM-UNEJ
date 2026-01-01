@@ -261,7 +261,7 @@ const About = ({ background }) => {
                 {/* Arti Warna Section */}
                 <section className="relative py-24 px-8 lg:px-20 rounded-[4rem] bg-linear-to-br from-muted/50 via-muted/20 to-transparent border border-border/50 overflow-hidden">
                     <div className="absolute top-0 right-0 -mr-20 -mt-20 opacity-[0.03] select-none pointer-events-none">
-                        <Palette className="w-[500px] h-[500px]" />
+                        <Palette className="w-125 h-125" />
                     </div>
 
                     <div className="relative z-10">
@@ -327,7 +327,7 @@ const About = ({ background }) => {
                             className="relative group lg:max-w-5xl lg:mx-auto"
                         >
                             <div className="absolute -inset-4 bg-linear-to-r from-brand-red/20 to-brand-yellow/20 rounded-[3.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-                            <div className="relative bg-linear-to-br from-brand-red to-brand-maroon p-12 sm:p-20 rounded-[3rem] text-white shadow-2xl overflow-hidden min-h-[400px] flex flex-col justify-center">
+                            <div className="relative bg-linear-to-br from-brand-red to-brand-maroon p-12 sm:p-20 rounded-[3rem] text-white shadow-2xl overflow-hidden min-h-100 flex flex-col justify-center">
                                 <div className="absolute top-0 right-0 -mr-16 -mt-16 opacity-10 group-hover:scale-110 group-hover:rotate-12 transition-all duration-1000 select-none">
                                     <Target className="w-80 h-80" />
                                 </div>
