@@ -63,18 +63,23 @@ class DivisionController extends Controller
             'name' => 'required|string',
             'short_desc' => 'required|string',
             'description' => 'required|string',
-            'icon_image' => 'required|image|max:2048',
-            'image' => 'required|image|max:2048',
+            'icon_image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:2048',
             'color' => 'required|string',
         ]);
 
         if ($request->hasFile('icon_image')) {
             $path = $request->file('icon_image')->store('divisions/icons', 'public');
             $validated['icon_image'] = '/storage/' . $path;
+        } else {
+            unset($validated['icon_image']);
         }
+
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('divisions/images', 'public');
             $validated['image'] = '/storage/' . $path;
+        } else {
+            unset($validated['image']);
         }
 
         Division::create($validated);

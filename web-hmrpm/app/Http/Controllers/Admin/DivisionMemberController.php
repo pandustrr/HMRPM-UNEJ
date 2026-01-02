@@ -96,7 +96,6 @@ class DivisionMemberController extends Controller
             'photo' => 'nullable|image|max:2048',
             'video' => 'nullable|file|mimes:mp4,mov,avi|max:10240',
             'instagram' => 'nullable|url',
-            'linkedin' => 'nullable|url',
             'email' => 'nullable|email',
         ]);
 
@@ -152,7 +151,6 @@ class DivisionMemberController extends Controller
             'photo' => 'nullable|image|max:2048',
             'video' => 'nullable|file|mimes:mp4,mov,avi|max:10240',
             'instagram' => 'nullable|url',
-            'linkedin' => 'nullable|url',
             'email' => 'nullable|email',
         ]);
 

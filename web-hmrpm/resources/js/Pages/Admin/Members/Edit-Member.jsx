@@ -8,7 +8,6 @@ import {
     User,
     Video,
     Instagram,
-    Linkedin,
     Mail,
     ChevronDown,
     Trash2
@@ -28,7 +27,6 @@ export default function Edit({ member, periods, filter_division_id }) {
         photo: null,
         video: null,
         instagram: member.instagram || '',
-        linkedin: member.linkedin || '',
         email: member.email || '',
     });
 
@@ -140,18 +138,6 @@ export default function Edit({ member, periods, filter_division_id }) {
                                         type="url"
                                         value={data.instagram}
                                         onChange={e => setData('instagram', e.target.value)}
-                                        className="w-full px-4 py-2.5 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all"
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-bold text-foreground flex items-center gap-2">
-                                        <Linkedin size={14} /> LinkedIn URL
-                                    </label>
-                                    <input
-                                        type="url"
-                                        value={data.linkedin}
-                                        onChange={e => setData('linkedin', e.target.value)}
                                         className="w-full px-4 py-2.5 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all"
                                     />
                                 </div>

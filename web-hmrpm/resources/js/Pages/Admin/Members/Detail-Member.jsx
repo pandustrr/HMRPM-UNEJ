@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Instagram, Linkedin, Mail } from 'lucide-react';
+import { X, Instagram, Mail } from 'lucide-react';
 import Modal from '@/Components/Admin/Modal.jsx';
 
 export default function Detail({ show, onClose, member }) {
@@ -60,9 +60,9 @@ export default function Detail({ show, onClose, member }) {
                                         <Instagram size={18} />
                                     </a>
                                 )}
-                                {member.linkedin && (
-                                    <a href={member.linkedin} target="_blank" className="p-2 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
-                                        <Linkedin size={18} />
+                                {member.email && (
+                                    <a href={`mailto:${member.email}`} className="p-2 rounded-xl bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
+                                        <Mail size={18} />
                                     </a>
                                 )}
                             </div>

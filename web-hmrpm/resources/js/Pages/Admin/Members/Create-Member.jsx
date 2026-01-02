@@ -8,7 +8,6 @@ import {
     User,
     Video,
     Instagram,
-    Linkedin,
     Mail,
     ChevronDown
 } from "lucide-react";
@@ -31,7 +30,6 @@ export default function Create({ periods, prefill, filter_division_id }) {
         photo: null,
         video: null,
         instagram: '',
-        linkedin: '',
         email: '',
     });
 
@@ -170,19 +168,6 @@ export default function Create({ periods, prefill, filter_division_id }) {
                                         onChange={e => setData('instagram', e.target.value)}
                                         className="w-full px-4 py-2.5 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all"
                                         placeholder="https://instagram.com/..."
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-bold text-foreground flex items-center gap-2">
-                                        <Linkedin size={14} /> LinkedIn URL
-                                    </label>
-                                    <input
-                                        type="url"
-                                        value={data.linkedin}
-                                        onChange={e => setData('linkedin', e.target.value)}
-                                        className="w-full px-4 py-2.5 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all"
-                                        placeholder="https://linkedin.com/in/..."
                                     />
                                 </div>
 

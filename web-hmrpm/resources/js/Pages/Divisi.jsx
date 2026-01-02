@@ -7,7 +7,6 @@ import {
     Users,
     ArrowRight,
     Mail,
-    Linkedin,
     Instagram,
     Info,
     LayoutGrid,
@@ -329,17 +328,28 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                                         {person.prodi || "TRPM"} ({person.angkatan || "23"})
                                     </p>
 
-                                    {/* Social Icons - Always visible or fade in? User didn't specify, but keeping them accessible is good. Let's make them fade in slightly or be subtle. */}
+                                    {/* Social Icons - Instagram & Email */}
                                     <div className="flex gap-3 opacity-80 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 transition-transform">
-                                        <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer">
-                                            <Instagram size={14} className="text-white" />
-                                        </div>
-                                        <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer">
-                                            <Linkedin size={14} className="text-white" />
-                                        </div>
-                                        <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer">
-                                            <Mail size={14} className="text-white" />
-                                        </div>
+                                        {person.instagram && (
+                                            <a
+                                                href={person.instagram}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                                title="Instagram"
+                                            >
+                                                <Instagram size={14} className="text-white" />
+                                            </a>
+                                        )}
+                                        {person.email && (
+                                            <a
+                                                href={`mailto:${person.email}`}
+                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                                title="Email"
+                                            >
+                                                <Mail size={14} className="text-white" />
+                                            </a>
+                                        )}
                                     </div>
                                 </div>
                             </motion.div>

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('short_desc');
             $table->longText('description');
-            $table->string('icon_image');
-            $table->string('image');
+            $table->string('icon_image')->nullable();
+            $table->string('image')->nullable();
             $table->string('color')->nullable(); // Tailwind classes e.g. "from-red-500 to-black"
             $table->timestamps();
         });
