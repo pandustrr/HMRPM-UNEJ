@@ -19,12 +19,20 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
     const { url } = usePage();
-    const [openSubmenu, setOpenSubmenu] = useState("Divisi & Pengurus"); // Default open
+    const [openSubmenu, setOpenSubmenu] = useState(["Divisi & Pengurus"]); // Default open array
 
     const menuItems = [
         { name: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
         { name: "Beranda", icon: Home, href: "/admin/beranda" },
-        { name: "About", icon: Info, href: "/admin/about" },
+        {
+            name: "About",
+            icon: Info,
+            href: "/admin/about",
+            submenu: [
+                { name: "Hero Background", href: "/admin/about" },
+                { name: "Pembina & Pendamping", href: "/admin/advisors" },
+            ]
+        },
         {
             name: "Divisi & Pengurus",
             icon: Users,
@@ -40,11 +48,19 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
     ];
 
     const toggleSubmenu = (itemName) => {
-        setOpenSubmenu(openSubmenu === itemName ? null : itemName);
+        if (openSubmenu.includes(itemName)) {
+            setOpenSubmenu(openSubmenu.filter(item => item !== itemName));
+        } else {
+            setOpenSubmenu([...openSubmenu, itemName]);
+        }
     };
 
     const isActiveSubmenu = (submenu) => {
-        return submenu.some(sub => url.startsWith(sub.href));
+        return submenu.some(sub => isActiveLink(sub.href));
+    };
+
+    const isActiveLink = (href) => {
+        return url === href || url.startsWith(href + '/') || url.startsWith(href + '?');
     };
 
     return (
@@ -52,11 +68,11 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
             className={cn(
                 "fixed left-0 top-0 h-screen z-50 transition-all duration-500 ease-in-out",
                 "bg-white backdrop-blur-2xl border-r border-slate-200",
-                isCollapsed ? "w-20" : "w-72"
+                isCollapsed ? "w-16" : "w-64"
             )}
         >
             {/* Header */}
-            <div className="p-6 flex items-center justify-between">
+            <div className="p-4 flex items-center justify-between">
                 <AnimatePresence mode="wait">
                     {!isCollapsed && (
                         <motion.div
@@ -89,20 +105,24 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                                 onClick={() => {
                                     if (item.href && !isCollapsed) {
                                         router.get(item.href);
+                                        // Auto open if navigating to it
+                                        if (!openSubmenu.includes(item.name)) {
+                                            toggleSubmenu(item.name);
+                                        }
                                     } else if (!isCollapsed) {
                                         toggleSubmenu(item.name);
                                     }
                                 }}
                                 className={cn(
-                                    "w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
-                                    isActiveSubmenu(item.submenu)
+                                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 group",
+                                    isActiveSubmenu(item.submenu) || (item.href && isActiveLink(item.href))
                                         ? "bg-brand-red/10 text-brand-red font-bold"
                                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
                                 )}
                             >
-                                <item.icon size={22} className={cn(
+                                <item.icon size={18} className={cn(
                                     "shrink-0 transition-transform duration-300 group-hover:scale-110",
-                                    isActiveSubmenu(item.submenu) ? "text-brand-red" : "text-muted-foreground"
+                                    isActiveSubmenu(item.submenu) || (item.href && isActiveLink(item.href)) ? "text-brand-red" : "text-muted-foreground"
                                 )} />
 
                                 <AnimatePresence>
@@ -111,7 +131,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                                             initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -10 }}
-                                            className="flex-1 text-left whitespace-nowrap overflow-hidden"
+                                            className="flex-1 text-left text-sm font-medium whitespace-nowrap overflow-hidden"
                                         >
                                             {item.name}
                                         </motion.span>
@@ -120,10 +140,10 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
 
                                 {!isCollapsed && (
                                     <ChevronDown
-                                        size={16}
+                                        size={14}
                                         className={cn(
                                             "transition-transform duration-300",
-                                            openSubmenu === item.name && "rotate-180"
+                                            openSubmenu.includes(item.name) && "rotate-180"
                                         )}
                                     />
                                 )}
@@ -132,13 +152,13 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                             <Link
                                 href={item.href}
                                 className={cn(
-                                    "flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group",
+                                    "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 group",
                                     url === item.href
                                         ? "bg-brand-red/10 text-brand-red font-bold"
                                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
                                 )}
                             >
-                                <item.icon size={22} className={cn(
+                                <item.icon size={18} className={cn(
                                     "shrink-0 transition-transform duration-300 group-hover:scale-110",
                                     url === item.href ? "text-brand-red" : "text-muted-foreground"
                                 )} />
@@ -149,7 +169,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                                             initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -10 }}
-                                            className="whitespace-nowrap overflow-hidden"
+                                            className="whitespace-nowrap overflow-hidden text-sm font-medium"
                                         >
                                             {item.name}
                                         </motion.span>
@@ -159,7 +179,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                                 {url === item.href && (
                                     <motion.div
                                         layoutId="active-pill"
-                                        className="absolute left-0 w-1 h-8 bg-brand-red rounded-r-full"
+                                        className="absolute left-0 w-1 h-6 bg-brand-red rounded-r-full"
                                     />
                                 )}
                             </Link>
@@ -168,7 +188,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                         {/* Submenu Items */}
                         {item.submenu && !isCollapsed && (
                             <AnimatePresence>
-                                {openSubmenu === item.name && (
+                                {openSubmenu.includes(item.name) && (
                                     <motion.div
                                         initial={{ height: 0, opacity: 0 }}
                                         animate={{ height: "auto", opacity: 1 }}
@@ -183,14 +203,14 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                                                     href={subItem.href}
                                                     className={cn(
                                                         "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm",
-                                                        url.startsWith(subItem.href)
+                                                        isActiveLink(subItem.href)
                                                             ? "bg-brand-red/10 text-brand-red font-semibold"
                                                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
                                                     )}
                                                 >
                                                     <div className={cn(
                                                         "w-1.5 h-1.5 rounded-full transition-colors",
-                                                        url.startsWith(subItem.href) ? "bg-brand-red" : "bg-muted-foreground/30"
+                                                        isActiveLink(subItem.href) ? "bg-brand-red" : "bg-muted-foreground/30"
                                                     )} />
                                                     {subItem.name}
                                                 </Link>
@@ -211,10 +231,10 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                     method="post"
                     as="button"
                     className={cn(
-                        "w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl text-muted-foreground hover:bg-brand-red/10 hover:text-brand-red transition-all duration-300 group"
+                        "w-full flex items-center gap-3 px-3 py-3 rounded-2xl text-muted-foreground hover:bg-brand-red/10 hover:text-brand-red transition-all duration-300 group"
                     )}
                 >
-                    <LogOut size={22} className="shrink-0 transition-transform duration-300 group-hover:-translate-x-1" />
+                    <LogOut size={20} className="shrink-0 transition-transform duration-300 group-hover:-translate-x-1" />
                     <AnimatePresence>
                         {!isCollapsed && (
                             <motion.span

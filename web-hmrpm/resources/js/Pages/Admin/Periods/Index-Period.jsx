@@ -127,8 +127,8 @@ export default function Index({ periods }) {
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-2xl sm:text-3xl font-black text-foreground">Kelola Periode</h1>
-                        <p className="text-muted-foreground text-sm sm:text-base mt-1">Atur periode kepengurusan dan background hero</p>
+                        <h1 className="text-2xl font-bold text-foreground">Kelola Periode</h1>
+                        <p className="text-muted-foreground text-sm mt-1">Atur periode kepengurusan dan background hero</p>
                     </div>
 
                     <button
@@ -185,12 +185,12 @@ export default function Index({ periods }) {
                                         </td>
                                         <td className="px-4 sm:px-6 py-4 text-center">
                                             {period.is_active ? (
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 uppercase tracking-widest border border-emerald-200 shadow-sm">
-                                                    AKTIF
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-sm">
+                                                    Aktif
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black bg-brand-red/10 text-brand-red uppercase tracking-widest border border-brand-red/20 shadow-sm">
-                                                    DIARSIPKAN
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-brand-red/10 text-brand-red border border-brand-red/20 shadow-sm">
+                                                    Diarsipkan
                                                 </span>
                                             )}
                                         </td>
@@ -198,12 +198,12 @@ export default function Index({ periods }) {
                                             <div className="flex items-center justify-end gap-2">
                                                 <button
                                                     onClick={() => toggleActive(period)}
-                                                    className={`px-3 py-1.5 text-[10px] font-black rounded-lg transition-all uppercase tracking-widest shadow-lg active:scale-95 ${period.is_active
+                                                    className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all shadow-lg active:scale-95 ${period.is_active
                                                         ? 'border-brand-red bg-brand-red text-white shadow-brand-red/20'
                                                         : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-200'
                                                         }`}
                                                 >
-                                                    {period.is_active ? 'ARSIPKAN' : 'AKTIFKAN'}
+                                                    {period.is_active ? 'Arsipkan' : 'Aktifkan'}
                                                 </button>
                                                 <div className="w-px h-6 bg-border mx-1" />
                                                 <button

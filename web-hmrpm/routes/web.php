@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AboutSettingController;
 use App\Http\Controllers\Admin\PeriodController;
 use App\Http\Controllers\Admin\DivisionController as AdminDivisionController;
 use App\Http\Controllers\Admin\DivisionMemberController;
+use App\Http\Controllers\Admin\AdvisorController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\DivisionController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Divisions & Members
     Route::resource('divisions', AdminDivisionController::class);
     Route::resource('members', DivisionMemberController::class);
+
+    // Advisors (Pembina & Pendamping)
+    Route::patch('advisors/{advisor}/toggle-active', [AdvisorController::class, 'toggleActive'])->name('advisors.toggleActive');
+    Route::resource('advisors', AdvisorController::class);
 });
 
 Route::get('/', function () {

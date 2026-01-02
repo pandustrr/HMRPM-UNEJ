@@ -91,7 +91,7 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-black text-foreground">Kelola Divisi & Pengurus</h1>
+                        <h1 className="text-2xl font-bold text-foreground">Kelola Divisi & Pengurus</h1>
                         <p className="text-muted-foreground mt-1">Kelola divisi dan anggota pengurus per periode</p>
                     </div>
 
@@ -139,12 +139,12 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                         {divisions.map(division => (
                             <div key={division.id} className="bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-shadow">
                                 {/* Division Image */}
-                                <div className="h-40 bg-slate-100 relative overflow-hidden">
+                                <div className="h-32 bg-slate-100 relative overflow-hidden">
                                     {division.image && (
                                         <img src={division.image} alt={division.name} className="w-full h-full object-cover" />
                                     )}
                                     <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
-                                    <h3 className="absolute bottom-4 left-4 text-white font-black text-xl drop-shadow-lg">{division.name}</h3>
+                                    <h3 className="absolute bottom-3 left-3 text-white font-bold text-base drop-shadow-lg">{division.name}</h3>
                                 </div>
 
                                 {/* Division Info */}
@@ -188,11 +188,10 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setShowAllMembers(!showAllMembers)}
-                            className={`flex-1 px-6 py-3 rounded-xl font-bold transition-all ${
-                                showAllMembers
-                                    ? 'bg-brand-red text-white hover:bg-brand-red/90'
-                                    : 'bg-muted text-foreground hover:bg-muted/80'
-                            }`}
+                            className={`flex-1 px-6 py-3 rounded-xl font-bold transition-all ${showAllMembers
+                                ? 'bg-brand-red text-white hover:bg-brand-red/90'
+                                : 'bg-muted text-foreground hover:bg-muted/80'
+                                }`}
                         >
                             {showAllMembers ? 'Tutup Semua Pengurus' : 'Lihat Semua Pengurus'}
                         </button>
@@ -244,20 +243,20 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                                 <table className="w-full text-left border-collapse">
                                     <thead>
                                         <tr className="bg-gradient-to-r from-muted/50 to-muted/30 border-b border-border">
-                                            <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Pengurus</th>
-                                            <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Role & Divisi</th>
-                                            <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Prodi & Angkatan</th>
-                                            <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground">Media Sosial</th>
-                                            <th className="px-4 sm:px-6 py-4 font-bold text-sm text-foreground text-right">Aksi</th>
+                                            <th className="px-3 sm:px-4 py-3 font-bold text-xs text-foreground">Pengurus</th>
+                                            <th className="px-3 sm:px-4 py-3 font-bold text-xs text-foreground">Role & Divisi</th>
+                                            <th className="px-3 sm:px-4 py-3 font-bold text-xs text-foreground">Prodi & Angkatan</th>
+                                            <th className="px-3 sm:px-4 py-3 font-bold text-xs text-foreground">Media Sosial</th>
+                                            <th className="px-3 sm:px-4 py-3 font-bold text-xs text-foreground text-right">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-border">
                                         {filteredMembers.length > 0 ? (
                                             filteredMembers.map((member) => (
                                                 <tr key={member.id} className="hover:bg-gradient-to-r hover:from-brand-red/5 hover:to-transparent transition-colors duration-200">
-                                                    <td className="px-4 sm:px-6 py-4">
+                                                    <td className="px-3 sm:px-4 py-3">
                                                         <div className="flex items-center gap-3">
-                                                            <div className="w-10 h-10 rounded-full overflow-hidden bg-muted border-2 border-brand-red/20 shadow-sm flex-shrink-0">
+                                                            <div className="w-8 h-8 rounded-full overflow-hidden bg-muted border-2 border-brand-red/20 shadow-sm flex-shrink-0">
                                                                 <img
                                                                     src={member.photo || '/storage/logo/hmrpm.png'}
                                                                     alt={member.name}
@@ -266,7 +265,7 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                                                                 />
                                                             </div>
                                                             <div className="min-w-0">
-                                                                <p className="font-bold text-foreground line-clamp-1">{member.name}</p>
+                                                                <p className="font-bold text-sm text-foreground line-clamp-1">{member.name}</p>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -275,7 +274,7 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                                                             <p className="inline-flex items-center gap-1.5 bg-brand-red/10 text-brand-red px-2.5 py-1 rounded-full font-bold text-xs">
                                                                 {member.role}
                                                             </p>
-                                                            <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">
+                                                            <p className="text-xs text-muted-foreground font-medium">
                                                                 {member.division?.name}
                                                             </p>
                                                         </div>

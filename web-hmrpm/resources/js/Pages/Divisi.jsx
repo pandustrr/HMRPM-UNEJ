@@ -57,7 +57,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
             <Head title={`Divisi & Kepengurusan ${currentPeriod} | HMRPM`} />
 
             {/* Hero Section - Referring to About Style */}
-            <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+            <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
                 <motion.div
                     initial={{ scale: 1.1 }}
                     animate={{ scale: 1 }}
@@ -83,13 +83,13 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                     <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black"></div>
                 </motion.div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+                <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tighter mb-6 drop-shadow-xl uppercase">
+                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tighter mb-4 drop-shadow-xl uppercase">
                             Divisi <span className="text-brand-yellow">&</span> Kepengurusan
                         </h1>
                         <p className="text-white/80 text-base md:text-lg max-w-xl mx-auto font-medium leading-relaxed drop-shadow-md mb-8">
@@ -136,18 +136,18 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                 </motion.div>
 
                 {/* Decorative bottom gradient */}
-                <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-background to-transparent"></div>
+                <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background to-transparent"></div>
             </section>
 
             {/* Division Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-24">
                 <div className="mb-16 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-6" data-aos="fade-up">
                     <div className="max-w-2xl">
                         <span className="py-1 px-4 bg-brand-red/10 text-brand-red rounded-full text-xs font-black uppercase tracking-widest mb-4 inline-block">Organizational Structure</span>
-                        <h2 className="text-4xl sm:text-5xl font-black tracking-tighter mb-4">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tighter mb-4">
                             Struktur <span className="text-brand-yellow">Organisasi</span>
                         </h2>
-                        <p className="text-muted-foreground text-lg font-medium">
+                        <p className="text-muted-foreground text-base font-medium">
                             Setiap divisi memiliki peran strategis dalam mewujudkan visi HMRPM untuk memajukan Prodi D4 RPM.
                         </p>
                     </div>
@@ -163,7 +163,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                             transition={{ delay: idx * 0.1 }}
                             whileHover={{ y: -5 }}
                             onClick={() => setSelectedDivision(div)}
-                            className="group relative h-72 sm:h-80 bg-card rounded-[2rem] overflow-hidden border border-white/10 hover:border-brand-red/50 transition-all duration-500 shadow-lg hover:shadow-2xl cursor-pointer"
+                            className="group relative h-64 sm:h-72 bg-card rounded-3xl overflow-hidden border border-white/10 hover:border-brand-red/50 transition-all duration-500 shadow-lg hover:shadow-2xl cursor-pointer"
                         >
                             {/* Full Background Image */}
                             <img
@@ -186,7 +186,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
 
                             {/* Content Section */}
                             <div className="relative z-10 flex flex-col justify-end h-full p-6 sm:p-8">
-                                <h3 className="text-2xl sm:text-3xl font-black tracking-tighter mb-2 text-white group-hover:text-brand-red transition-colors drop-shadow-lg">
+                                <h3 className="text-xl sm:text-2xl font-black tracking-tighter mb-2 text-white group-hover:text-brand-red transition-colors drop-shadow-lg">
                                     {div.name}
                                 </h3>
                                 <p className="text-white/80 text-sm sm:text-base font-medium leading-relaxed mb-4 max-w-xl line-clamp-2 drop-shadow-md">
@@ -210,14 +210,14 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
             </div>
 
             {/* Pengurus Section */}
-            <section className="bg-muted/30 py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="bg-muted/30 py-16 lg:py-24">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-20" data-aos="fade-up">
                         <span className="text-brand-red font-black tracking-widest uppercase text-xs mb-4 block underline decoration-brand-yellow/30 underline-offset-4">Executive Committee</span>
-                        <h2 className="text-4xl sm:text-5xl font-black text-foreground mb-6 tracking-tighter">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground mb-4 tracking-tighter">
                             Daftar <span className="text-brand-yellow">Pengurus</span>
                         </h2>
-                        <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed font-medium">
+                        <p className="text-muted-foreground max-w-xl mx-auto text-base leading-relaxed font-medium">
                             Pimpinan dan penggerak utama HMRPM yang berkomitmen penuh dalam mengabdi dan berinovasi.
                         </p>
 
@@ -282,7 +282,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="group relative h-[22rem] sm:h-[28rem] bg-card rounded-[2rem] sm:rounded-[3rem] overflow-hidden border border-border/50 hover:border-brand-red/50 transition-all duration-500 shadow-lg hover:shadow-2xl cursor-pointer"
+                                className="group relative h-72 sm:h-96 bg-card rounded-3xl overflow-hidden border border-border/50 hover:border-brand-red/50 transition-all duration-500 shadow-lg hover:shadow-2xl cursor-pointer"
                                 onMouseEnter={(e) => {
                                     const vid = e.currentTarget.querySelector('video');
                                     if (vid) vid.play();
@@ -318,10 +318,10 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
 
                                 {/* Content */}
                                 <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col items-center text-center z-10">
-                                    <h4 className="text-xl sm:text-2xl font-black tracking-tight mb-1 text-white group-hover:text-brand-red transition-colors duration-300">
+                                    <h4 className="text-lg sm:text-xl font-black tracking-tight mb-1 text-white group-hover:text-brand-red transition-colors duration-300">
                                         {person.name}
                                     </h4>
-                                    <p className="text-xs sm:text-sm font-bold text-white/80 uppercase tracking-wider mb-1">
+                                    <p className="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">
                                         {person.role}
                                     </p>
                                     <p className="text-xs font-medium text-white/50 mb-4 group-hover:text-white/70 transition-colors">
