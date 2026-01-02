@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Head, Link, useForm, router } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { ArrowLeft, Save, Plus, Trash2, Upload, Users, Edit as EditIcon } from "lucide-react";
-import MemberModal from "../Members/Modal-Member";
+import { ArrowLeft, Save, Plus, Trash2, Upload, Users, Edit as EditIcon, Eye } from "lucide-react";
 import ImageCropper from "@/Components/ImageCropper";
+import Detail from "@/Pages/Admin/Members/Detail-Member";
 
 export default function Edit({ division }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -15,25 +15,14 @@ export default function Edit({ division }) {
         image: null,
     });
 
-    // Member Creation Modal State & Form
-    const [showMemberModal, setShowMemberModal] = useState(false);
-    const memberForm = useForm({
-        division_id: division.id,
-        name: '',
-        role: '',
-        prodi: '',
-        angkatan: '',
-        photo: null,
-        video: null,
-        instagram: '',
-        linkedin: '',
-        email: '',
-    });
-
     const [showCropper, setShowCropper] = useState(false);
     const [masterBackgroundSource, setMasterBackgroundSource] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
     const [cropperKey, setCropperKey] = useState(0);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [memberToDelete, setMemberToDelete] = useState(null);
+    const [showDetailModal, setShowDetailModal] = useState(false);
+    const [selectedMember, setSelectedMember] = useState(null);
 
     // Update previewUrl whenever data.image changes (to show result in form)
     useEffect(() => {
@@ -99,21 +88,25 @@ export default function Edit({ division }) {
     };
 
     const handleDeleteMember = (member) => {
-        if (confirm(`Hapus anggota ${member.name}?`)) {
-            router.delete(`/admin/members/${member.id}`, {
-                preserveScroll: true,
-            });
-        }
+        setMemberToDelete(member);
+        setShowDeleteModal(true);
     };
 
-    const handleAddMember = (e) => {
-        e.preventDefault();
-        memberForm.post('/admin/members', {
-            onSuccess: () => {
-                setShowMemberModal(false);
-                memberForm.reset();
-            },
-        });
+    const handleShowDetail = (member) => {
+        setSelectedMember(member);
+        setShowDetailModal(true);
+    };
+
+    const confirmDeleteMember = () => {
+        if (memberToDelete) {
+            router.delete(`/admin/members/${memberToDelete.id}`, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setShowDeleteModal(false);
+                    setMemberToDelete(null);
+                }
+            });
+        }
     };
 
     return (
@@ -190,14 +183,13 @@ export default function Edit({ division }) {
                                     <Users size={24} className="text-brand-red" />
                                     Anggota Divisi
                                 </h2>
-                                <button
-                                    type="button"
-                                    onClick={() => setShowMemberModal(true)}
+                                <Link
+                                    href={`/admin/members/create?period_id=${division.period_id}&division_id=${division.id}`}
                                     className="p-2 bg-brand-red text-white rounded-lg hover:bg-brand-red/90 transition-all hover:scale-110 active:scale-95 shadow-lg shadow-red-100"
                                     title="Tambah Anggota"
                                 >
                                     <Plus size={20} />
-                                </button>
+                                </Link>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -218,9 +210,17 @@ export default function Edit({ division }) {
                                                     <p className="text-[10px] font-bold text-brand-red uppercase tracking-wider mt-0.5">{member.role}</p>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center gap-1">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleShowDetail(member)}
+                                                    className="p-2 hover:bg-blue-50 rounded-xl transition-colors text-muted-foreground hover:text-blue-600"
+                                                    title="Detail"
+                                                >
+                                                    <Eye size={16} />
+                                                </button>
                                                 <Link
-                                                    href={`/admin/members/${member.id}/edit`}
+                                                    href={`/admin/members/${member.id}/edit?division_id_source=${division.id}`}
                                                     className="p-2 hover:bg-white rounded-xl transition-colors text-muted-foreground hover:text-foreground"
                                                     title="Edit Anggota"
                                                 >
@@ -362,20 +362,46 @@ export default function Edit({ division }) {
                 )}
             </div>
 
-            {/* Modal Tambah Anggota */}
-            <MemberModal
-                show={showMemberModal}
-                onClose={() => setShowMemberModal(false)}
-                form={{
-                    data: memberForm.data,
-                    setData: memberForm.setData,
-                    errors: memberForm.errors,
-                    processing: memberForm.processing,
-                    handleSubmit: handleAddMember
-                }}
-                divisionName={division.name}
-                periodYear={division.period?.year}
+            {/* Detail Modal */}
+            <Detail
+                show={showDetailModal}
+                onClose={() => setShowDetailModal(false)}
+                member={selectedMember}
             />
+
+            {showDeleteModal && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-200">
+                        <div className="flex items-center gap-3 text-red-600 mb-4">
+                            <div className="p-2 bg-red-50 rounded-lg">
+                                <Trash2 size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold">Hapus Anggota?</h3>
+                        </div>
+                        <p className="text-muted-foreground mb-6">
+                            Apakah Anda yakin ingin menghapus anggota <strong>{memberToDelete?.name}</strong>?
+                            Tindakan ini tidak dapat dibatalkan.
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => {
+                                    setShowDeleteModal(false);
+                                    setMemberToDelete(null);
+                                }}
+                                className="flex-1 px-4 py-2.5 bg-muted hover:bg-muted/80 rounded-xl font-bold transition-colors"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={confirmDeleteMember}
+                                className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-200"
+                            >
+                                Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

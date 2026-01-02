@@ -20,6 +20,7 @@ export default function Edit({ member, periods, filter_division_id }) {
         division_id: member.division_id || '',
         period_id: member.division?.period_id || periods[0]?.id || '',
         filter_division_id: filter_division_id || '',
+        division_id_source: new URLSearchParams(window.location.search).get('division_id_source') || '',
         name: member.name || '',
         role: member.role || '',
         prodi: member.prodi || '',

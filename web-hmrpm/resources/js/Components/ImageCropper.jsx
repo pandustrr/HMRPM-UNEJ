@@ -73,7 +73,7 @@ const ImageCropper = ({ image, onCropComplete, onCancel, aspectRatio = 16 / 9 })
     };
 
     return (
-        <div className="fixed inset-0 z-[110] flex flex-col bg-black/90 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex flex-col bg-black/90 backdrop-blur-sm">
             <div className="flex items-center justify-between p-4 border-b border-white/10 bg-zinc-900/50">
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-brand-red flex items-center justify-center">

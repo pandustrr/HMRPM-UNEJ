@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, router } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import {
     ArrowLeft,
@@ -35,6 +35,7 @@ export default function Create({ periods, prefill, filter_division_id }) {
     });
 
     const [availableDivisions, setAvailableDivisions] = useState([]);
+    const [photoPreview, setPhotoPreview] = useState(null);
 
     useEffect(() => {
         const period = periods.find(p => p.id === parseInt(data.period_id));
@@ -50,6 +51,21 @@ export default function Create({ periods, prefill, filter_division_id }) {
         post('/admin/members', {
             forceFormData: true,
         });
+    };
+
+    const handlePhotoChange = (e) => {
+        const file = e.target.files[0];
+        setData('photo', file);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setPhotoPreview(event.target.result);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPhotoPreview(null);
+        }
     };
 
     return (
@@ -238,11 +254,26 @@ export default function Create({ periods, prefill, filter_division_id }) {
                                     <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                                         <User size={14} /> Foto Profil (Max 2MB)
                                     </label>
+                                    <div className="relative group overflow-hidden rounded-2xl border-2 border-dashed border-border aspect-square bg-muted/5 cursor-pointer">
+                                        <img
+                                            src={photoPreview || '/storage/logo/hmrpm.png'}
+                                            alt="Preview"
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
+                                        />
+                                        <label htmlFor="photo-upload" className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer">
+                                            <div className="flex flex-col items-center gap-2 text-white">
+                                                <Upload size={24} />
+                                                <span className="text-xs font-bold uppercase tracking-widest">Pilih Foto</span>
+                                            </div>
+                                        </label>
+                                    </div>
                                     <input
                                         type="file"
+                                        id="photo-upload"
                                         accept="image/*"
-                                        onChange={e => setData('photo', e.target.files[0])}
-                                        className="w-full text-xs text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-red/10 file:text-brand-red hover:file:bg-brand-red/20 cursor-pointer"
+                                        onChange={handlePhotoChange}
+                                        className="hidden"
                                     />
                                     {errors.photo && <p className="text-red-600 text-xs font-medium">{errors.photo}</p>}
                                 </div>

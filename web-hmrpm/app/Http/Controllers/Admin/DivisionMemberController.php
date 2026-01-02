@@ -112,6 +112,13 @@ class DivisionMemberController extends Controller
 
         DivisionMember::create($validated);
 
+        // Jika datang dari Edit Division, redirect ke Edit Division
+        if ($request->division_id) {
+            return redirect()->route('admin.divisions.edit', $request->division_id)
+                ->with('success', 'Anggota berhasil ditambahkan.');
+        }
+
+        // Jika tidak, redirect ke Index Member
         return redirect()->route('admin.members.index', [
             'period_id' => $request->period_id,
             'division_id' => $request->filter_division_id
@@ -173,6 +180,13 @@ class DivisionMemberController extends Controller
 
         $member->update($validated);
 
+        // Jika datang dari Edit Division, redirect ke Edit Division
+        if ($request->division_id_source) {
+            return redirect()->route('admin.divisions.edit', $request->division_id_source)
+                ->with('success', 'Anggota berhasil diperbarui.');
+        }
+
+        // Jika tidak, redirect ke Index Member
         return redirect()->route('admin.members.index', [
             'period_id' => $request->period_id,
             'division_id' => $request->filter_division_id
