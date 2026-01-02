@@ -113,15 +113,15 @@ class DivisionMemberController extends Controller
         DivisionMember::create($validated);
 
         // Jika datang dari Edit Division, redirect ke Edit Division
-        if ($request->division_id) {
-            return redirect()->route('admin.divisions.edit', $request->division_id)
+        if ($request->division_id_source) {
+            return redirect()->route('admin.divisions.edit', $request->division_id_source)
                 ->with('success', 'Anggota berhasil ditambahkan.');
         }
 
-        // Jika tidak, redirect ke Index Member
-        return redirect()->route('admin.members.index', [
+        // Jika tidak, redirect ke Kelola Divisi & Pengurus dengan show_all_members
+        return redirect()->route('admin.divisions.index', [
             'period_id' => $request->period_id,
-            'division_id' => $request->filter_division_id
+            'show_all_members' => 1
         ])->with('success', 'Anggota berhasil ditambahkan.');
     }
 
@@ -186,10 +186,10 @@ class DivisionMemberController extends Controller
                 ->with('success', 'Anggota berhasil diperbarui.');
         }
 
-        // Jika tidak, redirect ke Index Member
-        return redirect()->route('admin.members.index', [
+        // Jika tidak, redirect ke Kelola Divisi & Pengurus dengan show_all_members
+        return redirect()->route('admin.divisions.index', [
             'period_id' => $request->period_id,
-            'division_id' => $request->filter_division_id
+            'show_all_members' => 1
         ])->with('success', 'Anggota berhasil diperbarui.');
     }
 

@@ -184,7 +184,7 @@ export default function Edit({ division }) {
                                     Anggota Divisi
                                 </h2>
                                 <Link
-                                    href={`/admin/members/create?period_id=${division.period_id}&division_id=${division.id}`}
+                                    href={`/admin/members/create?period_id=${division.period_id}&division_id=${division.id}&division_id_source=${division.id}`}
                                     className="p-2 bg-brand-red text-white rounded-lg hover:bg-brand-red/90 transition-all hover:scale-110 active:scale-95 shadow-lg shadow-red-100"
                                     title="Tambah Anggota"
                                 >

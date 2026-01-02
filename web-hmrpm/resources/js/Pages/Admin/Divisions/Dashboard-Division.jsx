@@ -16,7 +16,7 @@ export default function Dashboard({ periodsCount, divisionsCount, membersCount }
             iconColor: "text-blue-600"
         },
         {
-            title: "Kelola Divisi",
+            title: "Kelola Divisi & Pengurus",
             description: "Tambah, edit, dan kelola divisi beserta anggota pengurus",
             icon: Users,
             href: "/admin/divisions",

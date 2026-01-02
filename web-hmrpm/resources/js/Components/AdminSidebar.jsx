@@ -31,8 +31,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
             href: "/admin/divisions-dashboard",
             submenu: [
                 { name: "Kelola Periode", href: "/admin/periods" },
-                { name: "Kelola Divisi", href: "/admin/divisions" },
-                { name: "Kelola Pengurus", href: "/admin/members" },
+                { name: "Kelola Divisi & Pengurus", href: "/admin/divisions" },
             ]
         },
         { name: "Proker", icon: Trophy, href: "/admin/proker" },
