@@ -169,10 +169,10 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                                         </Link>
                                         <button
                                             onClick={() => handleDelete(division)}
-                                            className="flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-lg font-medium text-sm transition-colors"
+                                            className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
+                                            title="Hapus"
                                         >
-                                            <Trash2 size={16} />
-                                            Hapus
+                                            <Trash2 size={18} />
                                         </button>
                                     </div>
                                 </div>
@@ -369,26 +369,26 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
             {/* Delete Member Confirmation Modal */}
             {showDeleteMemberModal && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-                    <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-200">
-                        <div className="flex items-center gap-3 text-red-600 mb-4">
-                            <div className="p-2 bg-red-50 rounded-lg">
-                                <Trash2 size={24} />
+                    <div className="bg-white rounded-2xl p-6 max-w-xs w-full shadow-2xl animate-in zoom-in-95 duration-200">
+                        <div className="flex items-center gap-3 text-red-600 mb-3">
+                            <div className="p-1.5 bg-red-50 rounded-lg">
+                                <Trash2 size={20} />
                             </div>
-                            <h3 className="text-xl font-bold">Hapus Pengurus?</h3>
+                            <h3 className="text-lg font-bold">Hapus Pengurus?</h3>
                         </div>
-                        <p className="text-muted-foreground mb-6">
+                        <p className="text-sm text-muted-foreground mb-6">
                             Apakah Anda yakin ingin menghapus pengurus <strong>{memberToDelete?.name}</strong>?
                         </p>
-                        <div className="flex gap-3">
+                        <div className="flex gap-2">
                             <button
                                 onClick={() => setShowDeleteMemberModal(false)}
-                                className="flex-1 px-4 py-2.5 bg-muted hover:bg-muted/80 rounded-xl font-bold transition-colors"
+                                className="flex-1 px-4 py-2 bg-muted hover:bg-muted/80 rounded-xl font-bold text-sm transition-colors"
                             >
                                 Batal
                             </button>
                             <button
                                 onClick={confirmDeleteMember}
-                                className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-200"
+                                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-sm transition-colors shadow-lg shadow-red-100"
                             >
                                 Hapus
                             </button>
@@ -400,27 +400,27 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
             {/* Delete Confirmation Modal */}
             {showDeleteModal && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-                    <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-200">
-                        <div className="flex items-center gap-3 text-red-600 mb-4">
-                            <div className="p-2 bg-red-50 rounded-lg">
-                                <Trash2 size={24} />
+                    <div className="bg-white rounded-2xl p-6 max-w-xs w-full shadow-2xl animate-in zoom-in-95 duration-200">
+                        <div className="flex items-center gap-3 text-red-600 mb-3">
+                            <div className="p-1.5 bg-red-50 rounded-lg">
+                                <Trash2 size={20} />
                             </div>
-                            <h3 className="text-xl font-bold">Hapus Divisi?</h3>
+                            <h3 className="text-lg font-bold">Hapus Divisi?</h3>
                         </div>
-                        <p className="text-muted-foreground mb-6">
+                        <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                             Apakah Anda yakin ingin menghapus divisi <strong>{divisionToDelete?.name}</strong>?
-                            Semua anggota di divisi ini juga akan terhapus.
+                            Semua anggota di dalamnya juga akan terhapus.
                         </p>
-                        <div className="flex gap-3">
+                        <div className="flex gap-2">
                             <button
                                 onClick={() => setShowDeleteModal(false)}
-                                className="flex-1 px-4 py-2.5 bg-muted hover:bg-muted/80 rounded-xl font-bold transition-colors"
+                                className="flex-1 px-4 py-2 bg-muted hover:bg-muted/80 rounded-xl font-bold text-sm transition-colors"
                             >
                                 Batal
                             </button>
                             <button
                                 onClick={confirmDelete}
-                                className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-200"
+                                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-sm transition-colors shadow-lg shadow-red-100"
                             >
                                 Hapus
                             </button>

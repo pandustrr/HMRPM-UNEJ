@@ -22,6 +22,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/about', [AboutSettingController::class, 'update'])->name('about.update');
     Route::delete('/about', [AboutSettingController::class, 'destroy'])->name('about.destroy');
 
+    // Proker Background Settings
+    Route::get('/proker', [App\Http\Controllers\Admin\ProkerSettingController::class, 'index'])->name('proker.index');
+    Route::post('/proker', [App\Http\Controllers\Admin\ProkerSettingController::class, 'update'])->name('proker.update');
+    Route::delete('/proker', [App\Http\Controllers\Admin\ProkerSettingController::class, 'destroy'])->name('proker.destroy');
+
+    // Program Kerja
+    Route::resource('program-kerja', App\Http\Controllers\Admin\ProgramKerjaController::class);
+
     // Periods
     Route::resource('periods', PeriodController::class);
     Route::post('periods/{period}/toggle-active', [PeriodController::class, 'toggleActive'])->name('periods.toggleActive');
@@ -46,7 +54,28 @@ Route::get('/about', [AboutController::class, 'index']);
 Route::get('/divisi', [DivisionController::class, 'index'])->name('divisi.index'); // Updated to Controller
 
 Route::get('/proker', function () {
-    return Inertia::render('Proker');
+    $background = \App\Models\ProkerSetting::where('key', 'proker_hero_bg')->first();
+    $divisions = \App\Models\Division::with(['programKerjas' => function ($query) {
+        $query->orderBy('event_date', 'desc');
+    }])->get();
+
+    return Inertia::render('Proker', [
+        'background' => $background,
+        'divisions' => $divisions
+    ]);
+});
+
+Route::get('/proker/{division}', function ($divisionId) {
+    $background = \App\Models\ProkerSetting::where('key', 'proker_hero_bg')->first();
+    $divisions = \App\Models\Division::with(['programKerjas' => function ($query) {
+        $query->orderBy('event_date', 'desc');
+    }])->get();
+
+    return Inertia::render('DetailProker', [
+        'background' => $background,
+        'divisions' => $divisions,
+        'divisionId' => $divisionId
+    ]);
 });
 
 Route::get('/blog', function () {

@@ -6,7 +6,7 @@ import ConfirmModal from "@/Components/ConfirmModal";
 import ImageCropper from "@/Components/ImageCropper";
 import { useState } from "react";
 
-const AboutIndex = ({ settings }) => {
+const ProkerIndex = ({ settings }) => {
     const { data, setData, post, processing, errors } = useForm({
         type: settings?.type || 'image',
         file: null,
@@ -23,8 +23,7 @@ const AboutIndex = ({ settings }) => {
                 const reader = new FileReader();
                 reader.onload = () => {
                     setCropImage(reader.result);
-                    // Don't set data.file yet, wait for crop
-                    e.target.value = null; // Reset input so same file can be selected again
+                    e.target.value = null;
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -36,14 +35,14 @@ const AboutIndex = ({ settings }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        post('/admin/about', {
+        post('/admin/proker', {
             forceFormData: true,
         });
     };
 
     const handleDelete = () => {
         setIsConfirmOpen(false);
-        router.delete('/admin/about', {
+        router.delete('/admin/proker', {
             onSuccess: () => {
                 setPreview(null);
                 setData('file', null);
@@ -53,11 +52,11 @@ const AboutIndex = ({ settings }) => {
 
     return (
         <>
-            <Head title="Pengaturan About | HMRPM Admin" />
+            <Head title="Pengaturan Proker | HMRPM Admin" />
             <div className="max-w-3xl mx-auto space-y-6">
                 <div>
-                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter mb-1 uppercase">PENGATURAN ABOUT</h1>
-                    <p className="text-slate-500 text-xs font-medium">Kelola tampilan hero background halaman About (Video/Gambar/GIF).</p>
+                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter mb-1 uppercase">PENGATURAN PROKER</h1>
+                    <p className="text-slate-500 text-xs font-medium">Kelola tampilan hero background halaman Proker (Video/Gambar/GIF).</p>
                 </div>
 
                 <div className="bg-white rounded-4xl border border-slate-200 p-6 shadow-sm">
@@ -121,7 +120,6 @@ const AboutIndex = ({ settings }) => {
                                 onCancel={() => {
                                     setCropImage(null);
                                     setData('file', null);
-                                    // Reset input value if needed, though hard with React controlled/uncontrolled
                                 }}
                             />
                         )}
@@ -178,6 +176,6 @@ const AboutIndex = ({ settings }) => {
     );
 };
 
-AboutIndex.layout = (page) => <AdminLayout children={page} />;
+ProkerIndex.layout = (page) => <AdminLayout children={page} />;
 
-export default AboutIndex;
+export default ProkerIndex;

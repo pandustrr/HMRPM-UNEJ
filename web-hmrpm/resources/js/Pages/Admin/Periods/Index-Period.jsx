@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Head, router, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Plus, Edit, Trash2, Calendar, Check, Upload, Eye, X, Image as ImageIcon, Film } from "lucide-react";
+import ImageCropper from "@/Components/ImageCropper";
 
 export default function Index({ periods }) {
     const [showModal, setShowModal] = useState(false);
@@ -10,6 +11,7 @@ export default function Index({ periods }) {
     const [periodToDelete, setPeriodToDelete] = useState(null);
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState(null);
+    const [cropImage, setCropImage] = useState(null);
 
 
 
@@ -359,7 +361,16 @@ export default function Index({ periods }) {
                                             onChange={(e) => {
                                                 const file = e.target.files[0];
                                                 if (file) {
-                                                    setData('hero_image', file);
+                                                    if (data.hero_type === 'image') {
+                                                        const reader = new FileReader();
+                                                        reader.onload = () => {
+                                                            setCropImage(reader.result);
+                                                            e.target.value = null;
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                    } else {
+                                                        setData('hero_image', file);
+                                                    }
                                                 }
                                             }}
                                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
@@ -377,6 +388,21 @@ export default function Index({ periods }) {
                                     </div>
                                     {errors.hero_image && <p className="text-brand-red text-[10px] font-bold mt-2 px-1">{errors.hero_image}</p>}
                                 </div>
+
+                                {data.hero_type === 'image' && cropImage && (
+                                    <ImageCropper
+                                        image={cropImage}
+                                        aspectRatio={20 / 9}
+                                        onCropComplete={(file) => {
+                                            setData('hero_image', file);
+                                            setCropImage(null);
+                                        }}
+                                        onCancel={() => {
+                                            setCropImage(null);
+                                            setData('hero_image', null);
+                                        }}
+                                    />
+                                )}
                             </div>
 
                             <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-xl">
@@ -400,7 +426,7 @@ export default function Index({ periods }) {
                                 >
                                     Batal
                                 </button>
-                                <button
+                                    <button
                                     type="submit"
                                     disabled={processing}
                                     className="flex-1 px-4 py-3 bg-brand-red hover:bg-brand-red/90 text-white rounded-xl font-bold shadow-lg shadow-brand-red/20 transition-all disabled:opacity-50"
@@ -417,28 +443,30 @@ export default function Index({ periods }) {
 
             {/* Delete Modal */}
             {showDeleteModal && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-100 p-4">
-                    <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-border">
-                        <div className="w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-6">
-                            <Trash2 size={32} />
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-2xl p-6 max-w-xs w-full shadow-2xl animate-in zoom-in-95 duration-200">
+                        <div className="flex items-center gap-3 text-red-600 mb-3">
+                            <div className="p-1.5 bg-red-50 rounded-lg">
+                                <Trash2 size={20} />
+                            </div>
+                            <h3 className="text-lg font-bold">Hapus Periode?</h3>
                         </div>
-                        <h3 className="text-2xl font-black text-foreground mb-2">Hapus Periode?</h3>
-                        <p className="text-muted-foreground mb-8 leading-relaxed">
+                        <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                             Apakah Anda yakin ingin menghapus periode <strong>{periodToDelete?.year}</strong>?
                             Aksi ini akan menghapus semua data divisi dan anggota terkait secara permanen.
                         </p>
-                        <div className="flex gap-3">
+                        <div className="flex gap-2">
                             <button
                                 onClick={() => setShowDeleteModal(false)}
-                                className="flex-1 px-4 py-3 bg-muted hover:bg-muted/80 rounded-xl font-bold transition-colors"
+                                className="flex-1 px-4 py-2 bg-muted hover:bg-muted/80 rounded-xl font-bold text-sm transition-colors"
                             >
                                 Batal
                             </button>
                             <button
                                 onClick={confirmDelete}
-                                className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold shadow-lg shadow-red-200 transition-all"
+                                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-sm transition-colors shadow-lg shadow-red-100"
                             >
-                                Ya, Hapus
+                                Hapus
                             </button>
                         </div>
                     </div>

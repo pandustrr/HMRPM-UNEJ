@@ -211,7 +211,7 @@ export default function Create({ periods, selectedPeriodId }) {
                                             </label>
                                         )}
                                     </div>
-                                    <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:8 untuk tampilan bg di website.</p>
+                                    <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:9 untuk tampilan bg di website.</p>
                                     <p className="text-[10px] text-muted-foreground font-medium italic">Untuk crop ulang gambar yang sudah disimpan, silakan upload ulang background terlebih dahulu.</p>
                                     {errors.image && <p className="text-red-600 text-sm mt-1 font-bold">{errors.image}</p>}
                                 </div>
@@ -233,7 +233,7 @@ export default function Create({ periods, selectedPeriodId }) {
                     <ImageCropper
                         key={`cropper-${cropperKey}`}
                         image={masterBackgroundSource}
-                        aspectRatio={16 / 8}
+                        aspectRatio={16 / 9}
                         onCropComplete={handleCropComplete}
                         onCancel={() => {
                             setShowCropper(false);

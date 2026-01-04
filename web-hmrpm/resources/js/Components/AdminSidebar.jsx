@@ -42,7 +42,15 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                 { name: "Kelola Divisi & Pengurus", href: "/admin/divisions" },
             ]
         },
-        { name: "Proker", icon: Trophy, href: "/admin/proker" },
+        {
+            name: "Proker",
+            icon: Trophy,
+            href: "/admin/proker",
+            submenu: [
+                { name: "Hero Background", href: "/admin/proker" },
+                { name: "Program Kerja", href: "/admin/program-kerja" },
+            ]
+        },
         { name: "Blog", icon: FileText, href: "/admin/blog" },
         { name: "Akademisi Prodi", icon: GraduationCap, href: "/admin/akademisi" },
     ];

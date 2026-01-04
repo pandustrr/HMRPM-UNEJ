@@ -25,4 +25,9 @@ class Division extends Model
     {
         return $this->hasMany(DivisionMember::class);
     }
+
+    public function programKerjas()
+    {
+        return $this->hasMany(ProgramKerja::class);
+    }
 }

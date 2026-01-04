@@ -92,47 +92,8 @@ const About = ({ background, advisors = [] }) => {
         "Meningkatkan solidaritas dan rasa memiliki antaranggota himpunan untuk memperkuat budaya kerja tim dan semangat kolaboratif."
     ];
 
-    const finalPembina = dynamicPembina || {
-        name: "Ir. Robertus Sidartawan, S.T., M.T., IPM",
-        details: [
-            { label: "Nama", value: "Ir. Robertus Sidartawan, S.T., M.T., IPM", icon: User, className: "col-span-full" },
-            { label: "NIDN", value: "0010037006", icon: IdCard },
-            { label: "NIP/NIK", value: "197003101997021001", icon: IdCard },
-            { label: "Tempat, Tgl Lahir", value: "Jember, 10 Maret 1970", icon: Calendar },
-            { label: "Jenis Kelamin", value: "Laki-laki", icon: User },
-            { label: "Agama", value: "Katolik", icon: Globe },
-            { label: "Pangkat/Golongan", value: "Penata/IIId", icon: Shield },
-            { label: "Jabatan", value: "Kaprodi", icon: Briefcase },
-            { label: "Perguruan Tinggi", value: "Universitas Jember", icon: GraduationCap },
-            { label: "Email", value: "iborsidarta@gmail.com", icon: Mail },
-            { label: "Telp./Faks.", value: "(0331) 484977", icon: Phone },
-            { label: "No. HP", value: "082221000752", icon: Phone },
-            { label: "Alamat Kantor", value: "Jl. Kalimantan 37 – Kampus Tegalboto kotak pos 159 Jember 68121", icon: MapPin },
-            { label: "Alamat Rumah", value: "Sun City, Jl. Piere Tendean Blok JV 01, Jember", icon: MapPin },
-            { label: "Alamat Rumah 2", value: "Jl. Bareng Kulon VI/893, Malang", icon: MapPin, className: "col-span-full" },
-        ],
-        image: "/storage/profile/pembina.jpg",
-        video: null
-    };
-
-    const finalPendamping = dynamicPendamping || {
-        name: "Nama Pendamping Dummy, S.T., M.T.",
-        details: [
-            { label: "Nama", value: "Nama Pendamping Dummy, S.T., M.T.", icon: User, className: "col-span-full" },
-            { label: "NIDN", value: "0000000000", icon: IdCard },
-            { label: "NIP/NIK", value: "198500000000000000", icon: IdCard },
-            { label: "Tempat, Tgl Lahir", value: "Jember, 1 Januari 1985", icon: Calendar },
-            { label: "Jenis Kelamin", value: "Laki-laki", icon: User },
-            { label: "Agama", value: "Islam", icon: Globe },
-            { label: "Pangkat/Golongan", value: "Penata Muda / IIIa", icon: Shield },
-            { label: "Jabatan", value: "Dosen Pembimbing", icon: Briefcase },
-            { label: "Perguruan Tinggi", value: "Universitas Jember", icon: GraduationCap },
-            { label: "Email", value: "pendamping@mail.com", icon: Mail },
-            { label: "Alamat Kantor", value: "Jl. Kalimantan 37 – Kampus Tegalboto", icon: MapPin },
-        ],
-        image: "/storage/profile/pendamping.jpg",
-        video: null
-    };
+    const finalPembina = dynamicPembina;
+    const finalPendamping = dynamicPendamping;
 
     const logoElements = [
         {
@@ -468,158 +429,163 @@ const About = ({ background, advisors = [] }) => {
                             </div>
                         </div>
 
-                        {/* Pembina & Pendamping Section */}
-                        <div className="space-y-24 items-center">
-                            {/* Pembina */}
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-4xl mx-auto">
-                                <motion.div
-                                    initial={{ opacity: 0, x: -50 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    onMouseEnter={() => setIsPembinaHovered(true)}
-                                    onMouseLeave={() => setIsPembinaHovered(false)}
-                                    className="lg:col-span-5 relative group"
-                                >
-                                    <div className="absolute -inset-4 bg-brand-red/10 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                                    <div className="relative aspect-3/4 rounded-3xl overflow-hidden border-2 border-brand-red/20 shadow-xl bg-black">
-                                        <AnimatePresence mode="wait">
-                                            {isPembinaHovered && finalPembina.video ? (
-                                                <motion.video
-                                                    key="video-pembina"
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    exit={{ opacity: 0 }}
-                                                    src={finalPembina.video}
-                                                    autoPlay
-                                                    muted
-                                                    loop
-                                                    playsInline
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            ) : (
-                                                <motion.img
-                                                    key="image-pembina"
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    exit={{ opacity: 0 }}
-                                                    src={finalPembina.image}
-                                                    alt={finalPembina.name}
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                                    onError={(e) => { e.target.src = "https://ui-avatars.com/api/?name=Pembina+HMRPM&background=AC190D&color=fff&size=512" }}
-                                                />
-                                            )}
-                                        </AnimatePresence>
-                                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                                        <div className="absolute bottom-5 left-5 right-5 pointer-events-none">
-                                            <p className="text-brand-yellow font-black uppercase tracking-widest text-[9px] mb-1">Pembina HMRPM</p>
-                                            <h4 className="text-white text-lg font-bold leading-tight">{finalPembina.name}</h4>
-                                        </div>
-                                    </div>
-                                </motion.div>
-
-                                <motion.div
-                                    initial={{ opacity: 0, x: 50 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    className="lg:col-span-7 space-y-6"
-                                >
-                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-red/5 border border-brand-red/10 rounded-full text-xs font-black uppercase tracking-widest text-brand-red">
-                                        Data Pembina
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        {finalPembina.details.map((detail, idx) => (
-                                            <div key={idx} className={`p-3 bg-card border border-border/50 rounded-xl hover:border-brand-red/30 transition-colors group ${detail.className || ''}`}>
-                                                <div className="flex items-start gap-3">
-                                                    <div className="w-7 h-7 rounded-lg bg-brand-red/5 flex items-center justify-center shrink-0 group-hover:bg-brand-red group-hover:text-white transition-all">
-                                                        <detail.icon className="w-3.5 h-3.5" />
-                                                    </div>
-                                                    <div className="min-w-0">
-                                                        <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
-                                                        <p className={`text-xs font-bold text-foreground leading-tight wrap-break-word ${detail.valueClassName || ''}`} title={detail.value}>{detail.value}</p>
-                                                    </div>
+                        {(finalPembina || finalPendamping) && (
+                            <div className="space-y-24 items-center">
+                                {/* Pembina */}
+                                {finalPembina && (
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-4xl mx-auto">
+                                        <motion.div
+                                            initial={{ opacity: 0, x: -50 }}
+                                            whileInView={{ opacity: 1, x: 0 }}
+                                            viewport={{ once: true }}
+                                            onMouseEnter={() => setIsPembinaHovered(true)}
+                                            onMouseLeave={() => setIsPembinaHovered(false)}
+                                            className="lg:col-span-5 relative group"
+                                        >
+                                            <div className="absolute -inset-4 bg-brand-red/10 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                            <div className="relative aspect-3/4 rounded-3xl overflow-hidden border-2 border-brand-red/20 shadow-xl bg-black">
+                                                <AnimatePresence mode="wait">
+                                                    {isPembinaHovered && finalPembina.video ? (
+                                                        <motion.video
+                                                            key="video-pembina"
+                                                            initial={{ opacity: 0 }}
+                                                            animate={{ opacity: 1 }}
+                                                            exit={{ opacity: 0 }}
+                                                            src={finalPembina.video}
+                                                            autoPlay
+                                                            muted
+                                                            loop
+                                                            playsInline
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <motion.img
+                                                            key="image-pembina"
+                                                            initial={{ opacity: 0 }}
+                                                            animate={{ opacity: 1 }}
+                                                            exit={{ opacity: 0 }}
+                                                            src={finalPembina.image}
+                                                            alt={finalPembina.name}
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                            onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(finalPembina.name)}&background=AC190D&color=fff&size=512` }}
+                                                        />
+                                                    )}
+                                                </AnimatePresence>
+                                                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                                                <div className="absolute bottom-5 left-5 right-5 pointer-events-none">
+                                                    <p className="text-brand-yellow font-black uppercase tracking-widest text-[9px] mb-1">Pembina HMRPM</p>
+                                                    <h4 className="text-white text-lg font-bold leading-tight">{finalPembina.name}</h4>
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </motion.div>
-                            </div>
+                                        </motion.div>
 
-                            {/* Pendamping */}
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-4xl mx-auto">
-                                <motion.div
-                                    initial={{ opacity: 0, x: -50 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    className="lg:col-span-7 order-2 lg:order-1 space-y-6"
-                                >
-                                    <div className="flex lg:justify-end">
-                                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-yellow/5 border border-brand-yellow/20 rounded-full text-xs font-black uppercase tracking-widest text-brand-yellow">
-                                            Data Pendamping
-                                        </div>
+                                        <motion.div
+                                            initial={{ opacity: 0, x: 50 }}
+                                            whileInView={{ opacity: 1, x: 0 }}
+                                            viewport={{ once: true }}
+                                            className="lg:col-span-7 space-y-6"
+                                        >
+                                            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-red/5 border border-brand-red/10 rounded-full text-xs font-black uppercase tracking-widest text-brand-red">
+                                                Data Pembina
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {finalPembina.details.map((detail, idx) => (
+                                                    <div key={idx} className={`p-3 bg-card border border-border/50 rounded-xl hover:border-brand-red/30 transition-colors group ${detail.className || ''}`}>
+                                                        <div className="flex items-start gap-3">
+                                                            <div className="w-7 h-7 rounded-lg bg-brand-red/5 flex items-center justify-center shrink-0 group-hover:bg-brand-red group-hover:text-white transition-all">
+                                                                <detail.icon className="w-3.5 h-3.5" />
+                                                            </div>
+                                                            <div className="min-w-0">
+                                                                <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
+                                                                <p className={`text-xs font-bold text-foreground leading-tight wrap-break-word ${detail.valueClassName || ''}`} title={detail.value}>{detail.value}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        {finalPendamping.details.map((detail, idx) => (
-                                            <div key={idx} className={`p-3 bg-card border border-border/50 rounded-xl hover:border-brand-yellow/30 transition-colors group ${detail.className || ''}`}>
-                                                <div className="flex items-start gap-3">
-                                                    <div className="w-7 h-7 rounded-lg bg-brand-yellow/5 flex items-center justify-center shrink-0 group-hover:bg-brand-yellow group-hover:text-black transition-all">
-                                                        <detail.icon className="w-3.5 h-3.5" />
-                                                    </div>
-                                                    <div className="min-w-0">
-                                                        <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
-                                                        <p className={`text-xs font-bold text-foreground leading-tight wrap-break-word ${detail.valueClassName || ''}`} title={detail.value}>{detail.value}</p>
-                                                    </div>
+                                )}
+
+                                {/* Pendamping */}
+                                {finalPendamping && (
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-4xl mx-auto">
+                                        <motion.div
+                                            initial={{ opacity: 0, x: -50 }}
+                                            whileInView={{ opacity: 1, x: 0 }}
+                                            viewport={{ once: true }}
+                                            className="lg:col-span-7 order-2 lg:order-1 space-y-6"
+                                        >
+                                            <div className="flex lg:justify-end">
+                                                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-yellow/5 border border-brand-yellow/20 rounded-full text-xs font-black uppercase tracking-widest text-brand-yellow">
+                                                    Data Pendamping
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </motion.div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {finalPendamping.details.map((detail, idx) => (
+                                                    <div key={idx} className={`p-3 bg-card border border-border/50 rounded-xl hover:border-brand-yellow/30 transition-colors group ${detail.className || ''}`}>
+                                                        <div className="flex items-start gap-3">
+                                                            <div className="w-7 h-7 rounded-lg bg-brand-yellow/5 flex items-center justify-center shrink-0 group-hover:bg-brand-yellow group-hover:text-black transition-all">
+                                                                <detail.icon className="w-3.5 h-3.5" />
+                                                            </div>
+                                                            <div className="min-w-0">
+                                                                <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
+                                                                <p className={`text-xs font-bold text-foreground leading-tight wrap-break-word ${detail.valueClassName || ''}`} title={detail.value}>{detail.value}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
 
-                                <motion.div
-                                    initial={{ opacity: 0, x: 50 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    onMouseEnter={() => setIsPendampingHovered(true)}
-                                    onMouseLeave={() => setIsPendampingHovered(false)}
-                                    className="lg:col-span-5 order-1 lg:order-2 relative group"
-                                >
-                                    <div className="absolute -inset-4 bg-brand-yellow/10 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                                    <div className="relative aspect-3/4 rounded-3xl overflow-hidden border-2 border-brand-yellow/20 shadow-xl bg-black">
-                                        <AnimatePresence mode="wait">
-                                            {isPendampingHovered && finalPendamping.video ? (
-                                                <motion.video
-                                                    key="video-pendamping"
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    exit={{ opacity: 0 }}
-                                                    src={finalPendamping.video}
-                                                    autoPlay
-                                                    muted
-                                                    loop
-                                                    playsInline
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            ) : (
-                                                <motion.img
-                                                    key="image-pendamping"
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    exit={{ opacity: 0 }}
-                                                    src={finalPendamping.image}
-                                                    alt={finalPendamping.name}
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                                    onError={(e) => { e.target.src = "https://ui-avatars.com/api/?name=Pendamping+HMRPM&background=F8F223&color=000&size=512" }}
-                                                />
-                                            )}
-                                        </AnimatePresence>
-                                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                                        <div className="absolute bottom-5 left-5 right-5 text-right pointer-events-none">
-                                            <p className="text-brand-yellow font-black uppercase tracking-widest text-[9px] mb-1">Pendamping HMRPM</p>
-                                            <h4 className="text-white text-lg font-bold leading-tight">{finalPendamping.name}</h4>
-                                        </div>
+                                        <motion.div
+                                            initial={{ opacity: 0, x: 50 }}
+                                            whileInView={{ opacity: 1, x: 0 }}
+                                            viewport={{ once: true }}
+                                            onMouseEnter={() => setIsPendampingHovered(true)}
+                                            onMouseLeave={() => setIsPendampingHovered(false)}
+                                            className="lg:col-span-5 order-1 lg:order-2 relative group"
+                                        >
+                                            <div className="absolute -inset-4 bg-brand-yellow/10 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                            <div className="relative aspect-3/4 rounded-3xl overflow-hidden border-2 border-brand-yellow/20 shadow-xl bg-black">
+                                                <AnimatePresence mode="wait">
+                                                    {isPendampingHovered && finalPendamping.video ? (
+                                                        <motion.video
+                                                            key="video-pendamping"
+                                                            initial={{ opacity: 0 }}
+                                                            animate={{ opacity: 1 }}
+                                                            exit={{ opacity: 0 }}
+                                                            src={finalPendamping.video}
+                                                            autoPlay
+                                                            muted
+                                                            loop
+                                                            playsInline
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <motion.img
+                                                            key="image-pendamping"
+                                                            initial={{ opacity: 0 }}
+                                                            animate={{ opacity: 1 }}
+                                                            exit={{ opacity: 0 }}
+                                                            src={finalPendamping.image}
+                                                            alt={finalPendamping.name}
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                            onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(finalPendamping.name)}&background=F8F223&color=000&size=512` }}
+                                                        />
+                                                    )}
+                                                </AnimatePresence>
+                                                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                                                <div className="absolute bottom-5 left-5 right-5 text-right pointer-events-none">
+                                                    <p className="text-brand-yellow font-black uppercase tracking-widest text-[9px] mb-1">Pendamping HMRPM</p>
+                                                    <h4 className="text-white text-lg font-bold leading-tight">{finalPendamping.name}</h4>
+                                                </div>
+                                            </div>
+                                        </motion.div>
                                     </div>
-                                </motion.div>
+                                )}
                             </div>
-                        </div>
+                        )}
                     </div>
                 </section>
 

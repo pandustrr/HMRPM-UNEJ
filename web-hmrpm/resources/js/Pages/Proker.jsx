@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Link } from "@inertiajs/react";
-import { ChevronRight, Calendar, CheckCircle2, Clock, CircleDashed, ChevronDown, X, Image as ImageIcon, ArrowUpRight } from "lucide-react";
+import { ChevronRight, Calendar, CheckCircle2, Clock, CircleDashed, X, Image as ImageIcon, ArrowUpRight } from "lucide-react";
 import { cn } from "../lib/utils";
 
-const Proker = ({ background }) => {
+const Proker = ({ background, divisions = [] }) => {
     const [selectedProgram, setSelectedProgram] = useState(null);
 
     useEffect(() => {
@@ -25,158 +25,18 @@ const Proker = ({ background }) => {
         restDelta: 0.001
     });
 
-    // Mock Data (Nanti bisa diganti dari database)
-    const allDivisions = [
-        {
-            id: "psdm",
-            name: "PSDM",
-            fullName: "Pengembangan Sumber Daya Mahasiswa",
-            description: "Fokus pada pengembangan soft skill dan hard skill mahasiswa.",
-            programs: [
-                {
-                    name: "Latihan Dasar Kepemimpinan",
-                    status: "Selesai",
-                    date: "Januari 2025",
-                    image: "/storage/proker/ldk.jpg",
-                    description: "Pelatihan kepemimpinan dasar untuk mahasiswa baru.",
-                    content: "Latihan Dasar Kepemimpinan (LDK) adalah program wajib bagi mahasiswa baru untuk membentuk karakter kepemimpinan yang tangguh, disiplin, dan bertanggung jawab. Kegiatan ini meliputi materi manajemen organisasi, problem solving, dan team building.",
-                    documentation: [
-                        "/storage/proker/ldk-1.jpg",
-                        "/storage/proker/ldk-2.jpg",
-                        "/storage/proker/ldk-3.jpg",
-                    ]
-                },
-                {
-                    name: "Upgrading Staff",
-                    status: "Progress",
-                    date: "Februari 2025",
-                    image: "/storage/proker/upgrading.jpg",
-                    description: "Peningkatan kapasitas staff himpunan.",
-                    content: "Upgrading Staff bertujuan untuk meningkatkan kompetensi dan kinerja seluruh pengurus himpunan. Materi yang diberikan mencakup administrasi, manajemen waktu, dan strategi komunikasi efektif.",
-                    documentation: [
-                        "/storage/proker/upgrading-1.jpg",
-                        "/storage/proker/upgrading-2.jpg"
-                    ]
-                },
-                {
-                    name: "Webinar Nasional",
-                    status: "Progress",
-                    date: "Mei 2025",
-                    image: "/storage/proker/webinar.jpg",
-                    description: "Seminar online dengan pembicara nasional.",
-                    content: "Webinar Nasional mengangkat tema teknologi terkini dalam dunia perancangan mekanik. Mengundang narasumber ahli dari industri dan akademisi untuk berbagi wawasan kepada mahasiswa.",
-                    documentation: []
-                },
-                {
-                    name: "Workshop CV & Interview",
-                    status: "Progress",
-                    date: "Juni 2025",
-                    image: "/storage/proker/workshop.jpg",
-                    description: "Persiapan karir untuk mahasiswa tingkat akhir.",
-                    content: "Workshop ini memberikan panduan praktis membuat CV yang menarik dan tips menghadapi wawancara kerja. Bekerja sama dengan HRD perusahaan ternama.",
-                    documentation: []
-                },
-                {
-                    name: "Program Mentoring",
-                    status: "Selesai",
-                    date: "Sepanjang Periode",
-                    image: "/storage/proker/mentoring.jpg",
-                    description: "Mentoring akademik dan organisasi.",
-                    content: "Program Mentoring memfasilitasi mahasiswa tingkat awal untuk mendapatkan bimbingan dari kakak tingkat mengenai akademik dan adaptasi kehidupan kampus.",
-                    documentation: [
-                        "/storage/proker/mentoring-1.jpg"
-                    ]
-                },
-            ]
-        },
-        {
-            id: "kominfo",
-            name: "Kominfo",
-            fullName: "Komunikasi dan Informasi",
-            description: "Mengelola informasi dan media sosial himpunan.",
-            programs: [
-                {
-                    name: "Maintenance Website",
-                    status: "Progress",
-                    date: "Setiap Bulan",
-                    image: "/storage/proker/website.jpg",
-                    description: "Pemeliharaan dan update konten website.",
-                    content: "Kegiatan rutin untuk memastikan website himpunan tetap aman, cepat, dan up-to-date dengan informasi terbaru seputar kegiatan mahasiswa.",
-                    documentation: []
-                },
-                {
-                    name: "Pelatihan Desain Grafis",
-                    status: "Progress",
-                    date: "Maret 2025",
-                    image: "/storage/proker/desain.jpg",
-                    description: "Workshop desain menggunakan Adobe Illustrator.",
-                    content: "Pelatihan ini mengajarkan dasar-dasar desain grafis kepada mahasiswa agar mampu membuat konten visual yang menarik untuk keperluan himpunan maupun pribadi.",
-                    documentation: ["/storage/proker/desain-1.jpg"]
-                },
-                {
-                    name: "Social Media Activation",
-                    status: "Progress",
-                    date: "Setiap Hari",
-                    image: "/storage/proker/socmed.jpg",
-                    description: "Pengelolaan Instagram dan TikTok HMRPM.",
-                    content: "Mengelola akun media sosial resmi himpunan untuk menyebarkan informasi kegiatan, prestasi, dan konten edukatif yang relevan.",
-                    documentation: []
-                },
-                {
-                    name: "Documentation Event",
-                    status: "Selesai",
-                    date: "Fleksibel",
-                    image: "/storage/proker/doc.jpg",
-                    description: "Dokumentasi setiap kegiatan himpunan.",
-                    content: "Bertanggung jawab mendokumentasikan setiap momen penting dalam kegiatan himpunan, baik berupa foto maupun video.",
-                    documentation: ["/storage/proker/doc-1.jpg", "/storage/proker/doc-2.jpg"]
-                },
-            ]
-        },
-        {
-            id: "hublu",
-            name: "Hublu",
-            fullName: "Hubungan Luar",
-            description: "Membangun relasi dengan pihak eksternal kampus dan alumni.",
-            programs: [
-                {
-                    name: "Studi Banding",
-                    status: "Progress",
-                    date: "April 2025",
-                    image: "/storage/proker/stuban.jpg",
-                    description: "Kunjungan ke Himpunan Mesin universitas lain.",
-                    content: "Bertukar wawasan dan pengalaman organisasi dengan himpunan mahasiswa dari universitas lain untuk meningkatkan kualitas manajemen organisasi.",
-                    documentation: ["/storage/proker/stuban-1.jpg"]
-                },
-                {
-                    name: "Alumni Gathering",
-                    status: "Progress",
-                    date: "Agustus 2025",
-                    image: "/storage/proker/alumni.jpg",
-                    description: "Temu kangen alumni lintas angkatan.",
-                    content: "Ajang silaturahmi antara pengurus aktif dengan alumni untuk mempererat ikatan kekeluargaan dan networking profesional.",
-                    documentation: []
-                },
-                {
-                    name: "Kunjungan Industri",
-                    status: "Progress",
-                    date: "Oktober 2025",
-                    image: "/storage/proker/industry.jpg",
-                    description: "Visit company ke perusahaan manufaktur.",
-                    content: "Mengajak mahasiswa melihat langsung proses produksi dan lingkungan kerja di industri manufaktur untuk menambah wawasan praktis.",
-                    documentation: ["/storage/proker/industry-1.jpg"]
-                },
-            ]
-        }
-    ];
-
     const [activeFilter, setActiveFilter] = useState("Semua");
-    const [currentPeriod, setCurrentPeriod] = useState("2024/2025");
-    const periods = ["2024/2025", "2023/2024"];
 
     const filteredDivisions = activeFilter === "Semua"
-        ? allDivisions
-        : allDivisions.filter(d => d.name === activeFilter);
+        ? divisions
+        : divisions.filter(d => d.name === activeFilter);
+
+    const getStatus = (date) => {
+        if (!date) return "Perencanaan";
+        const eventDate = new Date(date);
+        const today = new Date();
+        return eventDate < today ? "Selesai" : "Progress";
+    };
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -215,7 +75,7 @@ const Proker = ({ background }) => {
                         <video src={background.value} autoPlay muted loop playsInline className="w-full h-full object-cover" />
                     ) : (
                         <img
-                            src={background?.value || "/storage/logo/about-hero-bg.png"} // Fallback image same as reference
+                            src={background?.value || "/storage/logo/about-hero-bg.png"}
                             alt="Proker Background"
                             className="w-full h-full object-cover"
                         />
@@ -235,40 +95,18 @@ const Proker = ({ background }) => {
                         <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md mb-8">
                             Rencana strategis dan kegiatan nyata Himpunan Mahasiswa Rekayasa Perancangan Mekanik untuk mewujudkan visi dan misi organisasi.
                         </p>
-
-                        {/* Period Filter Dropdown - Ultra Transparent & Modern */}
-                        <div className="relative inline-block">
-                            <div className="flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full backdrop-blur-md transition-all group">
-                                <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider pl-2 border-r border-white/10 pr-3">Periode</span>
-                                <div className="relative flex items-center">
-                                    <select
-                                        value={currentPeriod}
-                                        onChange={(e) => setCurrentPeriod(e.target.value)}
-                                        className="appearance-none bg-transparent text-white/90 font-bold text-sm tracking-wide outline-none cursor-pointer pr-8 pl-1 transition-colors"
-                                    >
-                                        {periods.map(p => (
-                                            <option key={p} value={p} className="bg-zinc-900 text-white">{p}</option>
-                                        ))}
-                                    </select>
-                                    <div className="absolute right-1 pointer-events-none text-brand-yellow/40 group-hover:text-brand-yellow/80 transition-colors">
-                                        <ChevronDown size={14} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </motion.div>
                 </div>
             </section>
 
-
             {/* Filter Section */}
-            <section className="sticky top-20 z-40 py-6 bg-background/80 backdrop-blur-xl border-b border-border/50 supports-[backdrop-filter]:bg-background/60">
+            <section className="sticky top-20 z-40 py-3 bg-background/80 backdrop-blur-xl border-b border-border/50 supports-[backdrop-filter]:bg-background/60">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+                    <div className="flex flex-wrap items-center justify-center gap-2 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
                         <button
                             onClick={() => setActiveFilter("Semua")}
                             className={cn(
-                                "px-6 py-2 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-all duration-300 border",
+                                "px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all duration-300 border",
                                 activeFilter === "Semua"
                                     ? "bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/20"
                                     : "bg-card text-muted-foreground border-border hover:border-brand-red/50 hover:text-foreground"
@@ -276,12 +114,12 @@ const Proker = ({ background }) => {
                         >
                             Semua Divisi
                         </button>
-                        {allDivisions.map((div) => (
+                        {divisions.map((div) => (
                             <button
                                 key={div.id}
                                 onClick={() => setActiveFilter(div.name)}
                                 className={cn(
-                                    "px-6 py-2 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-all duration-300 border",
+                                    "px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all duration-300 border",
                                     activeFilter === div.name
                                         ? "bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/20"
                                         : "bg-card text-muted-foreground border-border hover:border-brand-red/50 hover:text-foreground"
@@ -301,18 +139,18 @@ const Proker = ({ background }) => {
                         key={division.id}
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.6 }}
-                        className="relative"
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="space-y-8"
                     >
                         {/* Division Header */}
-                        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 border-b border-border/50 pb-6">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border/50 pb-8">
                             <div>
-                                <span className="text-brand-yellow font-black tracking-widest uppercase text-[10px] mb-2 block">Divisi</span>
-                                <h2 className="text-3xl md:text-4xl font-black text-foreground tracking-tighter uppercase">
+                                <span className="text-brand-yellow font-black tracking-widest uppercase text-[9px] mb-1 block">Divisi</span>
+                                <h2 className="text-xl md:text-2xl font-black text-foreground tracking-tighter uppercase">
                                     {division.name}
                                 </h2>
-                                <p className="text-muted-foreground mt-2 max-w-xl">{division.description}</p>
+                                <p className="text-brand-red font-bold text-sm mt-1">{division.short_desc}</p>
                             </div>
                             <Link
                                 href={`/proker/${division.id}`}
@@ -326,51 +164,66 @@ const Proker = ({ background }) => {
                         </div>
 
                         {/* Proker Cards Grid (Max 4) */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {division.programs.slice(0, 4).map((program, pIdx) => (
-                                <div
-                                    key={pIdx}
-                                    onClick={() => setSelectedProgram(program)}
-                                    className="group relative bg-card rounded-2xl border border-border/50 hover:border-brand-red/30 overflow-hidden hover:shadow-xl hover:shadow-brand-red/5 transition-all duration-500 flex flex-col h-full cursor-pointer"
-                                >
-                                    <div className="relative h-40 overflow-hidden bg-muted shrink-0">
-                                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
-                                        {/* Placeholder Image if no image provided */}
-                                        <img
-                                            src={program.image}
-                                            alt={program.name}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                            onError={(e) => {
-                                                e.target.src = `https://ui-avatars.com/api/?name=${program.name}&background=1a1a1a&color=fff&size=512`;
-                                            }}
-                                        />
-                                        <div className="absolute top-3 right-3 z-20">
-                                            <div className={cn("flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border backdrop-blur-md", getStatusColor(program.status))}>
-                                                {getStatusIcon(program.status)}
-                                                {program.status}
+                        <div className="flex flex-wrap gap-6 justify-center">
+                            {division.program_kerjas?.slice(0, 4).map((program, pIdx) => {
+                                const status = program.status || 'Progress';
+                                return (
+                                    <div
+                                        key={program.id}
+                                        onClick={() => setSelectedProgram(program)}
+                                        className="group relative bg-card rounded-2xl border border-border/50 hover:border-brand-red/30 overflow-hidden hover:shadow-xl hover:shadow-brand-red/5 transition-all duration-500 flex flex-col h-full cursor-pointer w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] max-w-sm"
+                                    >
+                                        <div className="relative h-40 overflow-hidden bg-muted shrink-0">
+                                            <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
+                                            <img
+                                                src={program.documentation?.[0]}
+                                                alt={program.title}
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                                onError={(e) => {
+                                                    e.target.src = `https://ui-avatars.com/api/?name=${program.title}&background=1a1a1a&color=fff&size=512`;
+                                                }}
+                                            />
+                                            <div className="absolute top-3 right-3 z-20">
+                                                <div className={cn("flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border backdrop-blur-md", getStatusColor(status))}>
+                                                    {getStatusIcon(status)}
+                                                    {status}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="p-4 flex flex-col grow">
+                                            <div className="flex items-center gap-2 text-muted-foreground text-[9px] uppercase font-bold tracking-wider mb-2">
+                                                <Calendar className="w-3 h-3" />
+                                                {new Date(program.event_date).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}
+                                            </div>
+                                            <h3 className="text-lg font-bold text-foreground mb-2 leading-tight group-hover:text-brand-red transition-colors line-clamp-2">
+                                                {program.title}
+                                            </h3>
+                                            <div className="mt-auto pt-3 border-t border-border/50 flex justify-between items-center opacity-80 group-hover:opacity-100 transition-opacity">
+                                                <span className="text-[10px] font-bold text-brand-red uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
+                                                    Detail Program <ArrowUpRight size={12} />
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div className="p-4 flex flex-col grow">
-                                        <div className="flex items-center gap-2 text-muted-foreground text-[9px] uppercase font-bold tracking-wider mb-2">
-                                            <Calendar className="w-3 h-3" />
-                                            {program.date}
-                                        </div>
-                                        <h3 className="text-lg font-bold text-foreground mb-2 leading-tight group-hover:text-brand-red transition-colors">
-                                            {program.name}
-                                        </h3>
-                                        <div className="mt-auto pt-3 border-t border-border/50 flex justify-between items-center opacity-80 group-hover:opacity-100 transition-opacity">
-                                            <span className="text-[10px] font-bold text-brand-red uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
-                                                Detail Program <ArrowUpRight size={12} />
-                                            </span>
-                                        </div>
-                                    </div>
+                                );
+                            })}
+                            {(!division.program_kerjas || division.program_kerjas.length === 0) && (
+                                <div className="col-span-full py-10 text-center bg-muted/20 border border-dashed border-border rounded-2xl">
+                                    <p className="text-muted-foreground text-sm">Belum ada program kerja untuk divisi ini.</p>
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </motion.div>
                 ))}
+
+                {filteredDivisions.length === 0 && (
+                    <div className="py-20 text-center">
+                        <CircleDashed size={48} className="mx-auto text-muted-foreground/30 mb-4 animate-spin-slow" />
+                        <h3 className="text-xl font-bold text-foreground">Divisi Tidak Ditemukan</h3>
+                        <p className="text-muted-foreground mt-2">Coba filter divisi lainnya.</p>
+                    </div>
+                )}
             </div>
 
             {/* Detail Modal */}
@@ -393,7 +246,14 @@ const Proker = ({ background }) => {
                         >
                             {/* Modal Header */}
                             <div className="relative h-56 shrink-0">
-                                <img src={selectedProgram.image} alt={selectedProgram.name} className="w-full h-full object-cover" />
+                                <img
+                                    src={selectedProgram.documentation?.[0]}
+                                    alt={selectedProgram.title}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                        e.target.src = `https://ui-avatars.com/api/?name=${selectedProgram.title}&background=1a1a1a&color=fff&size=512`;
+                                    }}
+                                />
                                 <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-transparent" />
 
                                 <button
@@ -408,10 +268,10 @@ const Proker = ({ background }) => {
                                         {getStatusIcon(selectedProgram.status)}
                                         {selectedProgram.status}
                                     </div>
-                                    <h2 className="text-2xl md:text-3xl font-black text-foreground mb-1 leading-tight">{selectedProgram.name}</h2>
+                                    <h2 className="text-2xl md:text-3xl font-black text-foreground mb-1 leading-tight">{selectedProgram.title}</h2>
                                     <p className="text-muted-foreground text-sm font-bold flex items-center gap-2">
                                         <Calendar size={14} className="text-brand-red" />
-                                        {selectedProgram.date}
+                                        {new Date(selectedProgram.event_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                                     </p>
                                 </div>
                             </div>
@@ -425,7 +285,7 @@ const Proker = ({ background }) => {
                                             Isi Kegiatan
                                         </h3>
                                         <p className="text-foreground/80 leading-relaxed text-base">
-                                            {selectedProgram.content}
+                                            {selectedProgram.description}
                                         </p>
                                     </div>
 
@@ -438,12 +298,16 @@ const Proker = ({ background }) => {
                                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                                                 {selectedProgram.documentation.map((doc, idx) => (
                                                     <div key={idx} className="aspect-video rounded-xl overflow-hidden bg-muted group/img relative cursor-pointer border border-border/50 hover:border-brand-red/30 transition-all">
-                                                        <img
-                                                            src={doc}
-                                                            alt={`Dokumentasi ${idx + 1}`}
-                                                            className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500"
-                                                            onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=Doc+${idx + 1}&background=random` }}
-                                                        />
+                                                        {doc.endsWith('.mp4') || doc.endsWith('.webm') ? (
+                                                            <video src={doc} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <img
+                                                                src={doc}
+                                                                alt={`Dokumentasi ${idx + 1}`}
+                                                                className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500"
+                                                                onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=Doc+${idx + 1}&background=random` }}
+                                                            />
+                                                        )}
                                                         <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors" />
                                                     </div>
                                                 ))}
