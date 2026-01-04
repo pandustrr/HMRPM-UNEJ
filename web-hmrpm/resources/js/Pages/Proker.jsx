@@ -102,11 +102,11 @@ const Proker = ({ background, divisions = [] }) => {
             {/* Filter Section */}
             <section className="sticky top-20 z-40 py-3 bg-background/80 backdrop-blur-xl border-b border-border/50 supports-backdrop-blur:bg-background/60 transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-wrap items-center justify-center gap-2 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
+                    <div className="flex flex-nowrap items-center justify-start md:justify-center gap-2 overflow-x-auto pb-4 md:pb-0 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-thumb]:bg-brand-red/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-brand-red/50 transition-colors">
                         <button
                             onClick={() => setActiveFilter("Semua")}
                             className={cn(
-                                "px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all duration-300 border",
+                                "px-3 py-1 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider transition-all duration-300 border whitespace-nowrap",
                                 activeFilter === "Semua"
                                     ? "bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/20"
                                     : "bg-card text-muted-foreground border-border hover:border-brand-red/50 hover:text-foreground"
@@ -119,7 +119,7 @@ const Proker = ({ background, divisions = [] }) => {
                                 key={div.id}
                                 onClick={() => setActiveFilter(div.name)}
                                 className={cn(
-                                    "px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all duration-300 border",
+                                    "px-3 py-1 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider transition-all duration-300 border whitespace-nowrap",
                                     activeFilter === div.name
                                         ? "bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/20"
                                         : "bg-card text-muted-foreground border-border hover:border-brand-red/50 hover:text-foreground"

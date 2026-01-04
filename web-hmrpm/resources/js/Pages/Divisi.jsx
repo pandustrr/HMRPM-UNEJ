@@ -243,12 +243,12 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                         </div>
 
                         {/* Division Filters */}
-                        <div className="mt-12 overflow-x-auto pb-4 -mx-4 px-4 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-brand-red/50 transition-colors">
-                            <div className="flex flex-wrap justify-center gap-3 min-w-max">
+                        <div className="mt-12 overflow-x-auto pb-4 -mx-4 px-4 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-thumb]:bg-brand-red/40 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-brand-red/60 transition-colors">
+                            <div className="flex flex-nowrap justify-start md:justify-center gap-2 min-w-max">
                                 <button
                                     onClick={() => setActiveFilter("Semua")}
                                     className={cn(
-                                        "px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all border",
+                                        "px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all duration-300 border whitespace-nowrap",
                                         activeFilter === "Semua"
                                             ? "bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/20"
                                             : "bg-white/5 text-muted-foreground border-border/50 hover:bg-white/10 hover:border-brand-red/10"
@@ -261,7 +261,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                                         key={div.id}
                                         onClick={() => setActiveFilter(div.name)}
                                         className={cn(
-                                            "px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all border whitespace-nowrap",
+                                            "px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all duration-300 border whitespace-nowrap",
                                             activeFilter === div.name
                                                 ? "bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/20"
                                                 : "bg-white/5 text-muted-foreground border-border/50 hover:bg-white/10 hover:border-brand-red/10"
