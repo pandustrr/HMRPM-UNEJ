@@ -196,16 +196,16 @@ const About = ({ background, advisors = [] }) => {
                     <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black"></div>
                 </motion.div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 flex flex-col items-center">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tighter mb-4 drop-shadow-xl">
+                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-6 drop-shadow-xl uppercase">
                             MENGENAL <span className="text-brand-yellow">HMRPM</span>
                         </h1>
-                        <p className="text-white/80 text-base md:text-lg max-w-xl mx-auto font-medium leading-relaxed drop-shadow-md">
+                        <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
                             Membangun masa depan perancangan mekanik dengan integritas, inovasi, dan kolaborasi tanpa batas.
                         </p>
                     </motion.div>

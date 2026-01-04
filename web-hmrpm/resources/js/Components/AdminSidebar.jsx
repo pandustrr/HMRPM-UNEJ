@@ -13,13 +13,23 @@ import {
     GraduationCap,
     Home
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "../lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
-const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
+const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen }) => {
     const { url } = usePage();
-    const [openSubmenu, setOpenSubmenu] = useState(["Divisi & Pengurus"]); // Default open array
+    const [openSubmenu, setOpenSubmenu] = useState([]);
+
+    // Auto open submenu if active on mount
+    useEffect(() => {
+        const activeItem = menuItems.find(item =>
+            item.submenu && isActiveSubmenu(item.submenu)
+        );
+        if (activeItem && !openSubmenu.includes(activeItem.name)) {
+            setOpenSubmenu(prev => [...prev, activeItem.name]);
+        }
+    }, []); // Only run once on mount
 
     const menuItems = [
         { name: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
@@ -56,6 +66,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
             icon: FileText,
             href: "/admin/blog",
             submenu: [
+                { name: "Hero Background", href: "/admin/blog-setting" },
                 { name: "Tipe Blog", href: "/admin/blog-types" },
                 { name: "Kelola Blog", href: "/admin/blog" },
             ]
@@ -84,7 +95,8 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
             className={cn(
                 "fixed left-0 top-0 h-screen z-50 transition-all duration-500 ease-in-out",
                 "bg-white backdrop-blur-2xl border-r border-slate-200",
-                isCollapsed ? "w-16" : "w-64"
+                isCollapsed ? "lg:w-16" : "lg:w-64 w-64",
+                isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
             )}
         >
             {/* Header */}
@@ -105,7 +117,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
 
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="p-1.5 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground transition-colors"
+                    className="hidden lg:flex p-1.5 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground transition-colors"
                 >
                     {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
                 </button>
@@ -119,14 +131,12 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                         {item.submenu ? (
                             <button
                                 onClick={() => {
-                                    if (item.href && !isCollapsed) {
+                                    if (isCollapsed && !isMobileOpen) return;
+
+                                    toggleSubmenu(item.name);
+
+                                    if (item.href && !isMobileOpen) {
                                         router.get(item.href);
-                                        // Auto open if navigating to it
-                                        if (!openSubmenu.includes(item.name)) {
-                                            toggleSubmenu(item.name);
-                                        }
-                                    } else if (!isCollapsed) {
-                                        toggleSubmenu(item.name);
                                     }
                                 }}
                                 className={cn(
@@ -167,6 +177,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                         ) : (
                             <Link
                                 href={item.href}
+                                onClick={() => setIsMobileOpen(false)}
                                 className={cn(
                                     "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 group",
                                     url === item.href
@@ -217,6 +228,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                                                 <Link
                                                     key={subItem.name}
                                                     href={subItem.href}
+                                                    onClick={() => setIsMobileOpen(false)}
                                                     className={cn(
                                                         "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm",
                                                         isActiveLink(subItem.href)

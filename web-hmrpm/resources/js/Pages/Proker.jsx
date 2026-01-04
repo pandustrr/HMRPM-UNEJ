@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Link } from "@inertiajs/react";
-import { ChevronRight, Calendar, CheckCircle2, Clock, CircleDashed, X, Image as ImageIcon, ArrowUpRight } from "lucide-react";
+import { ChevronRight, Calendar, CheckCircle2, Clock, CircleDashed, X, Image as ImageIcon, ArrowUpRight, ChevronDown } from "lucide-react";
 import { cn } from "../lib/utils";
 
 const Proker = ({ background, divisions = [] }) => {
@@ -80,7 +80,7 @@ const Proker = ({ background, divisions = [] }) => {
                             className="w-full h-full object-cover"
                         />
                     )}
-                    <div className="absolute inset-0 bg-linear-to-b from-black/80 via-black/50 to-background"></div>
+                    <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black"></div>
                 </motion.div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 flex flex-col items-center">
@@ -97,6 +97,25 @@ const Proker = ({ background, divisions = [] }) => {
                         </p>
                     </motion.div>
                 </div>
+
+                {/* Animated Scroll Indicator */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 1.5 }}
+                    className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+                >
+                    <span className="text-white/50 text-[10px] font-bold uppercase tracking-[0.3em]">Gulir Kebawah</span>
+                    <motion.div
+                        animate={{ y: [0, 8, 0] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                        <ChevronDown className="text-white/50 w-6 h-6" />
+                    </motion.div>
+                </motion.div>
+
+                {/* Decorative bottom gradient */}
+                <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background to-transparent"></div>
             </section>
 
             {/* Filter Section */}

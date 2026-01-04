@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DivisionMemberController;
 use App\Http\Controllers\Admin\AdvisorController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogTypeController;
+use App\Http\Controllers\Admin\BlogSettingController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\DivisionController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('advisors', AdvisorController::class);
 
     // Blog
+    Route::get('/blog-setting', [BlogSettingController::class, 'index'])->name('blog-setting.index');
+    Route::post('/blog-setting', [BlogSettingController::class, 'update'])->name('blog-setting.update');
+    Route::delete('/blog-setting', [BlogSettingController::class, 'destroy'])->name('blog-setting.destroy');
     Route::resource('blog-types', BlogTypeController::class);
     Route::resource('blog', BlogController::class);
 });
@@ -85,7 +89,9 @@ Route::get('/proker/{division}', function ($divisionId) {
 });
 
 Route::get('/blog', function () {
+    $background = \App\Models\BlogSetting::where('key', 'blog_hero_bg')->first();
     return Inertia::render('Blog', [
+        'background' => $background,
         'blogs' => \App\Models\Blog::with('blogType')->where('is_published', true)->latest()->get()
     ]);
 });
