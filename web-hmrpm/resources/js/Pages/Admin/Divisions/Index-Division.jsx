@@ -242,7 +242,7 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
-                                        <tr className="bg-gradient-to-r from-muted/50 to-muted/30 border-b border-border">
+                                        <tr className="bg-linear-to-r from-muted/50 to-muted/30 border-b border-border">
                                             <th className="px-3 sm:px-4 py-3 font-bold text-xs text-foreground">Pengurus</th>
                                             <th className="px-3 sm:px-4 py-3 font-bold text-xs text-foreground">Role & Divisi</th>
                                             <th className="px-3 sm:px-4 py-3 font-bold text-xs text-foreground">Prodi & Angkatan</th>
@@ -253,10 +253,10 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                                     <tbody className="divide-y divide-border">
                                         {filteredMembers.length > 0 ? (
                                             filteredMembers.map((member) => (
-                                                <tr key={member.id} className="hover:bg-gradient-to-r hover:from-brand-red/5 hover:to-transparent transition-colors duration-200">
+                                                <tr key={member.id} className="hover:bg-linear-to-r hover:from-brand-red/5 hover:to-transparent transition-colors duration-200">
                                                     <td className="px-3 sm:px-4 py-3">
                                                         <div className="flex items-center gap-3">
-                                                            <div className="w-8 h-8 rounded-full overflow-hidden bg-muted border-2 border-brand-red/20 shadow-sm flex-shrink-0">
+                                                            <div className="size-8 rounded-full overflow-hidden bg-muted border-2 border-brand-red/20 shadow-sm shrink-0 transition-all duration-200">
                                                                 <img
                                                                     src={member.photo || '/storage/logo/hmrpm.png'}
                                                                     alt={member.name}

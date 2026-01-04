@@ -100,7 +100,7 @@ const Proker = ({ background, divisions = [] }) => {
             </section>
 
             {/* Filter Section */}
-            <section className="sticky top-20 z-40 py-3 bg-background/80 backdrop-blur-xl border-b border-border/50 supports-[backdrop-filter]:bg-background/60">
+            <section className="sticky top-20 z-40 py-3 bg-background/80 backdrop-blur-xl border-b border-border/50 supports-backdrop-blur:bg-background/60 transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-wrap items-center justify-center gap-2 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
                         <button
