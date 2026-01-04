@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\PeriodController;
 use App\Http\Controllers\Admin\DivisionController as AdminDivisionController;
 use App\Http\Controllers\Admin\DivisionMemberController;
 use App\Http\Controllers\Admin\AdvisorController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\BlogTypeController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\DivisionController;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +46,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Advisors (Pembina & Pendamping)
     Route::patch('advisors/{advisor}/toggle-active', [AdvisorController::class, 'toggleActive'])->name('advisors.toggleActive');
     Route::resource('advisors', AdvisorController::class);
+
+    // Blog
+    Route::resource('blog-types', BlogTypeController::class);
+    Route::resource('blog', BlogController::class);
 });
 
 Route::get('/', function () {
@@ -79,12 +85,20 @@ Route::get('/proker/{division}', function ($divisionId) {
 });
 
 Route::get('/blog', function () {
-    return Inertia::render('Blog');
+    return Inertia::render('Blog', [
+        'blogs' => \App\Models\Blog::with('blogType')->where('is_published', true)->latest()->get()
+    ]);
 });
 
-Route::get('/blog/{id}', function ($id) {
-
-    return Inertia::render('Blog');
+Route::get('/blog/{blog:slug}', function (\App\Models\Blog $blog) {
+    return Inertia::render('DetailBlog', [
+        'blog' => $blog->load('blogType'),
+        'relatedBlogs' => \App\Models\Blog::where('blog_type_id', $blog->blog_type_id)
+            ->where('id', '!=', $blog->id)
+            ->where('is_published', true)
+            ->limit(3)
+            ->get()
+    ]);
 });
 
 Route::get('/akademisi', function () {

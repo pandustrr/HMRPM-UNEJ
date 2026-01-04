@@ -51,7 +51,15 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                 { name: "Program Kerja", href: "/admin/program-kerja" },
             ]
         },
-        { name: "Blog", icon: FileText, href: "/admin/blog" },
+        {
+            name: "Blog",
+            icon: FileText,
+            href: "/admin/blog",
+            submenu: [
+                { name: "Tipe Blog", href: "/admin/blog-types" },
+                { name: "Kelola Blog", href: "/admin/blog" },
+            ]
+        },
         { name: "Akademisi Prodi", icon: GraduationCap, href: "/admin/akademisi" },
     ];
 
