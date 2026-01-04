@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Head, router, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Plus, Edit, Trash2, Calendar, Check, Upload, Eye, X, Image as ImageIcon, Film } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, Check, Upload, Eye, X, Image as ImageIcon, Film, Scissors } from "lucide-react";
 import ImageCropper from "@/Components/ImageCropper";
 
 export default function Index({ periods }) {
@@ -11,7 +11,8 @@ export default function Index({ periods }) {
     const [periodToDelete, setPeriodToDelete] = useState(null);
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState(null);
-    const [cropImage, setCropImage] = useState(null);
+    const [masterSource, setMasterSource] = useState(null);
+    const [showCropper, setShowCropper] = useState(false);
 
 
 
@@ -348,6 +349,16 @@ export default function Index({ periods }) {
                                             <div className="absolute top-3 left-3 px-3 py-1 bg-brand-red/90 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md">
                                                 {data.hero_image ? 'Baru' : 'Aktif Saat Ini'}
                                             </div>
+                                            {data.hero_image && data.hero_type === 'image' && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowCropper(true)}
+                                                    className="absolute top-3 right-3 p-2 bg-brand-red text-white rounded-xl shadow-xl hover:bg-brand-red/90 transition-all hover:scale-110 active:scale-95 group/crop"
+                                                    title="Potong Gambar"
+                                                >
+                                                    <Scissors size={14} className="group-hover/crop:rotate-12 transition-transform" />
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -361,15 +372,15 @@ export default function Index({ periods }) {
                                             onChange={(e) => {
                                                 const file = e.target.files[0];
                                                 if (file) {
+                                                    setData('hero_image', file);
                                                     if (data.hero_type === 'image') {
                                                         const reader = new FileReader();
                                                         reader.onload = () => {
-                                                            setCropImage(reader.result);
-                                                            e.target.value = null;
+                                                            setMasterSource(reader.result);
                                                         };
                                                         reader.readAsDataURL(file);
                                                     } else {
-                                                        setData('hero_image', file);
+                                                        setMasterSource(null);
                                                     }
                                                 }
                                             }}
@@ -389,17 +400,16 @@ export default function Index({ periods }) {
                                     {errors.hero_image && <p className="text-brand-red text-[10px] font-bold mt-2 px-1">{errors.hero_image}</p>}
                                 </div>
 
-                                {data.hero_type === 'image' && cropImage && (
+                                {data.hero_type === 'image' && showCropper && masterSource && (
                                     <ImageCropper
-                                        image={cropImage}
+                                        image={masterSource}
                                         aspectRatio={20 / 9}
                                         onCropComplete={(file) => {
                                             setData('hero_image', file);
-                                            setCropImage(null);
+                                            setShowCropper(false);
                                         }}
                                         onCancel={() => {
-                                            setCropImage(null);
-                                            setData('hero_image', null);
+                                            setShowCropper(false);
                                         }}
                                     />
                                 )}
@@ -426,7 +436,7 @@ export default function Index({ periods }) {
                                 >
                                     Batal
                                 </button>
-                                    <button
+                                <button
                                     type="submit"
                                     disabled={processing}
                                     className="flex-1 px-4 py-3 bg-brand-red hover:bg-brand-red/90 text-white rounded-xl font-bold shadow-lg shadow-brand-red/20 transition-all disabled:opacity-50"

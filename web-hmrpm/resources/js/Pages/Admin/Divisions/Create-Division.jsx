@@ -1,6 +1,6 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { ArrowLeft, Save, Upload, ChevronDown } from "lucide-react";
+import { ArrowLeft, Save, Upload, ChevronDown, Scissors } from "lucide-react";
 import { useState, useEffect } from "react";
 import ImageCropper from "@/Components/ImageCropper";
 
@@ -34,11 +34,11 @@ export default function Create({ periods, selectedPeriodId }) {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setData('image', file);
             const reader = new FileReader();
             reader.onload = () => {
                 setMasterBackgroundSource(reader.result);
                 setCropperKey(prev => prev + 1);
-                setShowCropper(true);
             };
             reader.readAsDataURL(file);
         }
@@ -193,13 +193,23 @@ export default function Create({ periods, selectedPeriodId }) {
                                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                     alt="Preview"
                                                 />
-                                                <label
-                                                    htmlFor="image-upload"
-                                                    className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/btn"
-                                                    title="Ganti Gambar"
-                                                >
-                                                    <Upload size={16} className="group-hover/btn:rotate-12 transition-transform" />
-                                                </label>
+                                                <div className="absolute top-3 right-3 flex gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowCropper(true)}
+                                                        className="p-2 bg-brand-red text-white backdrop-blur-md rounded-xl transition-all shadow-xl hover:bg-brand-red/90 hover:scale-110 active:scale-95 group/btn"
+                                                        title="Potong Gambar"
+                                                    >
+                                                        <Scissors size={16} className="group-hover/btn:rotate-12 transition-transform" />
+                                                    </button>
+                                                    <label
+                                                        htmlFor="image-upload"
+                                                        className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/upload"
+                                                        title="Ganti Gambar"
+                                                    >
+                                                        <Upload size={16} className="group-hover/upload:rotate-12 transition-transform" />
+                                                    </label>
+                                                </div>
                                             </>
                                         ) : (
                                             <label

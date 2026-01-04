@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Head, Link, useForm, router } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { ArrowLeft, Save, Plus, Trash2, Upload, Users, Edit as EditIcon, Eye } from "lucide-react";
+import { ArrowLeft, Save, Plus, Trash2, Upload, Users, Edit as EditIcon, Eye, Scissors } from "lucide-react";
 import ImageCropper from "@/Components/ImageCropper";
 import Detail from "@/Pages/Admin/Members/Detail-Member";
 
@@ -43,14 +43,34 @@ export default function Edit({ division }) {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setData('image', file);
             const reader = new FileReader();
             reader.onload = () => {
-                const result = reader.result;
-                setMasterBackgroundSource(result);
+                setMasterBackgroundSource(reader.result);
+                setCropperKey(prev => prev + 1);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleOpenCropper = () => {
+        if (masterBackgroundSource) {
+            setShowCropper(true);
+        } else if (division.image) {
+            // Load existing image into cropper
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                setMasterBackgroundSource(canvas.toDataURL('image/jpeg'));
                 setCropperKey(prev => prev + 1);
                 setShowCropper(true);
             };
-            reader.readAsDataURL(file);
+            img.src = division.image;
         }
     };
 
@@ -305,13 +325,34 @@ export default function Edit({ division }) {
                                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                     alt="Preview"
                                                 />
-                                                <label
-                                                    htmlFor="image-upload"
-                                                    className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/btn"
-                                                    title="Ganti Gambar"
-                                                >
-                                                    <Upload size={16} className="group-hover/btn:rotate-12 transition-transform" />
-                                                </label>
+                                                <div className="absolute top-3 right-3 flex gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleOpenCropper}
+                                                        className="p-2 bg-brand-red text-white backdrop-blur-md rounded-xl cursor-pointer border border-white/20 shadow-xl transition-all hover:bg-brand-red/90 hover:scale-110 active:scale-95 group/crop"
+                                                        title="Potong Gambar"
+                                                    >
+                                                        <Scissors size={16} className="group-hover/crop:rotate-12 transition-transform" />
+                                                    </button>
+                                                    <label
+                                                        htmlFor="image-upload"
+                                                        className="p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl cursor-pointer border border-white/20 shadow-xl transition-all group/upload"
+                                                        title="Ganti Gambar"
+                                                    >
+                                                        <Upload
+                                                            size={16}
+                                                            className="
+                                                            stroke-brand-red
+                                                            transition-all duration-200
+                                                            group-hover/upload:stroke-white
+                                                            group-hover/upload:rotate-12
+                                                            group-hover/upload:scale-110
+                                                            "
+                                                        />
+                                                    </label>
+                                                </div>
+
+
                                             </>
                                         ) : (
                                             <label
@@ -335,8 +376,8 @@ export default function Edit({ division }) {
                                     disabled={processing}
                                     className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-red hover:bg-brand-red/90 text-white rounded-2xl font-black transition-all disabled:opacity-50 shadow-xl shadow-red-100 uppercase tracking-wider"
                                 >
-                                    <Save size={20} />
-                                    {processing ? 'Menyimpan...' : 'Simpan Perubahan'}
+                                    <Save size={18} />
+                                    {processing ? 'Menyimpan...' : 'Simpan'}
                                 </button>
                                 <Link
                                     href={`/admin/divisions?period_id=${division.period_id}`}

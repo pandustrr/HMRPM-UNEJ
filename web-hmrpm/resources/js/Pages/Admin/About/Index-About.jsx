@@ -1,6 +1,6 @@
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, useForm } from "@inertiajs/react";
-import { Upload, Image as ImageIcon, Film, Save, AlertCircle, Trash2 } from "lucide-react";
+import { Upload, Image as ImageIcon, Film, Save, AlertCircle, Trash2, Scissors } from "lucide-react";
 import { router } from "@inertiajs/react";
 import ConfirmModal from "@/Components/ConfirmModal";
 import ImageCropper from "@/Components/ImageCropper";
@@ -14,7 +14,8 @@ const AboutIndex = ({ settings }) => {
 
     const [preview, setPreview] = useState(settings?.value || null);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-    const [cropImage, setCropImage] = useState(null);
+    const [masterSource, setMasterSource] = useState(null);
+    const [showCropper, setShowCropper] = useState(false);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -22,14 +23,15 @@ const AboutIndex = ({ settings }) => {
             if (data.type === 'image') {
                 const reader = new FileReader();
                 reader.onload = () => {
-                    setCropImage(reader.result);
-                    // Don't set data.file yet, wait for crop
-                    e.target.value = null; // Reset input so same file can be selected again
+                    setPreview(reader.result);
+                    setMasterSource(reader.result);
+                    setData('file', file);
                 };
                 reader.readAsDataURL(file);
             } else {
                 setData('file', file);
                 setPreview(URL.createObjectURL(file));
+                setMasterSource(null);
             }
         }
     };
@@ -109,19 +111,17 @@ const AboutIndex = ({ settings }) => {
                             {errors.file && <p className="text-brand-red text-[10px] font-bold flex items-center gap-2 mt-2 px-1"><AlertCircle size={12} /> {errors.file}</p>}
                         </div>
 
-                        {data.type === 'image' && cropImage && (
+                        {data.type === 'image' && showCropper && masterSource && (
                             <ImageCropper
-                                image={cropImage}
+                                image={masterSource}
                                 aspectRatio={20 / 9}
                                 onCropComplete={(file) => {
                                     setData('file', file);
                                     setPreview(URL.createObjectURL(file));
-                                    setCropImage(null);
+                                    setShowCropper(false);
                                 }}
                                 onCancel={() => {
-                                    setCropImage(null);
-                                    setData('file', null);
-                                    // Reset input value if needed, though hard with React controlled/uncontrolled
+                                    setShowCropper(false);
                                 }}
                             />
                         )}
@@ -139,6 +139,16 @@ const AboutIndex = ({ settings }) => {
                                     <div className="absolute top-3 left-3 py-0.5 px-2.5 bg-brand-red text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg">
                                         Tampilan Aktif
                                     </div>
+                                    {data.file && data.type === 'image' && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowCropper(true)}
+                                            className="absolute top-3 right-3 p-2 bg-brand-red text-white rounded-xl shadow-xl hover:bg-brand-red/90 transition-all hover:scale-110 active:scale-95 group/crop"
+                                            title="Potong Gambar"
+                                        >
+                                            <Scissors size={16} className="group-hover/crop:rotate-12 transition-transform" />
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )}

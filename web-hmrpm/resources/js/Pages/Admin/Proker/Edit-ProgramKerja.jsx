@@ -1,7 +1,8 @@
 import { Head, Link, useForm, router } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { ArrowLeft, Save, Upload, X } from "lucide-react";
+import { ArrowLeft, Save, Upload, X, Scissors } from "lucide-react";
 import { useState } from "react";
+import ImageCropper from "@/Components/ImageCropper";
 
 export default function Edit({ programKerja, divisions }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -15,6 +16,8 @@ export default function Edit({ programKerja, divisions }) {
     });
 
     const [previewFiles, setPreviewFiles] = useState([]);
+    const [croppingIndex, setCroppingIndex] = useState(null);
+    const [croppingImage, setCroppingImage] = useState(null);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -35,6 +38,31 @@ export default function Edit({ programKerja, divisions }) {
 
         const newPreviews = previewFiles.filter((_, i) => i !== index);
         setPreviewFiles(newPreviews);
+    };
+
+    const handleCropClick = (index) => {
+        const file = data.documentation[index];
+        const reader = new FileReader();
+        reader.onload = () => {
+            setCroppingImage(reader.result);
+            setCroppingIndex(index);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleCropComplete = (croppedFile) => {
+        const newFiles = [...data.documentation];
+        newFiles[croppingIndex] = croppedFile;
+        setData('documentation', newFiles);
+
+        const newPreviews = [...previewFiles];
+        newPreviews[croppingIndex] = {
+            ...newPreviews[croppingIndex],
+            url: URL.createObjectURL(croppedFile)
+        };
+        setPreviewFiles(newPreviews);
+        setCroppingImage(null);
+        setCroppingIndex(null);
     };
 
 
@@ -220,6 +248,15 @@ export default function Edit({ programKerja, divisions }) {
                                                 )}
                                             </div>
                                             <div className="absolute top-2 right-2 flex gap-1">
+                                                {!file.type.startsWith('video/') && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleCropClick(index)}
+                                                        className="p-1.5 bg-brand-red text-white rounded-full hover:bg-brand-red/90 transition-colors shadow-lg"
+                                                    >
+                                                        <Scissors size={12} />
+                                                    </button>
+                                                )}
                                                 <button
                                                     type="button"
                                                     onClick={() => removeNewFile(index)}
@@ -254,6 +291,17 @@ export default function Edit({ programKerja, divisions }) {
                     </div>
                 </form>
             </div>
+
+            {croppingImage && (
+                <ImageCropper
+                    image={croppingImage}
+                    onCropComplete={handleCropComplete}
+                    onCancel={() => {
+                        setCroppingImage(null);
+                        setCroppingIndex(null);
+                    }}
+                />
+            )}
         </>
     );
 }
