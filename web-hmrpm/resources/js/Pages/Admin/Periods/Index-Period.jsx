@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Head, router, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Plus, Edit, Trash2, Calendar, Check, Upload, Eye, X } from "lucide-react";
-import ImageCropper from "@/Components/ImageCropper";
+import { Plus, Edit, Trash2, Calendar, Check, Upload, Eye, X, Image as ImageIcon, Film } from "lucide-react";
 
 export default function Index({ periods }) {
     const [showModal, setShowModal] = useState(false);
@@ -12,9 +11,7 @@ export default function Index({ periods }) {
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedPeriod, setSelectedPeriod] = useState(null);
 
-    // Image Cropping States
-    const [cropperImage, setCropperImage] = useState(null);
-    const [showCropper, setShowCropper] = useState(false);
+
 
     const { data, setData, post, put, processing, errors, reset } = useForm({
         year: '',
@@ -303,92 +300,83 @@ export default function Index({ periods }) {
                                 {errors.year && <p className="text-red-600 text-sm mt-1">{errors.year}</p>}
                             </div>
 
-                            <div className="space-y-4">
-                                <label className="block text-sm font-bold text-muted-foreground uppercase tracking-widest">Konten Hero Background</label>
-
-                                <div className="grid grid-cols-2 gap-3 pb-2">
-                                    {[
-                                        { id: 'image', label: 'Gambar' },
-                                        { id: 'video', label: 'Video (MP4/GIF)' },
-                                    ].map((type) => (
-                                        <button
-                                            key={type.id}
-                                            type="button"
-                                            onClick={() => setData('hero_type', type.id)}
-                                            className={`py-2 px-4 rounded-xl border-2 font-bold text-sm transition-all ${data.hero_type === type.id
-                                                ? 'border-brand-red bg-brand-red/5 text-brand-red'
-                                                : 'border-border bg-muted/30 text-muted-foreground'
-                                                }`}
-                                        >
-                                            {type.label}
-                                        </button>
-                                    ))}
+                            <div className="space-y-6">
+                                {/* Tipe Background */}
+                                <div className="space-y-3">
+                                    <label className="block text-slate-700 text-[10px] font-black uppercase tracking-widest px-1">Tipe Background</label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {[
+                                            { id: 'image', label: 'Gambar', icon: ImageIcon },
+                                            { id: 'video', label: 'Video (MP4/GIF)', icon: Film },
+                                        ].map((type) => (
+                                            <button
+                                                key={type.id}
+                                                type="button"
+                                                onClick={() => setData('hero_type', type.id)}
+                                                className={`flex items-center justify-center gap-3 p-3 rounded-xl border-2 transition-all ${data.hero_type === type.id
+                                                    ? 'border-brand-red bg-brand-red/5 text-brand-red shadow-lg shadow-brand-red/10'
+                                                    : 'border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-200'
+                                                    }`}
+                                            >
+                                                <type.icon size={18} />
+                                                <span className="font-bold text-sm">{type.label}</span>
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
 
-                                {/* Preview current or new */}
+                                {/* Preview Current/New */}
                                 {(data.hero_image || (editingPeriod && editingPeriod.hero_image)) && (
-                                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-border mb-4 bg-muted/30">
-                                        {data.hero_image ? (
-                                            data.hero_type === 'video' ? (
-                                                <video src={URL.createObjectURL(data.hero_image)} className="w-full h-full object-cover" autoPlay muted loop />
-                                            ) : (
-                                                <img src={URL.createObjectURL(data.hero_image)} className="w-full h-full object-cover" alt="Preview" />
-                                            )
-                                        ) : editingPeriod.hero_image && (
-                                            editingPeriod.hero_type === 'video' ? (
-                                                <video src={editingPeriod.hero_image} className="w-full h-full object-cover" autoPlay muted loop />
-                                            ) : (
-                                                <img src={editingPeriod.hero_image} className="w-full h-full object-cover" alt="Existing" />
-                                            )
-                                        )}
-                                        <div className="absolute top-3 left-3 px-3 py-1 bg-brand-red/90 text-white text-[10px] font-black uppercase tracking-widest rounded-full">
-                                            {data.hero_image ? 'Baru' : 'Aktif Saat Ini'}
+                                    <div className="space-y-3">
+                                        <label className="block text-slate-700 text-[10px] font-black uppercase tracking-widest px-1">Preview</label>
+                                        <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-slate-200 shadow-inner bg-slate-50">
+                                            {data.hero_image ? (
+                                                data.hero_type === 'video' ? (
+                                                    <video src={URL.createObjectURL(data.hero_image)} className="w-full h-full object-cover" autoPlay muted loop />
+                                                ) : (
+                                                    <img src={URL.createObjectURL(data.hero_image)} className="w-full h-full object-cover" alt="Preview" />
+                                                )
+                                            ) : editingPeriod.hero_image && (
+                                                editingPeriod.hero_type === 'video' ? (
+                                                    <video src={editingPeriod.hero_image} className="w-full h-full object-cover" autoPlay muted loop />
+                                                ) : (
+                                                    <img src={editingPeriod.hero_image} className="w-full h-full object-cover" alt="Existing" />
+                                                )
+                                            )}
+                                            <div className="absolute top-3 left-3 px-3 py-1 bg-brand-red/90 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md">
+                                                {data.hero_image ? 'Baru' : 'Aktif Saat Ini'}
+                                            </div>
                                         </div>
-                                        <label
-                                            htmlFor="hero-upload"
-                                            className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-brand-red backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/btn"
-                                            title="Ganti Gambar"
-                                        >
-                                            <Upload size={16} className="group-hover/btn:rotate-12 transition-transform" />
-                                        </label>
                                     </div>
                                 )}
-                                <p className="text-[10px] text-muted-foreground font-medium italic">* Rasio ideal 16:9 untuk tampilan hero di website.</p>
-                                <p className="text-[10px] text-muted-foreground font-medium italic">Untuk crop ulang gambar yang sudah disimpan, silakan upload ulang background terlebih dahulu.</p>
 
-                                <div className="relative">
-                                    <input
-                                        type="file"
-                                        accept={data.hero_type === 'video' ? 'video/mp4' : 'image/*'}
-                                        onChange={e => {
-                                            const file = e.target.files[0];
-                                            if (file) {
-                                                if (data.hero_type === 'image') {
-                                                    const reader = new FileReader();
-                                                    reader.onload = () => {
-                                                        setCropperImage(reader.result);
-                                                        setShowCropper(true);
-                                                    };
-                                                    reader.readAsDataURL(file);
-                                                } else {
+                                {/* File Upload */}
+                                <div className="space-y-3">
+                                    <label className="block text-slate-700 text-[10px] font-black uppercase tracking-widest px-1">Unggah File Baru</label>
+                                    <div className="relative group">
+                                        <input
+                                            type="file"
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (file) {
                                                     setData('hero_image', file);
                                                 }
-                                            }
-                                        }}
-                                        className="hidden"
-                                        id="hero-upload"
-                                    />
-                                    <label
-                                        htmlFor="hero-upload"
-                                        className="block text-center py-8 border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-brand-red/5 hover:border-brand-red/30 transition-all"
-                                    >
-                                        <p className="text-sm font-bold text-foreground">
-                                            {data.hero_image ? 'Ganti file terpilih' : 'Unggah file baru'}
-                                        </p>
-                                    </label>
-                                    <p className="text-[10px] text-muted-foreground font-medium italic">Maksimal 20MB (.mp4, .jpg, .png, .gif)</p>
+                                            }}
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                            accept={data.hero_type === 'video' ? 'video/mp4' : 'image/*'}
+                                        />
+                                        <div className="border-2 border-dashed border-slate-200 group-hover:border-brand-red/50 rounded-3xl p-8 flex flex-col items-center justify-center gap-3 transition-all bg-slate-50 group-hover:bg-brand-red/5">
+                                            <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-slate-400 group-hover:text-brand-red transition-all shadow-sm">
+                                                <Upload size={24} />
+                                            </div>
+                                            <div className="text-center">
+                                                <p className="text-slate-900 font-bold text-sm">Pilih file atau tarik kesini</p>
+                                                <p className="text-slate-500 text-[10px]">MP4, JPG, PNG, atau GIF (Maks. 20MB)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {errors.hero_image && <p className="text-brand-red text-[10px] font-bold mt-2 px-1">{errors.hero_image}</p>}
                                 </div>
-                                {errors.hero_image && <p className="text-red-600 text-sm font-bold italic">{errors.hero_image}</p>}
                             </div>
 
                             <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-xl">
@@ -425,22 +413,7 @@ export default function Index({ periods }) {
                 </div>
             )}
 
-            {/* Cropper Section */}
-            {showCropper && (
-                <ImageCropper
-                    image={cropperImage}
-                    onCropComplete={(croppedFile) => {
-                        setData('hero_image', croppedFile);
-                        setShowCropper(false);
-                        setCropperImage(null);
-                    }}
-                    onCancel={() => {
-                        setShowCropper(false);
-                        setCropperImage(null);
-                    }}
-                    aspectRatio={16 / 9}
-                />
-            )}
+
 
             {/* Delete Modal */}
             {showDeleteModal && (

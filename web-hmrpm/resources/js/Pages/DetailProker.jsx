@@ -1,12 +1,12 @@
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Link } from "@inertiajs/react";
-import { ChevronRight, Calendar, CheckCircle2, Clock, CircleDashed, ChevronDown, X, Image as ImageIcon, ArrowUpRight } from "lucide-react";
+import { Link, usePage } from "@inertiajs/react";
+import { ChevronLeft, Calendar, CheckCircle2, Clock, CircleDashed, Users, X, Image as ImageIcon, ArrowUpRight } from "lucide-react";
 import { cn } from "../lib/utils";
 
-const Proker = ({ background }) => {
+const DetailProker = ({ background, divisionId }) => {
     const [selectedProgram, setSelectedProgram] = useState(null);
 
     useEffect(() => {
@@ -25,7 +25,7 @@ const Proker = ({ background }) => {
         restDelta: 0.001
     });
 
-    // Mock Data (Nanti bisa diganti dari database)
+    // Mock Data (Shared with Proker.jsx - In real app, this should come from API/Props)
     const allDivisions = [
         {
             id: "psdm",
@@ -170,13 +170,7 @@ const Proker = ({ background }) => {
         }
     ];
 
-    const [activeFilter, setActiveFilter] = useState("Semua");
-    const [currentPeriod, setCurrentPeriod] = useState("2024/2025");
-    const periods = ["2024/2025", "2023/2024"];
-
-    const filteredDivisions = activeFilter === "Semua"
-        ? allDivisions
-        : allDivisions.filter(d => d.name === activeFilter);
+    const division = allDivisions.find(d => d.id === divisionId) || allDivisions[0];
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -203,7 +197,11 @@ const Proker = ({ background }) => {
                 style={{ scaleX }}
             />
 
-            {/* Hero Section */}
+            {/* Back Button */}
+            {/* Keeping existing back button logic */}
+
+
+            {/* Hero Section (Specific Division) */}
             <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
                 <motion.div
                     initial={{ scale: 1.1 }}
@@ -215,7 +213,7 @@ const Proker = ({ background }) => {
                         <video src={background.value} autoPlay muted loop playsInline className="w-full h-full object-cover" />
                     ) : (
                         <img
-                            src={background?.value || "/storage/logo/about-hero-bg.png"} // Fallback image same as reference
+                            src={background?.value || "/storage/logo/about-hero-bg.png"}
                             alt="Proker Background"
                             className="w-full h-full object-cover"
                         />
@@ -223,154 +221,96 @@ const Proker = ({ background }) => {
                     <div className="absolute inset-0 bg-linear-to-b from-black/80 via-black/50 to-background"></div>
                 </motion.div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 flex flex-col items-center">
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-10">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-6 drop-shadow-xl uppercase">
-                            Program <span className="text-brand-yellow">Kerja</span>
+                        <span className="inline-block py-1 px-3 rounded-full bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 text-[10px] font-black uppercase tracking-widest mb-4 backdrop-blur-sm">
+                            Divisi {division.name}
+                        </span>
+                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-4 drop-shadow-xl uppercase">
+                            {division.fullName}
                         </h1>
-                        <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md mb-8">
-                            Rencana strategis dan kegiatan nyata Himpunan Mahasiswa Rekayasa Perancangan Mekanik untuk mewujudkan visi dan misi organisasi.
+                        <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
+                            {division.description}
                         </p>
-
-                        {/* Period Filter Dropdown - Ultra Transparent & Modern */}
-                        <div className="relative inline-block">
-                            <div className="flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full backdrop-blur-md transition-all group">
-                                <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider pl-2 border-r border-white/10 pr-3">Periode</span>
-                                <div className="relative flex items-center">
-                                    <select
-                                        value={currentPeriod}
-                                        onChange={(e) => setCurrentPeriod(e.target.value)}
-                                        className="appearance-none bg-transparent text-white/90 font-bold text-sm tracking-wide outline-none cursor-pointer pr-8 pl-1 transition-colors"
-                                    >
-                                        {periods.map(p => (
-                                            <option key={p} value={p} className="bg-zinc-900 text-white">{p}</option>
-                                        ))}
-                                    </select>
-                                    <div className="absolute right-1 pointer-events-none text-brand-yellow/40 group-hover:text-brand-yellow/80 transition-colors">
-                                        <ChevronDown size={14} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </motion.div>
-                </div>
-            </section>
-
-
-            {/* Filter Section */}
-            <section className="sticky top-20 z-40 py-6 bg-background/80 backdrop-blur-xl border-b border-border/50 supports-[backdrop-filter]:bg-background/60">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
-                        <button
-                            onClick={() => setActiveFilter("Semua")}
-                            className={cn(
-                                "px-6 py-2 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-all duration-300 border",
-                                activeFilter === "Semua"
-                                    ? "bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/20"
-                                    : "bg-card text-muted-foreground border-border hover:border-brand-red/50 hover:text-foreground"
-                            )}
-                        >
-                            Semua Divisi
-                        </button>
-                        {allDivisions.map((div) => (
-                            <button
-                                key={div.id}
-                                onClick={() => setActiveFilter(div.name)}
-                                className={cn(
-                                    "px-6 py-2 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-all duration-300 border",
-                                    activeFilter === div.name
-                                        ? "bg-brand-red text-white border-brand-red shadow-lg shadow-brand-red/20"
-                                        : "bg-card text-muted-foreground border-border hover:border-brand-red/50 hover:text-foreground"
-                                )}
-                            >
-                                {div.name}
-                            </button>
-                        ))}
-                    </div>
                 </div>
             </section>
 
             {/* Content Container */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
-                {filteredDivisions.map((division, idx) => (
-                    <motion.div
-                        key={division.id}
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.6 }}
-                        className="relative"
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className="mb-6">
+                    <Link
+                        href="/proker"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-md border border-border rounded-full text-sm font-bold text-muted-foreground hover:text-foreground hover:border-brand-red transition-all shadow-sm hover:shadow-lg group dark:text-brand-red dark:border-brand-red/50 dark:bg-brand-red/5"
                     >
-                        {/* Division Header */}
-                        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 border-b border-border/50 pb-6">
-                            <div>
-                                <span className="text-brand-yellow font-black tracking-widest uppercase text-[10px] mb-2 block">Divisi</span>
-                                <h2 className="text-3xl md:text-4xl font-black text-foreground tracking-tighter uppercase">
-                                    {division.name}
-                                </h2>
-                                <p className="text-muted-foreground mt-2 max-w-xl">{division.description}</p>
-                            </div>
-                            <Link
-                                href={`/proker/${division.id}`}
-                                className="inline-flex items-center gap-2 text-sm font-bold text-brand-red hover:text-brand-yellow transition-colors group shrink-0"
-                            >
-                                Lihat Selengkapnya
-                                <span className="bg-brand-red/10 p-1 rounded-full group-hover:bg-brand-yellow/10 transition-colors">
-                                    <ChevronRight className="w-4 h-4" />
-                                </span>
-                            </Link>
-                        </div>
+                        <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                        Kembali
+                    </Link>
+                </div>
 
-                        {/* Proker Cards Grid (Max 4) */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {division.programs.slice(0, 4).map((program, pIdx) => (
-                                <div
-                                    key={pIdx}
-                                    onClick={() => setSelectedProgram(program)}
-                                    className="group relative bg-card rounded-2xl border border-border/50 hover:border-brand-red/30 overflow-hidden hover:shadow-xl hover:shadow-brand-red/5 transition-all duration-500 flex flex-col h-full cursor-pointer"
-                                >
-                                    <div className="relative h-40 overflow-hidden bg-muted shrink-0">
-                                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
-                                        {/* Placeholder Image if no image provided */}
-                                        <img
-                                            src={program.image}
-                                            alt={program.name}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                            onError={(e) => {
-                                                e.target.src = `https://ui-avatars.com/api/?name=${program.name}&background=1a1a1a&color=fff&size=512`;
-                                            }}
-                                        />
-                                        <div className="absolute top-3 right-3 z-20">
-                                            <div className={cn("flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border backdrop-blur-md", getStatusColor(program.status))}>
-                                                {getStatusIcon(program.status)}
-                                                {program.status}
-                                            </div>
-                                        </div>
-                                    </div>
+                <div className="mb-10 flex items-center justify-between">
+                    <h2 className="text-2xl font-bold flex items-center gap-2">
+                        <Users className="w-6 h-6 text-brand-red" />
+                        Daftar Program Kerja
+                    </h2>
+                    <div className="text-sm text-muted-foreground font-medium">
+                        Total {division.programs.length} Program
+                    </div>
+                </div>
 
-                                    <div className="p-4 flex flex-col grow">
-                                        <div className="flex items-center gap-2 text-muted-foreground text-[9px] uppercase font-bold tracking-wider mb-2">
-                                            <Calendar className="w-3 h-3" />
-                                            {program.date}
-                                        </div>
-                                        <h3 className="text-lg font-bold text-foreground mb-2 leading-tight group-hover:text-brand-red transition-colors">
-                                            {program.name}
-                                        </h3>
-                                        <div className="mt-auto pt-3 border-t border-border/50 flex justify-between items-center opacity-80 group-hover:opacity-100 transition-opacity">
-                                            <span className="text-[10px] font-bold text-brand-red uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
-                                                Detail Program <ArrowUpRight size={12} />
-                                            </span>
-                                        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {division.programs.map((program, idx) => (
+                        <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: idx * 0.1 }}
+                            onClick={() => setSelectedProgram(program)}
+                            className="group bg-card rounded-2xl border border-border/50 overflow-hidden hover:border-brand-red/30 hover:shadow-2xl hover:shadow-brand-red/5 transition-all duration-500 cursor-pointer flex flex-col"
+                        >
+                            <div className="relative h-56 overflow-hidden shrink-0">
+                                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
+                                <img
+                                    src={program.image}
+                                    alt={program.name}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                    onError={(e) => {
+                                        e.target.src = `https://ui-avatars.com/api/?name=${program.name}&background=1a1a1a&color=fff&size=512`;
+                                    }}
+                                />
+                                <div className="absolute top-4 right-4 z-20">
+                                    <div className={cn("flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border backdrop-blur-md shadow-lg", getStatusColor(program.status))}>
+                                        {getStatusIcon(program.status)}
+                                        {program.status}
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </motion.div>
-                ))}
+                            </div>
+                            <div className="p-6 flex flex-col grow">
+                                <div className="flex items-center gap-2 text-muted-foreground text-[10px] uppercase font-bold tracking-wider mb-3">
+                                    <Calendar className="w-3 h-3" />
+                                    {program.date}
+                                </div>
+                                <h3 className="text-xl font-bold text-foreground mb-3 leading-tight group-hover:text-brand-red transition-colors line-clamp-2">
+                                    {program.name}
+                                </h3>
+                                <p className="text-muted-foreground text-sm leading-relaxed mb-6 line-clamp-2 grow">
+                                    {program.description}
+                                </p>
+
+                                <div className="pt-4 border-t border-border/50 mt-auto">
+                                    <button className="text-brand-red text-xs font-bold uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
+                                        Detail Program <ArrowUpRight size={14} />
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
             </div>
 
             {/* Detail Modal */}
@@ -465,4 +405,4 @@ const Proker = ({ background }) => {
     );
 };
 
-export default Proker;
+export default DetailProker;
