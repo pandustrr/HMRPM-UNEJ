@@ -55,10 +55,10 @@ const BlogSettingIndex = ({ settings }) => {
 
     return (
         <>
-            <Head title="Pengaturan Blog | HMRPM Admin" />
+            <Head title="Background Blog | HMRPM Admin" />
             <div className="max-w-3xl mx-auto space-y-6">
                 <div>
-                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter mb-1 uppercase">PENGATURAN BLOG</h1>
+                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter mb-1 uppercase">BACKGROUND BLOG</h1>
                     <p className="text-slate-500 text-xs font-medium">Kelola tampilan hero background halaman Blog (Video/Gambar/GIF).</p>
                 </div>
 

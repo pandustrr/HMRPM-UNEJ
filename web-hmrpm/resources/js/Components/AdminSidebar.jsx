@@ -70,7 +70,14 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
                 { name: "Kelola Blog", href: "/admin/blog" },
             ]
         },
-        { name: "Akademisi Prodi", icon: GraduationCap, href: "/admin/akademisi" },
+        {
+            name: "Akademisi Prodi",
+            icon: GraduationCap,
+            href: "/admin/akademisi-setting",
+            submenu: [
+                { name: "Hero Background", href: "/admin/akademisi-setting" },
+            ]
+        },
     ];
 
     const toggleSubmenu = (itemName) => {
@@ -115,6 +122,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
                 </AnimatePresence>
 
                 <button
+                    type="button"
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     className="hidden lg:flex p-1.5 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground transition-colors"
                 >
@@ -129,12 +137,13 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
                         {/* Main Menu Item */}
                         {item.submenu ? (
                             <button
+                                type="button"
                                 onClick={() => {
                                     if (isCollapsed && !isMobileOpen) return;
 
                                     toggleSubmenu(item.name);
 
-                                    if (item.href && !isMobileOpen) {
+                                    if (item.href && !isMobileOpen && !isActiveSubmenu(item.submenu) && !isActiveLink(item.href)) {
                                         router.get(item.href);
                                     }
                                 }}

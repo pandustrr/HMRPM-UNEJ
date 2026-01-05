@@ -6,7 +6,7 @@ import ConfirmModal from "@/Components/ConfirmModal";
 import ImageCropper from "@/Components/ImageCropper";
 import { useState } from "react";
 
-const AboutIndex = ({ settings }) => {
+const AkademisiIndex = ({ settings }) => {
     const { data, setData, post, processing, errors } = useForm({
         type: settings?.type || 'image',
         file: null,
@@ -38,14 +38,14 @@ const AboutIndex = ({ settings }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        post('/admin/about', {
+        post('/admin/akademisi-setting', {
             forceFormData: true,
         });
     };
 
     const handleDelete = () => {
         setIsConfirmOpen(false);
-        router.delete('/admin/about', {
+        router.delete('/admin/akademisi-setting', {
             onSuccess: () => {
                 setPreview(null);
                 setData('file', null);
@@ -55,11 +55,11 @@ const AboutIndex = ({ settings }) => {
 
     return (
         <>
-            <Head title="Background About | HMRPM Admin" />
+            <Head title="Background Akademisi | HMRPM Admin" />
             <div className="max-w-3xl mx-auto space-y-6">
                 <div>
-                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter mb-1 uppercase">Background ABOUT</h1>
-                    <p className="text-slate-500 text-xs font-medium">Kelola tampilan hero background halaman About (Video/Gambar/GIF).</p>
+                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter mb-1 uppercase">BACKGROUND AKADEMISI</h1>
+                    <p className="text-slate-500 text-xs font-medium">Kelola tampilan hero background halaman Akademisi (Video/Gambar/GIF).</p>
                 </div>
 
                 <div className="bg-white rounded-4xl border border-slate-200 p-6 shadow-sm">
@@ -188,6 +188,6 @@ const AboutIndex = ({ settings }) => {
     );
 };
 
-AboutIndex.layout = (page) => <AdminLayout children={page} />;
+AkademisiIndex.layout = (page) => <AdminLayout children={page} />;
 
-export default AboutIndex;
+export default AkademisiIndex;

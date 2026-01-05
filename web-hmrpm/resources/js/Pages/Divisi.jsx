@@ -93,7 +93,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                             Divisi <span className="text-brand-yellow">&</span> Kepengurusan
                         </h1>
                         <p className="text-white/80 text-base md:text-lg max-w-xl mx-auto font-medium leading-relaxed drop-shadow-md mb-8">
-                            Mengenal lebih dekat struktur organisasi dan tim hebat di balik setiap pergerakan HMRPM.
+                            Mengenal lebih dekat struktur organisasi dan tim hebat di balik setiap pergerakan Himpunan Mahasiswa Rekayasa Perancangan Mekanik.
                         </p>
 
                         {/* Period Filter Dropdown - Ultra Transparent & Modern */}

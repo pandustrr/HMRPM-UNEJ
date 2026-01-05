@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdvisorController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogTypeController;
 use App\Http\Controllers\Admin\BlogSettingController;
+use App\Http\Controllers\Admin\AkademisiSettingController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\DivisionController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/about', [AboutSettingController::class, 'index'])->name('about');
     Route::post('/about', [AboutSettingController::class, 'update'])->name('about.update');
     Route::delete('/about', [AboutSettingController::class, 'destroy'])->name('about.destroy');
+
+    Route::get('/akademisi-setting', [AkademisiSettingController::class, 'index'])->name('akademisi-setting.index');
+    Route::post('/akademisi-setting', [AkademisiSettingController::class, 'update'])->name('akademisi-setting.update');
+    Route::delete('/akademisi-setting', [AkademisiSettingController::class, 'destroy'])->name('akademisi-setting.destroy');
 
     // Proker Background Settings
     Route::get('/proker', [App\Http\Controllers\Admin\ProkerSettingController::class, 'index'])->name('proker.index');
@@ -57,7 +62,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 });
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    $background = \App\Models\AboutSetting::where('key', 'about_hero_bg')->first();
+    return Inertia::render('Home', [
+        'background' => $background
+    ]);
 });
 
 Route::get('/about', [AboutController::class, 'index']);
@@ -108,5 +116,8 @@ Route::get('/blog/{blog:slug}', function (\App\Models\Blog $blog) {
 });
 
 Route::get('/akademisi', function () {
-    return Inertia::render('Akademisi');
+    $background = \App\Models\AkademisiSetting::where('key', 'akademisi_hero_bg')->first();
+    return Inertia::render('Akademisi', [
+        'background' => $background
+    ]);
 });

@@ -52,7 +52,7 @@ export default function Blog({ blogs, background }) {
                             Blog & <span className="text-brand-yellow">Berita</span>
                         </h1>
                         <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
-                            Ikuti perkembangan terbaru, artikel edukatif, dan pengumuman resmi seputar HMRPM.
+                            Ikuti perkembangan terbaru, artikel edukatif, dan pengumuman resmi seputar Himpunan Mahasiswa Rekayasa Perancangan Mekanik.
                         </p>
                     </motion.div>
                 </div>

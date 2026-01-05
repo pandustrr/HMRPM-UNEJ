@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
 
-const Home = () => {
+const Home = ({ background }) => {
     const homeMissionPoints = [
         { title: "Inovasi Program", desc: "Mengembangkan program kerja strategis yang kolaboratif dan inklusif." },
         { title: "Growth & Skill", desc: "Pelatihan teknis dan manajerial intensif berstandar kebutuhan industri." },
@@ -24,12 +24,23 @@ const Home = () => {
                     transition={{ duration: 10, ease: "easeOut" }}
                     className="absolute inset-0 z-0"
                 >
-                    <img
-                        src="/storage/logo/about-hero-bg.png"
-                        alt="HMRPM Banner"
-                        className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-b from-black/80 via-black/20 to-black"></div>
+                    {background?.type === 'video' ? (
+                        <video
+                            src={background.value}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <img
+                            src={background?.value || "/storage/logo/about-hero-bg.png"}
+                            alt="HMRPM Banner"
+                            className="w-full h-full object-cover"
+                        />
+                    )}
+                    <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black"></div>
                 </motion.div>
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
@@ -72,7 +83,7 @@ const Home = () => {
                 </div>
 
                 {/* Decorative Bottom Mask */}
-                <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background to-transparent"></div>
+                <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background/50 to-transparent"></div>
             </section>
 
             {/* Content Sections Container */}
