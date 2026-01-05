@@ -9,8 +9,10 @@ import {
     Video,
     Instagram,
     Mail,
-    ChevronDown
+    ChevronDown,
+    Scissors
 } from "lucide-react";
+import ImageCropper from "@/Components/ImageCropper";
 
 export default function Create({ periods, prefill, filter_division_id }) {
     // Gunakan periode dari prefill, atau periode aktif, atau periode pertama sebagai fallback
@@ -34,7 +36,22 @@ export default function Create({ periods, prefill, filter_division_id }) {
     });
 
     const [availableDivisions, setAvailableDivisions] = useState([]);
-    const [photoPreview, setPhotoPreview] = useState(null);
+    const [showCropper, setShowCropper] = useState(false);
+    const [masterBackgroundSource, setMasterBackgroundSource] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const [cropperKey, setCropperKey] = useState(0);
+
+
+    // Update previewUrl whenever data.photo changes
+    useEffect(() => {
+        if (!data.photo) {
+            setPreviewUrl(null);
+            return;
+        }
+        const url = URL.createObjectURL(data.photo);
+        setPreviewUrl(url);
+        return () => URL.revokeObjectURL(url);
+    }, [data.photo]);
 
     useEffect(() => {
         const period = periods.find(p => p.id === parseInt(data.period_id));
@@ -54,17 +71,21 @@ export default function Create({ periods, prefill, filter_division_id }) {
 
     const handlePhotoChange = (e) => {
         const file = e.target.files[0];
-        setData('photo', file);
-
         if (file) {
+            setData('photo', file);
             const reader = new FileReader();
-            reader.onload = (event) => {
-                setPhotoPreview(event.target.result);
+            reader.onload = () => {
+                setMasterBackgroundSource(reader.result);
+                // Increment key to reset cropper instance with new image
+                setCropperKey(prev => prev + 1);
             };
             reader.readAsDataURL(file);
-        } else {
-            setPhotoPreview(null);
         }
+    };
+
+    const handleCropComplete = (croppedFile) => {
+        setData('photo', croppedFile);
+        setShowCropper(false);
     };
 
     return (
@@ -232,28 +253,62 @@ export default function Create({ periods, prefill, filter_division_id }) {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-2xl border border-border p-6 shadow-sm space-y-4">
+                        <div className="bg-white rounded-2xl border border-border p-4 shadow-sm space-y-4">
                             <h2 className="font-bold text-foreground">Media</h2>
 
-                            <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-3">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                                         <User size={14} /> Foto Profil (Max 2MB)
                                     </label>
-                                    <div className="relative group overflow-hidden rounded-2xl border-2 border-dashed border-border aspect-square bg-muted/5 cursor-pointer">
-                                        <img
-                                            src={photoPreview || '/storage/logo/hmrpm.png'}
-                                            alt="Preview"
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
-                                        />
-                                        <label htmlFor="photo-upload" className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer">
-                                            <div className="flex flex-col items-center gap-2 text-white">
-                                                <Upload size={24} />
-                                                <span className="text-xs font-bold uppercase tracking-widest">Pilih Foto</span>
-                                            </div>
-                                        </label>
+
+                                    {/* Card Preview Container matching Divisi style */}
+                                    <div className="group relative h-64 w-full max-w-[160px] mx-auto bg-card rounded-3xl overflow-hidden border border-border shadow-md">
+                                        {/* If we have a preview (newly selected) use it, otherwise placeholder */}
+                                        {previewUrl ? (
+                                            <>
+                                                <img
+                                                    src={previewUrl}
+                                                    alt="Preview"
+                                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+                                                    onError={(e) => e.target.src = '/storage/logo/hmrpm.png'}
+                                                />
+
+                                                {/* Top Right Controls */}
+                                                <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                    {data.photo && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setShowCropper(true)}
+                                                            className="p-2 bg-brand-red text-white backdrop-blur-md rounded-xl transition-all shadow-xl hover:bg-brand-red/90 hover:scale-110 active:scale-95 group/btn"
+                                                            title="Potong Gambar"
+                                                        >
+                                                            <Scissors size={16} className="group-hover/btn:rotate-12 transition-transform" />
+                                                        </button>
+                                                    )}
+
+                                                    <label
+                                                        htmlFor="photo-upload"
+                                                        className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/upload"
+                                                        title="Ganti Foto"
+                                                    >
+                                                        <Upload size={16} className="group-hover/upload:rotate-12 transition-transform" />
+                                                    </label>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <label
+                                                htmlFor="photo-upload"
+                                                className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer hover:bg-muted/30 transition-colors group"
+                                            >
+                                                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center group-hover:scale-110 transition-transform mb-2">
+                                                    <Upload size={24} className="text-muted-foreground" />
+                                                </div>
+                                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Upload Foto</span>
+                                            </label>
+                                        )}
                                     </div>
+
                                     <input
                                         type="file"
                                         id="photo-upload"
@@ -261,20 +316,77 @@ export default function Create({ periods, prefill, filter_division_id }) {
                                         onChange={handlePhotoChange}
                                         className="hidden"
                                     />
-                                    {errors.photo && <p className="text-red-600 text-xs font-medium">{errors.photo}</p>}
+                                    {errors.photo && <p className="text-red-600 text-xs font-medium mt-2">{errors.photo}</p>}
                                 </div>
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                                         <Video size={14} /> Video Hover (Max 10MB)
                                     </label>
+
+                                    {/* Video Preview & Drop Zone */}
+                                    <div className="group relative h-64 w-full max-w-[160px] mx-auto bg-card rounded-3xl overflow-hidden border border-border shadow-md">
+                                        {/* Content: Video or Placeholder */}
+                                        {data.video ? (
+                                            <>
+                                                <video
+                                                    src={data.video instanceof File ? URL.createObjectURL(data.video) : data.video}
+                                                    autoPlay
+                                                    muted
+                                                    loop
+                                                    playsInline
+                                                    className="absolute inset-0 w-full h-full object-cover"
+                                                />
+
+                                                {/* Top Right Controls */}
+                                                <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                    <label
+                                                        htmlFor="video-upload"
+                                                        className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/upload"
+                                                        title="Ganti Video"
+                                                    >
+                                                        <Upload size={16} className="group-hover/upload:rotate-12 transition-transform" />
+                                                    </label>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <label
+                                                htmlFor="video-upload"
+                                                className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer hover:bg-muted/30 transition-colors group border-2 border-dashed border-border/50 hover:border-brand-red/50 bg-muted/5"
+                                                onDragOver={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                }}
+                                                onDrop={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    const files = e.dataTransfer.files;
+                                                    if (files && files.length > 0 && files[0].type.startsWith('video/')) {
+                                                        setData('video', files[0]);
+                                                    }
+                                                }}
+                                            >
+                                                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center group-hover:scale-110 transition-transform mb-2">
+                                                    <Video size={24} className="text-muted-foreground group-hover:text-brand-red transition-colors" />
+                                                </div>
+                                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest group-hover:text-brand-red transition-colors">
+                                                    Drag & Drop Video
+                                                </span>
+                                                <span className="text-[10px] text-muted-foreground/50 font-medium">
+                                                    atau klik untuk memilih
+                                                </span>
+                                            </label>
+                                        )}
+                                    </div>
+
                                     <input
                                         type="file"
+                                        id="video-upload"
                                         accept="video/*"
                                         onChange={e => setData('video', e.target.files[0])}
-                                        className="w-full text-xs text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-brand-red/10 file:text-brand-red hover:file:bg-brand-red/20 cursor-pointer"
+                                        className="hidden"
                                     />
-                                    {errors.video && <p className="text-red-600 text-xs font-medium">{errors.video}</p>}
+                                    {errors.video && <p className="text-red-600 text-xs font-medium mt-2">{errors.video}</p>}
                                 </div>
                             </div>
                         </div>
@@ -282,13 +394,23 @@ export default function Create({ periods, prefill, filter_division_id }) {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-brand-red text-white rounded-2xl font-black text-lg hover:bg-brand-red/90 transition-all shadow-lg shadow-red-200 disabled:opacity-50"
+                            className="w-full flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-red text-white rounded-xl font-bold text-sm hover:bg-brand-red/90 transition-all shadow-md shadow-red-200 disabled:opacity-50"
                         >
-                            <Save size={20} />
+                            <Save size={18} />
                             {processing ? 'Menyimpan...' : 'Simpan Data'}
                         </button>
                     </div>
                 </form>
+
+                {showCropper && (
+                    <ImageCropper
+                        key={`cropper-${cropperKey}`}
+                        image={masterBackgroundSource}
+                        aspectRatio={9 / 16}
+                        onCropComplete={handleCropComplete}
+                        onCancel={() => setShowCropper(false)}
+                    />
+                )}
             </div>
         </>
     );
