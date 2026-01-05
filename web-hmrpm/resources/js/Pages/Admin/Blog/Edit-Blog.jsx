@@ -38,7 +38,7 @@ export default function Edit({ blog, blogTypes }) {
         <>
             <Head title={`Edit Blog: ${blog.title}`} />
 
-            <div className="p-6 max-w-5xl mx-auto space-y-6">
+            <div className="p-6 max-w-6xl mx-auto space-y-6">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <Link
@@ -54,7 +54,7 @@ export default function Edit({ blog, blogTypes }) {
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-foreground">
                     {/* Left Column - Main Form */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="bg-white p-8 rounded-3xl border border-border shadow-sm space-y-6">
@@ -74,7 +74,17 @@ export default function Edit({ blog, blogTypes }) {
                             {/* CKEditor Content */}
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Isi Konten</label>
-                                <div className="prose-sm ck-content">
+                                <div className="prose-sm ck-content max-w-none">
+                                    <style>{`
+                                        .ck-editor__editable {
+                                            min-height: 400px;
+                                            border-bottom-left-radius: 12px !important;
+                                            border-bottom-right-radius: 12px !important;
+                                        }
+                                        .ck-editor {
+                                            width: 100% !important;
+                                        }
+                                    `}</style>
                                     <CKEditor
                                         editor={ClassicEditor}
                                         data={data.content}
@@ -214,7 +224,7 @@ export default function Edit({ blog, blogTypes }) {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full flex items-center justify-center gap-3 bg-slate-900 hover:bg-brand-red text-white py-5 rounded-3xl font-black transition-all shadow-xl hover:shadow-brand-red/30 uppercase tracking-widest overflow-hidden group relative"
+                            className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-brand-red text-white py-3.5 rounded-2xl font-black transition-all shadow-xl hover:shadow-brand-red/30 uppercase tracking-widest overflow-hidden group relative"
                         >
                             <span className="relative z-10 flex items-center gap-2 leading-none">
                                 <Save size={20} />

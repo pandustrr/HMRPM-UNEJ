@@ -30,16 +30,16 @@ const Navbar = () => {
     return (
         <nav
             className={cn(
-                "fixed left-0 right-0 z-50 transition-all duration-500 ease-in-out px-4 top-4",
-                isScrolled ? "top-2" : "top-6"
+                "fixed left-0 right-0 z-50 transition-all duration-500 ease-in-out px-4 top-2",
+                isScrolled ? "top-1.5" : "top-4"
             )}
         >
             <div
                 className={cn(
                     "mx-auto max-w-7xl transition-all duration-500 ease-in-out",
                     isScrolled
-                        ? "bg-white/80 dark:bg-brand-black/80 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] rounded-2xl py-2"
-                        : "bg-black/30 dark:bg-black/50 backdrop-blur-md border border-white/10 rounded-4xl py-4 shadow-lg shadow-black/5"
+                        ? "bg-white/80 dark:bg-brand-black/80 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] rounded-2xl py-1.5"
+                        : "bg-black/30 dark:bg-black/50 backdrop-blur-md border border-white/10 rounded-3xl py-2.5 shadow-lg shadow-black/5"
                 )}
             >
                 <div className="px-6 flex justify-between items-center">
@@ -47,12 +47,12 @@ const Navbar = () => {
                         <motion.div
                             whileHover={{ rotate: 360 }}
                             transition={{ duration: 0.8, ease: "easeInOut" }}
-                            className="bg-brand-yellow p-1.5 rounded-xl shadow-lg shadow-brand-yellow/30"
+                            className="bg-brand-yellow p-1.25 rounded-lg shadow-lg shadow-brand-yellow/30"
                         >
-                            <img src="/logo.png" alt="Logo" className="h-7 w-auto" />
+                            <img src="/logo.png" alt="Logo" className="h-5 w-auto" />
                         </motion.div>
                         <span className={cn(
-                            "text-sm md:text-base font-black tracking-tight transition-all duration-500",
+                            "text-xs md:text-sm font-black tracking-tight transition-all duration-500 text-nowrap",
                             isScrolled
                                 ? "text-brand-red dark:text-brand-red"
                                 : "text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
@@ -69,7 +69,7 @@ const Navbar = () => {
                                 key={item.name}
                                 href={item.href}
                                 className={cn(
-                                    "px-4 py-2 text-xs lg:text-sm font-bold rounded-xl transition-all duration-300 relative group overflow-hidden",
+                                    "px-4 py-2 text-[11px] lg:text-xs font-bold rounded-xl transition-all duration-300 relative group overflow-hidden",
                                     url === item.href
                                         ? (isScrolled
                                             ? "text-brand-red bg-brand-red/10"

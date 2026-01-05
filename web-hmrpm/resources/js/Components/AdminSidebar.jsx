@@ -67,7 +67,6 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
             href: "/admin/blog",
             submenu: [
                 { name: "Hero Background", href: "/admin/blog-setting" },
-                { name: "Tipe Blog", href: "/admin/blog-types" },
                 { name: "Kelola Blog", href: "/admin/blog" },
             ]
         },

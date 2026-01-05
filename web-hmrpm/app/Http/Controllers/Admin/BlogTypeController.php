@@ -12,9 +12,7 @@ class BlogTypeController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Admin/Blog/Index-BlogType', [
-            'blogTypes' => BlogType::latest()->get()
-        ]);
+        return redirect()->route('admin.blog.index');
     }
 
     public function store(Request $request)

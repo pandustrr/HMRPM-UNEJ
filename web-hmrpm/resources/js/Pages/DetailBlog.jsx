@@ -120,10 +120,15 @@ export default function DetailBlog({ blog, relatedBlogs }) {
                             <div className="bg-slate-900 rounded-3xl p-8 text-center space-y-4 shadow-xl">
                                 <img src="/logo.png" alt="HMRPM" className="h-12 w-auto mx-auto brightness-200" />
                                 <h3 className="text-white font-black text-xl tracking-tighter uppercase">Gabung Komunitas</h3>
-                                <p className="text-white/60 text-xs font-medium">Jangan lewatkan update terbaru seputar TRPM dan kegiatan mahasiswa.</p>
-                                <button className="w-full bg-brand-red text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-transform shadow-lg shadow-brand-red/20">
+                                <p className="text-white/60 text-xs font-medium">Jangan lewatkan update terbaru seputar HMRPM dan kegiatan mahasiswa.</p>
+                                <a
+                                    href="https://www.instagram.com/hmrpm.unej?igsh=MW5sOXF2dGU0d285eQ=="
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block w-full bg-brand-red text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-transform shadow-lg shadow-brand-red/20"
+                                >
                                     Follow Instagram
-                                </button>
+                                </a>
                             </div>
                         </aside>
                     </div>

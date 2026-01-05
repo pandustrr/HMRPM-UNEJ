@@ -15,7 +15,8 @@ class BlogController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Blog/Index-Blog', [
-            'blogs' => Blog::with('blogType')->latest()->get()
+            'blogs' => Blog::with('blogType')->latest()->get(),
+            'blogTypes' => BlogType::latest()->get()
         ]);
     }
 
