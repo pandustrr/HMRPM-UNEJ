@@ -74,22 +74,24 @@ export default function Blog({ blogs, background }) {
                 </motion.div>
 
                 {/* Decorative bottom gradient */}
-                <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background to-transparent"></div>
+                <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background/50 to-transparent"></div>
             </section>
 
             {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 lg:pt-10 lg:pb-16">
                 {/* Search & Filter Bar */}
-                <div className="bg-card p-4 rounded-3xl border border-border shadow-2xl mb-12 flex flex-col md:flex-row gap-4 items-center">
-                    <div className="relative flex-1 group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-red transition-colors" size={20} />
-                        <input
-                            type="text"
-                            placeholder="Cari artikel atau kategori..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-12 pr-6 py-3 bg-muted/50 rounded-2xl border border-border focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all font-medium"
-                        />
+                <div className="max-w-lg mx-auto mb-16">
+                    <div className="bg-card p-3 rounded-2xl border border-border shadow-2xl flex flex-col md:flex-row gap-4 items-center">
+                        <div className="relative flex-1 group w-full">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-red transition-colors" size={18} />
+                            <input
+                                type="text"
+                                placeholder="Cari artikel atau kategori..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-11 pr-6 py-2 bg-muted/50 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all text-sm font-medium"
+                            />
+                        </div>
                     </div>
                 </div>
 

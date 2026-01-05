@@ -136,7 +136,7 @@ const Divisi = ({ periods, currentPeriod, activePeriodData, divisions }) => {
                 </motion.div>
 
                 {/* Decorative bottom gradient */}
-                <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background to-transparent"></div>
+                <div className="absolute bottom-0 left-0 w-full h-32 bg-linear-to-t from-background/50 to-transparent"></div>
             </section>
 
             {/* Division Section */}
