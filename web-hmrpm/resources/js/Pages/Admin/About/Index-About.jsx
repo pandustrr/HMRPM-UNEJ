@@ -129,16 +129,15 @@ const AboutIndex = ({ settings }) => {
                         {/* Preview */}
                         {preview && (
                             <div className="space-y-3">
-                                <label className="block text-slate-700 text-[10px] font-black uppercase tracking-widest px-1">Preview Saat Ini</label>
+                                <label className="block text-slate-700 text-[10px] font-black uppercase tracking-widest px-1">
+                                    {data.file ? 'Preview Perubahan (Belum Disimpan)' : 'Background Aktif'}
+                                </label>
                                 <div className="relative rounded-2xl overflow-hidden aspect-video border border-slate-200 shadow-inner bg-slate-100 max-w-lg mx-auto">
                                     {data.type === 'video' ? (
                                         <video src={preview} className="w-full h-full object-cover" autoPlay muted loop playsInline />
                                     ) : (
                                         <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                                     )}
-                                    <div className="absolute top-3 left-3 py-0.5 px-2.5 bg-brand-red text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg">
-                                        Tampilan Aktif
-                                    </div>
                                     {data.file && data.type === 'image' && (
                                         <button
                                             type="button"
@@ -167,7 +166,7 @@ const AboutIndex = ({ settings }) => {
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-brand-red text-white rounded-xl font-black transition-all shadow-xl hover:shadow-brand-red/20 disabled:opacity-50 group ml-auto uppercase tracking-widest"
+                                className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 hover:bg-brand-red text-white rounded-xl font-bold text-sm transition-all shadow-xl hover:shadow-brand-red/20 disabled:opacity-50 group ml-auto uppercase tracking-widest"
                             >
                                 <Save size={18} className="group-hover:scale-110 transition-transform" />
                                 {processing ? 'Menyimpan...' : 'Simpan Perubahan'}

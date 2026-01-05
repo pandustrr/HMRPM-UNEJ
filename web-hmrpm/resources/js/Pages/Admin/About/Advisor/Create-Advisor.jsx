@@ -1,7 +1,8 @@
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { Save, ChevronLeft, Upload, AlertCircle, User, Info, MapPin, Phone, Mail, Video } from "lucide-react";
-import { useState } from "react";
+import { Save, ChevronLeft, Upload, AlertCircle, User, Info, MapPin, Phone, Mail, Video, Scissors } from "lucide-react";
+import { useState, useEffect } from "react";
+import ImageCropper from "@/Components/ImageCropper";
 
 const CreateAdvisor = () => {
     const { data, setData, post, processing, errors } = useForm({
@@ -28,13 +29,31 @@ const CreateAdvisor = () => {
 
     const [preview, setPreview] = useState(null);
     const [videoPreview, setVideoPreview] = useState(null);
+    const [showCropper, setShowCropper] = useState(false);
+    const [masterSource, setMasterSource] = useState(null);
+    const [cropperKey, setCropperKey] = useState(0);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setData('image', file);
-            setPreview(URL.createObjectURL(file));
+            const reader = new FileReader();
+            reader.onload = () => {
+                setPreview(reader.result);
+                // Set master source for cropping (only if this is a new file upload)
+                setMasterSource(reader.result);
+                // Reset cropper with new image
+                setCropperKey(prev => prev + 1);
+            };
+            reader.readAsDataURL(file);
         }
+    };
+
+    const handleCropComplete = (croppedFile) => {
+        setData('image', croppedFile);
+        const objectUrl = URL.createObjectURL(croppedFile);
+        setPreview(objectUrl);
+        setShowCropper(false);
     };
 
     const handleVideoChange = (e) => {
@@ -106,28 +125,58 @@ const CreateAdvisor = () => {
                             </div>
 
                             <div className="space-y-4">
-                                <label className="block text-slate-700 text-[10px] font-black uppercase tracking-widest text-center">Foto Profil</label>
-                                <div className="relative group mx-auto w-36 h-48">
-                                    <input
-                                        type="file"
-                                        onChange={handleFileChange}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                        accept="image/*"
-                                    />
-                                    <div className="w-full h-full rounded-2xl border-2 border-dashed border-slate-200 group-hover:border-brand-red/50 bg-slate-50 group-hover:bg-brand-red/5 transition-all overflow-hidden flex flex-col items-center justify-center gap-3">
-                                        {preview ? (
-                                            <img src={preview} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <>
-                                                <Upload size={24} className="text-slate-300 group-hover:text-brand-red" />
-                                                <span className="text-[10px] font-black uppercase text-slate-400 group-hover:text-brand-red text-center px-4 tracking-tighter">Pilih Foto</span>
-                                            </>
-                                        )}
-                                    </div>
-                                    {preview && (
-                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-3xl pointer-events-none">
-                                            <span className="text-white font-black text-[10px] uppercase tracking-widest">Ganti Foto</span>
-                                        </div>
+                                <label className="block text-slate-700 text-[10px] font-black uppercase tracking-widest text-center">Foto Profil (3:4)</label>
+
+                                <input
+                                    type="file"
+                                    id="photo-upload"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                />
+
+                                {/* 3:4 Card Preview Container (h-56 sm:h-72 w-full max-w-[200px]) */}
+                                <div className={`group relative h-56 sm:h-72 w-full max-w-[200px] mx-auto rounded-3xl overflow-hidden transition-all ${preview ? 'bg-card border border-border shadow-md' : 'bg-slate-50 border-2 border-dashed border-slate-200 hover:border-brand-red/50 hover:bg-brand-red/5'}`}>
+                                    {preview ? (
+                                        <>
+                                            <img
+                                                src={preview}
+                                                className="w-full h-full object-cover"
+                                                alt="Preview"
+                                            />
+
+                                            {/* Top Right Controls */}
+                                            <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                {/* Crop Button */}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowCropper(true)}
+                                                    className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white transition-all shadow-xl border border-white/20 group/crop"
+                                                    title="Potong Gambar"
+                                                >
+                                                    <Scissors size={16} className="group-hover/crop:rotate-12 transition-transform" />
+                                                </button>
+
+                                                {/* Upload Change Button */}
+                                                <label
+                                                    htmlFor="photo-upload"
+                                                    className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/upload"
+                                                    title="Ganti Foto"
+                                                >
+                                                    <Upload size={16} className="group-hover/upload:rotate-12 transition-transform" />
+                                                </label>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <label
+                                            htmlFor="photo-upload"
+                                            className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer transition-colors group"
+                                        >
+                                            <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-300 group-hover:text-brand-red group-hover:border-brand-red/30 group-hover:scale-110 transition-all shadow-sm">
+                                                <Upload size={18} />
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase text-slate-400 group-hover:text-brand-red tracking-widest text-center px-2">Upload Foto</span>
+                                        </label>
                                     )}
                                 </div>
                                 {errors.image && <p className="text-brand-red text-[10px] font-bold text-center">{errors.image}</p>}
@@ -137,20 +186,22 @@ const CreateAdvisor = () => {
                                 <label className="block text-slate-700 text-[10px] font-black uppercase tracking-widest text-center flex items-center justify-center gap-2">
                                     <Video size={12} /> Video Hover (MP4)
                                 </label>
-                                <div className="relative group mx-auto w-36 h-48">
+                                <div className="relative group h-56 sm:h-72 w-full max-w-[200px] mx-auto rounded-3xl overflow-hidden transition-all bg-slate-50 border-2 border-dashed border-slate-200 hover:border-brand-red/50 hover:bg-brand-red/5">
                                     <input
                                         type="file"
                                         onChange={handleVideoChange}
                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                         accept="video/mp4"
                                     />
-                                    <div className="w-full h-full rounded-2xl border-2 border-dashed border-slate-200 group-hover:border-brand-red/50 bg-slate-50 group-hover:bg-brand-red/5 transition-all flex flex-col items-center justify-center gap-3 overflow-hidden">
+                                    <div className="w-full h-full flex flex-col items-center justify-center gap-3 overflow-hidden pointer-events-none">
                                         {videoPreview ? (
                                             <video src={videoPreview} className="w-full h-full object-cover" autoPlay muted loop playsInline />
                                         ) : (
                                             <>
-                                                <Upload size={24} className="text-slate-300 group-hover:text-brand-red" />
-                                                <span className="text-[10px] font-black uppercase text-slate-400 group-hover:text-brand-red tracking-tighter text-center px-4">Pilih Video</span>
+                                                <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center group-hover:scale-110 transition-transform mb-2">
+                                                    <Video size={18} className="text-slate-300 group-hover:text-brand-red transition-colors" />
+                                                </div>
+                                                <span className="text-[10px] font-black uppercase text-slate-400 group-hover:text-brand-red tracking-widest text-center px-2">Drag & Drop Video</span>
                                             </>
                                         )}
                                     </div>
@@ -168,7 +219,7 @@ const CreateAdvisor = () => {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-slate-900 hover:bg-brand-red text-white rounded-2xl font-black transition-all shadow-xl hover:shadow-brand-red/20 disabled:opacity-50 group tracking-widest text-sm"
+                            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 hover:bg-brand-red text-white rounded-2xl font-black transition-all shadow-xl hover:shadow-brand-red/20 disabled:opacity-50 group tracking-widest text-sm"
                         >
                             <Save size={18} className="group-hover:scale-110 transition-transform" />
                             {processing ? 'MEMPROSES...' : 'SIMPAN DATA'}
@@ -327,6 +378,17 @@ const CreateAdvisor = () => {
                         </div>
                     </div>
                 </form>
+
+                {/* Cropper Modal */}
+                {showCropper && masterSource && (
+                    <ImageCropper
+                        key={`cropper-${cropperKey}`}
+                        image={masterSource}
+                        aspectRatio={3 / 4}
+                        onCropComplete={handleCropComplete}
+                        onCancel={() => setShowCropper(false)}
+                    />
+                )}
             </div>
         </>
     );

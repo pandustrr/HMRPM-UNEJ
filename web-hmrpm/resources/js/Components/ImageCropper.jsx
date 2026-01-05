@@ -135,12 +135,14 @@ const ImageCropper = ({ image, onCropComplete, onCancel, aspectRatio = 16 / 9 })
 
                 <div className="flex gap-4 max-w-md mx-auto">
                     <button
+                        type="button"
                         onClick={onCancel}
                         className="flex-1 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-bold text-sm transition-all border border-white/10"
                     >
                         Batal
                     </button>
                     <button
+                        type="button"
                         onClick={handleConfirm}
                         className="flex-3 px-6 py-3 rounded-xl bg-brand-red hover:bg-brand-red/90 text-white font-black text-sm transition-all shadow-lg shadow-brand-red/20 uppercase tracking-widest flex items-center justify-center gap-2"
                     >

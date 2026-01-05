@@ -258,12 +258,12 @@ export default function Create({ periods, prefill, filter_division_id }) {
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                        <User size={14} /> Foto Profil (Max 2MB)
+                                    <label className="text-xs font-medium text-muted-foreground flex items-center gap-2">
+                                        <User size={12} /> Foto Profil (Max 2MB)
                                     </label>
 
                                     {/* Card Preview Container matching Divisi style */}
-                                    <div className="group relative h-64 w-full max-w-[160px] mx-auto bg-card rounded-3xl overflow-hidden border border-border shadow-md">
+                                    <div className={`group relative h-64 w-full max-w-[160px] mx-auto rounded-3xl overflow-hidden transition-all ${previewUrl ? 'bg-card border border-border shadow-md' : 'bg-muted/5 border-2 border-dashed border-border hover:border-brand-red/50'}`}>
                                         {/* If we have a preview (newly selected) use it, otherwise placeholder */}
                                         {previewUrl ? (
                                             <>
@@ -275,24 +275,24 @@ export default function Create({ periods, prefill, filter_division_id }) {
                                                 />
 
                                                 {/* Top Right Controls */}
-                                                <div className="absolute top-3 right-3 flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <div className="absolute top-2 right-2 flex gap-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                                     {data.photo && (
                                                         <button
                                                             type="button"
                                                             onClick={() => setShowCropper(true)}
-                                                            className="p-2 bg-brand-red text-white backdrop-blur-md rounded-xl transition-all shadow-xl hover:bg-brand-red/90 hover:scale-110 active:scale-95 group/btn"
+                                                            className="p-1.5 bg-brand-red text-white backdrop-blur-md rounded-lg transition-all shadow-xl hover:bg-brand-red/90 hover:scale-110 active:scale-95 group/btn"
                                                             title="Potong Gambar"
                                                         >
-                                                            <Scissors size={16} className="group-hover/btn:rotate-12 transition-transform" />
+                                                            <Scissors size={14} className="group-hover/btn:rotate-12 transition-transform" />
                                                         </button>
                                                     )}
 
                                                     <label
                                                         htmlFor="photo-upload"
-                                                        className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white transition-all cursor-pointer border border-white/20 shadow-xl group/upload"
+                                                        className="p-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-lg text-white transition-all cursor-pointer border border-white/20 shadow-xl group/upload"
                                                         title="Ganti Foto"
                                                     >
-                                                        <Upload size={16} className="group-hover/upload:rotate-12 transition-transform" />
+                                                        <Upload size={14} className="group-hover/upload:rotate-12 transition-transform" />
                                                     </label>
                                                 </div>
                                             </>
@@ -301,10 +301,12 @@ export default function Create({ periods, prefill, filter_division_id }) {
                                                 htmlFor="photo-upload"
                                                 className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer hover:bg-muted/30 transition-colors group"
                                             >
-                                                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center group-hover:scale-110 transition-transform mb-2">
-                                                    <Upload size={24} className="text-muted-foreground" />
+                                                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center group-hover:scale-110 transition-transform mb-2">
+                                                    <Upload size={18} className="text-muted-foreground group-hover:text-brand-red transition-colors" />
                                                 </div>
-                                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Upload Foto</span>
+                                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest group-hover:text-brand-red transition-colors text-center px-2">
+                                                    Upload Foto
+                                                </span>
                                             </label>
                                         )}
                                     </div>
@@ -325,7 +327,7 @@ export default function Create({ periods, prefill, filter_division_id }) {
                                     </label>
 
                                     {/* Video Preview & Drop Zone */}
-                                    <div className="group relative h-64 w-full max-w-[160px] mx-auto bg-card rounded-3xl overflow-hidden border border-border shadow-md">
+                                    <div className={`group relative h-64 w-full max-w-[160px] mx-auto rounded-3xl overflow-hidden transition-all ${data.video ? 'bg-card border border-border shadow-md' : 'bg-muted/5 border-2 border-dashed border-border hover:border-brand-red/50'}`}>
                                         {/* Content: Video or Placeholder */}
                                         {data.video ? (
                                             <>
@@ -352,7 +354,7 @@ export default function Create({ periods, prefill, filter_division_id }) {
                                         ) : (
                                             <label
                                                 htmlFor="video-upload"
-                                                className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer hover:bg-muted/30 transition-colors group border-2 border-dashed border-border/50 hover:border-brand-red/50 bg-muted/5"
+                                                className="flex flex-col items-center justify-center gap-2 w-full h-full cursor-pointer hover:bg-muted/30 transition-colors group"
                                                 onDragOver={(e) => {
                                                     e.preventDefault();
                                                     e.stopPropagation();
@@ -366,10 +368,10 @@ export default function Create({ periods, prefill, filter_division_id }) {
                                                     }
                                                 }}
                                             >
-                                                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center group-hover:scale-110 transition-transform mb-2">
-                                                    <Video size={24} className="text-muted-foreground group-hover:text-brand-red transition-colors" />
+                                                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center group-hover:scale-110 transition-transform mb-2">
+                                                    <Video size={18} className="text-muted-foreground group-hover:text-brand-red transition-colors" />
                                                 </div>
-                                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest group-hover:text-brand-red transition-colors">
+                                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest group-hover:text-brand-red transition-colors text-center px-2">
                                                     Drag & Drop Video
                                                 </span>
                                                 <span className="text-[10px] text-muted-foreground/50 font-medium">

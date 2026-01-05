@@ -158,7 +158,7 @@ export default function Create({ periods, selectedPeriodId }) {
                                     />
                                     <label
                                         htmlFor="icon-upload"
-                                        className="flex flex-col items-center justify-center gap-2 w-full aspect-square border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-muted/30 transition-colors group overflow-hidden"
+                                        className="flex flex-col items-center justify-center gap-2 w-32 mx-auto aspect-square border-2 border-dashed border-border rounded-2xl cursor-pointer hover:bg-muted/30 transition-colors group overflow-hidden"
                                     >
                                         {data.icon_image ? (
                                             <img
@@ -230,9 +230,9 @@ export default function Create({ periods, selectedPeriodId }) {
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-red hover:bg-brand-red/90 text-white rounded-2xl font-black transition-all disabled:opacity-50 shadow-xl shadow-red-100 uppercase tracking-wider font-black"
+                                className="w-full flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-red hover:bg-brand-red/90 text-white rounded-xl font-bold text-sm transition-all disabled:opacity-50 shadow-md shadow-red-200"
                             >
-                                <Save size={20} />
+                                <Save size={18} />
                                 {processing ? 'Menyimpan...' : 'Tambah Divisi'}
                             </button>
                         </div>
