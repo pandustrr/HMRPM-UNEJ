@@ -117,11 +117,20 @@ class DivisionMemberController extends Controller
                 ->with('success', 'Anggota berhasil ditambahkan.');
         }
 
-        // Jika tidak, redirect ke Kelola Divisi & Pengurus dengan show_all_members
-        return redirect()->route('admin.divisions.index', [
+        // Redirect params
+        $redirectParams = [
             'period_id' => $request->period_id,
             'show_all_members' => 1
-        ])->with('success', 'Anggota berhasil ditambahkan.');
+        ];
+
+        // Jika ada filter divisi sebelumnya, tambahkan ke redirect
+        if ($request->filter_division_id) {
+            $redirectParams['member_division_id'] = $request->filter_division_id;
+        }
+
+        // Jika tidak, redirect ke Kelola Divisi & Pengurus dengan show_all_members
+        return redirect()->route('admin.divisions.index', $redirectParams)
+            ->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     public function show(DivisionMember $member)
@@ -184,17 +193,31 @@ class DivisionMemberController extends Controller
                 ->with('success', 'Anggota berhasil diperbarui.');
         }
 
-        // Jika tidak, redirect ke Kelola Divisi & Pengurus dengan show_all_members
-        return redirect()->route('admin.divisions.index', [
+        // Redirect params
+        $redirectParams = [
             'period_id' => $request->period_id,
             'show_all_members' => 1
-        ])->with('success', 'Anggota berhasil diperbarui.');
+        ];
+
+        // Jika ada filter divisi sebelumnya, tambahkan ke redirect
+        if ($request->filter_division_id) {
+            $redirectParams['member_division_id'] = $request->filter_division_id;
+        }
+
+        return redirect()->route('admin.divisions.index', $redirectParams)
+            ->with('success', 'Anggota berhasil diperbarui.');
     }
 
     public function destroy(DivisionMember $member)
     {
-        if ($member->photo) Storage::disk('public')->delete(str_replace('/storage/', '', $member->photo));
-        if ($member->video) Storage::disk('public')->delete(str_replace('/storage/', '', $member->video));
+        // Protect default logo from deletion
+        if ($member->photo && !str_contains($member->photo, '/logo/')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $member->photo));
+        }
+
+        if ($member->video) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $member->video));
+        }
 
         $member->delete();
 

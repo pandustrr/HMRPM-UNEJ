@@ -10,8 +10,24 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [divisionToDelete, setDivisionToDelete] = useState(null);
     const [selectedDivision, setSelectedDivision] = useState(null);
-    const [showAllMembers, setShowAllMembers] = useState(new URLSearchParams(window.location.search).get('show_all_members') === '1');
-    const [selectedMemberDivisionId, setSelectedMemberDivisionId] = useState('');
+    const [showAllMembers, setShowAllMembers] = useState(
+        new URLSearchParams(window.location.search).get('show_all_members') === '1' ||
+        !!new URLSearchParams(window.location.search).get('member_division_id')
+    );
+    const [selectedMemberDivisionId, setSelectedMemberDivisionId] = useState(
+        new URLSearchParams(window.location.search).get('member_division_id') || ''
+    );
+
+    // Add effect to handle initial URL params if needed in future, or just rely on state
+    // Function to handle showing members for a specific division
+    const handleFilterMembers = (divisionId) => {
+        setSelectedMemberDivisionId(divisionId.toString());
+        setShowAllMembers(true);
+        // Optional: scroll to members section
+        setTimeout(() => {
+            document.getElementById('members-section')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    };
     const [memberSearchTerm, setMemberSearchTerm] = useState('');
     const [showMemberDetailModal, setShowMemberDetailModal] = useState(false);
     const [selectedMember, setSelectedMember] = useState(null);
@@ -160,6 +176,16 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                                         >
                                             <Eye size={18} />
                                         </button>
+
+                                        {/* Filter Members Button */}
+                                        <button
+                                            onClick={() => handleFilterMembers(division.id)}
+                                            className="p-2 bg-brand-red/5 hover:bg-brand-red/10 text-brand-red rounded-lg transition-colors"
+                                            title="Lihat Pengurus"
+                                        >
+                                            <Users size={18} />
+                                        </button>
+
                                         <Link
                                             href={`/admin/divisions/${division.id}/edit`}
                                             className="flex-1 flex items-center justify-center gap-2 bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-lg font-medium text-sm transition-colors"
@@ -186,27 +212,31 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
             {divisions.length > 0 && (
                 <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => setShowAllMembers(!showAllMembers)}
-                            className={`flex-1 px-6 py-3 rounded-xl font-bold transition-all ${showAllMembers
-                                ? 'bg-brand-red text-white hover:bg-brand-red/90'
-                                : 'bg-muted text-foreground hover:bg-muted/80'
-                                }`}
-                        >
-                            {showAllMembers ? 'Tutup Semua Pengurus' : 'Lihat Semua Pengurus'}
-                        </button>
-                        <Link
-                            href={`/admin/members/create?period_id=${selectedPeriodId}`}
-                            className="flex items-center justify-center gap-2 bg-brand-red text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-red/90 transition-colors"
-                        >
-                            <Plus size={18} />
-                            Tambah Pengurus
-                        </Link>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => setShowAllMembers(!showAllMembers)}
+                                className={`flex-1 px-6 py-3 rounded-xl font-bold transition-all border border-transparent ${showAllMembers
+                                    ? 'bg-white text-brand-red border-brand-red shadow-sm'
+                                    : 'bg-brand-red text-white hover:bg-brand-red/90 shadow-md'
+                                    }`}
+                            >
+                                {showAllMembers ? 'Tutup Daftar Pengurus' : 'Lihat Semua Pengurus'}
+                            </button>
+                        </div>
                     </div>
 
                     {showAllMembers && (
-                        <div className="bg-white rounded-2xl border border-border p-6 space-y-4 shadow-sm">
-                            <h2 className="text-xl font-bold text-foreground">Semua Pengurus</h2>
+                        <div id="members-section" className="bg-white rounded-2xl border border-border p-6 space-y-6 shadow-sm scroll-mt-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <h2 className="text-xl font-bold text-foreground">Daftar Pengurus</h2>
+                                <Link
+                                    href={`/admin/members/create?period_id=${selectedPeriodId}&filter_division_id=${selectedMemberDivisionId}&member_division_id=${selectedMemberDivisionId}`}
+                                    className="flex items-center justify-center gap-2 bg-brand-red text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-brand-red/90 transition-colors shadow-lg shadow-brand-red/20"
+                                >
+                                    <Plus size={16} />
+                                    Tambah Pengurus
+                                </Link>
+                            </div>
 
                             {/* Filters & Search */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -317,7 +347,7 @@ export default function Index({ periods, selectedPeriodId, divisions }) {
                                                                 <Eye size={16} />
                                                             </button>
                                                             <Link
-                                                                href={`/admin/members/${member.id}/edit`}
+                                                                href={`/admin/members/${member.id}/edit?filter_division_id=${selectedMemberDivisionId}`}
                                                                 className="p-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg transition-colors duration-200"
                                                                 title="Edit"
                                                             >

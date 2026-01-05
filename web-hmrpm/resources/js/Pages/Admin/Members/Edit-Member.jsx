@@ -91,7 +91,7 @@ export default function Edit({ member, periods, filter_division_id }) {
             <div className="p-6 space-y-6">
                 <div className="flex items-center gap-4">
                     <Link
-                        href={data.division_id_source ? `/admin/divisions/${data.division_id_source}/edit` : `/admin/divisions?period_id=${data.period_id}&show_all_members=1`}
+                        href={data.division_id_source ? `/admin/divisions/${data.division_id_source}/edit` : `/admin/divisions?period_id=${data.period_id}&show_all_members=1&member_division_id=${data.filter_division_id}`}
                         className="p-2 hover:bg-muted rounded-lg transition-colors"
                     >
                         <ArrowLeft size={20} />
