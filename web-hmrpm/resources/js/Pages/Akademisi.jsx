@@ -1,18 +1,102 @@
 import { Head } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Mail, Instagram, MapPin, FlaskConical, Zap, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { cn } from "../lib/utils";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Akademisi = ({ background }) => {
+    useEffect(() => {
+        AOS.init({
+            duration: 1200,
+            once: true,
+            easing: 'ease-out-cubic',
+        });
+    }, []);
+
     const lecturers = [
-        { name: "Dr. Budi Santoso, M.Kom", role: "Kaprodi", nip: "19800101..." },
-        { name: "Siti Aminah, S.T., M.T.", role: "Dosen Pembimbing", nip: "19850202..." },
-        { name: "Rudi Hartono, M.Cs.", role: "Dosen", nip: "19900303..." },
+        {
+            name: "Dr. Budi Santoso, M.Kom",
+            role: "Kaprodi",
+            nip: "19800101...",
+            photo: "/storage/logo/hmrpm.png",
+            instagram: "https://instagram.com",
+            email: "budi@example.com"
+        },
+        {
+            name: "Siti Aminah, S.T., M.T.",
+            role: "Dosen Pembimbing",
+            nip: "19850202...",
+            photo: "/storage/logo/hmrpm.png",
+            instagram: "https://instagram.com",
+            email: "siti@example.com"
+        },
+        {
+            name: "Rudi Hartono, M.Cs.",
+            role: "Dosen",
+            nip: "19900303...",
+            photo: "/storage/logo/hmrpm.png"
+        },
     ];
 
     const technicians = [
-        { name: "Ahmad Junaedi", role: "Teknisi Lab RPL" },
-        { name: "Dewi Sartika", role: "Laboran" },
+        {
+            name: "Ahmad Junaedi",
+            role: "Teknisi Lab RPL",
+            photo: "/storage/logo/hmrpm.png"
+        },
+        {
+            name: "Dewi Sartika",
+            role: "Laboran",
+            photo: "/storage/logo/hmrpm.png"
+        },
     ];
+
+    const laboratories = [
+        {
+            id: 1,
+            name: "Laboratorium CAD/CAM",
+            role: "Kepala Lab: Dr. Eng. Ir. Sutrisno, M.T.",
+            image: "/storage/logo/hmrpm.png",
+            video: null,
+            details: [
+                { label: "Lokasi", value: "Gedung Laboratorium Terpadu Lt. 1", icon: MapPin },
+                { label: "Fasilitas Utama", value: "30 Workstations, CNC Simulator", icon: Zap },
+                { label: "Jenis Kegiatan", value: "Praktikum Desain & Manufaktur", icon: FlaskConical },
+                { label: "Kapasitas", value: "30 Mahasiswa", icon: User },
+            ]
+        },
+        {
+            id: 2,
+            name: "Laboratorium Material Teknik",
+            role: "Kepala Lab: Prof. Dr. Budiarto",
+            image: "/storage/logo/hmrpm.png",
+            video: null,
+            details: [
+                { label: "Lokasi", value: "Gedung Laboratorium Terpadu Lt. 2", icon: MapPin },
+                { label: "Fasilitas Utama", value: "Uji Tarik, Uji Kekerasan, Mikroskop", icon: Zap },
+                { label: "Jenis Kegiatan", value: "Pengujian Material & Metalurgi", icon: FlaskConical },
+                { label: "Kapasitas", value: "25 Mahasiswa", icon: User },
+            ]
+        },
+        {
+            id: 3,
+            name: "Laboratorium Mekatronika",
+            role: "Kepala Lab: Ir. Haryono, M.Eng.",
+            image: "/storage/logo/hmrpm.png",
+            video: null,
+            details: [
+                { label: "Lokasi", value: "Gedung Laboratorium Terpadu Lt. 3", icon: MapPin },
+                { label: "Fasilitas Utama", value: "PLC Training Kits, Robotic Arms", icon: Zap },
+                { label: "Jenis Kegiatan", value: "Otomasi Industri & Robotika", icon: FlaskConical },
+                { label: "Kapasitas", value: "20 Mahasiswa", icon: User },
+            ]
+        }
+    ];
+
+    const [hoveredLab, setHoveredLab] = useState(null);
 
     return (
         <div className="bg-background min-h-screen pb-20">
@@ -82,51 +166,324 @@ const Akademisi = ({ background }) => {
 
             {/* Content Container */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-                <div className="mb-20">
-                    <h2 className="text-2xl font-bold text-brand-yellow mb-8 border-b border-border pb-2 uppercase tracking-tighter">Dosen</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {lecturers.map((dosen, idx) => (
+                {/* Dosen Section */}
+                <div className="mb-32">
+                    <div className="text-center mb-16" data-aos="fade-up">
+                        <span className="text-brand-red font-black tracking-widest uppercase text-xs mb-3 block underline decoration-brand-yellow/30 underline-offset-4">Academic Staff</span>
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground mb-4 tracking-tighter">
+                            Daftar <span className="text-brand-yellow">Dosen</span>
+                        </h2>
+                        <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base leading-relaxed font-medium">
+                            Tenaga pendidik profesional yang membimbing dan menyalurkan ilmu bagi mahasiswa Rekayasa Perancangan Mekanik.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
+                        {lecturers.map((person, index) => (
                             <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
+                                key={index}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="bg-card p-6 rounded-3xl flex items-center space-x-4 hover:bg-card/80 transition-all border border-border/50 hover:border-brand-red/30 shadow-sm hover:shadow-xl group"
+                                transition={{ delay: index * 0.1 }}
+                                className="group relative h-72 sm:h-96 bg-card rounded-3xl overflow-hidden border border-border/50 hover:border-brand-red/50 transition-all duration-500 shadow-lg hover:shadow-2xl cursor-pointer"
+                                onMouseEnter={(e) => {
+                                    const vid = e.currentTarget.querySelector('video');
+                                    if (vid) vid.play();
+                                }}
+                                onMouseLeave={(e) => {
+                                    const vid = e.currentTarget.querySelector('video');
+                                    if (vid) {
+                                        vid.pause();
+                                        vid.currentTime = 0;
+                                    }
+                                }}
                             >
-                                <div className="w-16 h-16 rounded-2xl bg-brand-maroon flex items-center justify-center text-xl font-bold text-white group-hover:scale-110 transition-transform shadow-lg">
-                                    {dosen.name.charAt(0)}
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-foreground group-hover:text-brand-red transition-colors">{dosen.name}</h3>
-                                    <p className="text-sm text-brand-yellow font-medium">{dosen.role}</p>
-                                    <p className="text-xs text-muted-foreground font-mono">{dosen.nip}</p>
+                                {/* Background Image (Default) */}
+                                <img
+                                    src={person.photo || "/storage/logo/hmrpm.png"}
+                                    alt={person.name}
+                                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+                                    onError={(e) => e.target.src = "/storage/logo/hmrpm.png"}
+                                />
+
+                                {/* Background Video (Hover) */}
+                                {person.video && (
+                                    <video
+                                        src={person.video}
+                                        muted
+                                        loop
+                                        playsInline
+                                        className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                    />
+                                )}
+
+                                {/* Gradient Overlay */}
+                                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent"></div>
+
+                                {/* Content */}
+                                <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col items-center text-center z-10">
+                                    <h4 className="text-base sm:text-lg font-black tracking-tight mb-1 text-white group-hover:text-brand-red transition-colors duration-300 line-clamp-2">
+                                        {person.name}
+                                    </h4>
+                                    <p className="text-[10px] sm:text-xs font-bold text-brand-yellow uppercase tracking-wider mb-1">
+                                        {person.role}
+                                    </p>
+                                    <p className="text-[10px] font-medium text-white/50 mb-4 group-hover:text-white/70 transition-colors font-mono">
+                                        {person.nip || ""}
+                                    </p>
+
+                                    {/* Social Icons - Instagram & Email */}
+                                    <div className="flex gap-3 opacity-80 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 transition-transform">
+                                        {person.instagram && (
+                                            <a
+                                                href={person.instagram}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                                title="Instagram"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <Instagram size={14} className="text-white" />
+                                            </a>
+                                        )}
+                                        {person.email && (
+                                            <a
+                                                href={`mailto:${person.email}`}
+                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                                title="Email"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <Mail size={14} className="text-white" />
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
                 </div>
 
+                {/* Teknisi Section */}
                 <div>
-                    <h2 className="text-2xl font-bold text-brand-yellow mb-8 border-b border-border pb-2 uppercase tracking-tighter">Teknisi</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {technicians.map((tek, idx) => (
+                    <div className="text-center mb-16" data-aos="fade-up">
+                        <span className="text-brand-red font-black tracking-widest uppercase text-xs mb-3 block underline decoration-brand-yellow/30 underline-offset-4">Technical Staff</span>
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground mb-4 tracking-tighter">
+                            Daftar <span className="text-brand-yellow">Teknisi</span>
+                        </h2>
+                        <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base leading-relaxed font-medium">
+                            Tim ahli yang mendukung keberlanjutan pratikum dan pemeliharaan fasilitas laboratorium di Prodi RPM.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
+                        {technicians.map((person, index) => (
                             <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
+                                key={index}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="bg-card p-6 rounded-3xl flex items-center space-x-4 hover:bg-card/80 transition-all border border-border/50 hover:border-brand-red/30 shadow-sm hover:shadow-xl group"
+                                transition={{ delay: index * 0.1 }}
+                                className="group relative h-72 sm:h-96 bg-card rounded-3xl overflow-hidden border border-border/50 hover:border-brand-red/50 transition-all duration-500 shadow-lg hover:shadow-2xl cursor-pointer"
+                                onMouseEnter={(e) => {
+                                    const vid = e.currentTarget.querySelector('video');
+                                    if (vid) vid.play();
+                                }}
+                                onMouseLeave={(e) => {
+                                    const vid = e.currentTarget.querySelector('video');
+                                    if (vid) {
+                                        vid.pause();
+                                        vid.currentTime = 0;
+                                    }
+                                }}
                             >
-                                <div className="w-16 h-16 rounded-2xl bg-muted border border-border flex items-center justify-center text-xl font-bold text-foreground group-hover:scale-110 transition-transform shadow-md">
-                                    {tek.name.charAt(0)}
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-foreground group-hover:text-brand-red transition-colors">{tek.name}</h3>
-                                    <p className="text-sm text-muted-foreground font-medium">{tek.role}</p>
+                                {/* Background Image (Default) */}
+                                <img
+                                    src={person.photo || "/storage/logo/hmrpm.png"}
+                                    alt={person.name}
+                                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+                                    onError={(e) => e.target.src = "/storage/logo/hmrpm.png"}
+                                />
+
+                                {/* Background Video (Hover) */}
+                                {person.video && (
+                                    <video
+                                        src={person.video}
+                                        muted
+                                        loop
+                                        playsInline
+                                        className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                    />
+                                )}
+
+                                {/* Gradient Overlay */}
+                                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent"></div>
+
+                                {/* Content */}
+                                <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col items-center text-center z-10">
+                                    <h4 className="text-base sm:text-lg font-black tracking-tight mb-1 text-white group-hover:text-brand-red transition-colors duration-300">
+                                        {person.name}
+                                    </h4>
+                                    <p className="text-[10px] sm:text-xs font-bold text-brand-yellow uppercase tracking-wider mb-1">
+                                        {person.role}
+                                    </p>
+
+                                    {/* Social Icons - Instagram & Email */}
+                                    <div className="flex gap-3 opacity-80 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 transition-transform">
+                                        {person.instagram && (
+                                            <a
+                                                href={person.instagram}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                                title="Instagram"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <Instagram size={14} className="text-white" />
+                                            </a>
+                                        )}
+                                        {person.email && (
+                                            <a
+                                                href={`mailto:${person.email}`}
+                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                                title="Email"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <Mail size={14} className="text-white" />
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                             </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Laboratorium Section (Zig-Zag Style like About.jsx) */}
+                <div className="mt-32">
+                    <div className="text-center mb-16" data-aos="fade-up">
+                        <span className="text-brand-red font-black tracking-widest uppercase text-xs mb-3 block underline decoration-brand-yellow/30 underline-offset-4">Facilities</span>
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground mb-4 tracking-tighter">
+                            Daftar <span className="text-brand-yellow">Laboratorium</span>
+                        </h2>
+                        <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base leading-relaxed font-medium">
+                            Fasilitas penunjang kegiatan praktikum dan penelitian mahasiswa Rekayasa Perancangan Mekanik.
+                        </p>
+                    </div>
+
+                    <div className="space-y-24 items-center">
+                        {laboratories.map((lab, idx) => (
+                            <div key={lab.id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-5xl mx-auto">
+                                <motion.div
+                                    initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    onMouseEnter={() => setHoveredLab(lab.id)}
+                                    onMouseLeave={() => setHoveredLab(null)}
+                                    className={cn(
+                                        "lg:col-span-3 relative group",
+                                        idx % 2 !== 0 && "lg:order-2"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "absolute -inset-4 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700",
+                                        idx % 2 === 0 ? "bg-brand-red/10" : "bg-brand-yellow/10"
+                                    )}></div>
+                                    <div className={cn(
+                                        "relative h-72 sm:h-96 rounded-3xl overflow-hidden border-2 shadow-xl bg-black transition-colors duration-500",
+                                        idx % 2 === 0 ? "border-brand-red/20 group-hover:border-brand-red/50" : "border-brand-yellow/20 group-hover:border-brand-yellow/50"
+                                    )}>
+                                        <AnimatePresence mode="wait">
+                                            {hoveredLab === lab.id && lab.video ? (
+                                                <motion.video
+                                                    key="video"
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    exit={{ opacity: 0 }}
+                                                    src={lab.video}
+                                                    autoPlay
+                                                    muted
+                                                    loop
+                                                    playsInline
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <motion.img
+                                                    key="image"
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    exit={{ opacity: 0 }}
+                                                    src={lab.image}
+                                                    alt={lab.name}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                    onError={(e) => { e.target.src = "/storage/logo/hmrpm.png"; }}
+                                                />
+                                            )}
+                                        </AnimatePresence>
+                                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                                        <div className={cn(
+                                            "absolute bottom-5 left-5 right-5 pointer-events-none",
+                                            idx % 2 !== 0 && "text-right"
+                                        )}>
+                                            <p className={cn(
+                                                "font-black uppercase tracking-widest text-[9px] mb-1",
+                                                idx % 2 === 0 ? "text-brand-yellow" : "text-brand-red"
+                                            )}>{lab.role}</p>
+                                            <h4 className="text-white text-lg font-bold leading-tight">{lab.name}</h4>
+                                        </div>
+                                    </div>
+                                </motion.div>
+
+                                <motion.div
+                                    initial={{ opacity: 0, x: idx % 2 === 0 ? 50 : -50 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    className={cn(
+                                        "lg:col-span-9 space-y-6",
+                                        idx % 2 !== 0 && "lg:order-1 lg:text-right"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "flex",
+                                        idx % 2 !== 0 ? "lg:justify-end" : "justify-start"
+                                    )}>
+                                        <div className={cn(
+                                            "inline-flex items-center gap-2 px-4 py-1.5 border rounded-full text-xs font-black uppercase tracking-widest",
+                                            idx % 2 === 0
+                                                ? "bg-brand-red/5 border-brand-red/10 text-brand-red"
+                                                : "bg-brand-yellow/5 border-brand-yellow/20 text-brand-yellow"
+                                        )}>
+                                            Detail Laboratorium
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {lab.details.map((detail, detailIdx) => (
+                                            <div key={detailIdx} className={cn(
+                                                "p-3 bg-card border border-border/50 rounded-xl transition-colors group",
+                                                idx % 2 === 0 ? "hover:border-brand-red/30" : "hover:border-brand-yellow/30"
+                                            )}>
+                                                <div className={cn(
+                                                    "flex items-start gap-3",
+                                                    idx % 2 !== 0 && "flex-row-reverse text-right"
+                                                )}>
+                                                    <div className={cn(
+                                                        "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all",
+                                                        idx % 2 === 0
+                                                            ? "bg-brand-red/5 group-hover:bg-brand-red group-hover:text-white"
+                                                            : "bg-brand-yellow/5 group-hover:bg-brand-yellow group-hover:text-black"
+                                                    )}>
+                                                        <detail.icon className="w-3.5 h-3.5" />
+                                                    </div>
+                                                    <div className="min-w-0 flex flex-col justify-center">
+                                                        <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
+                                                        <p className="text-xs font-bold text-foreground leading-tight wrap-break-word">{detail.value}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            </div>
                         ))}
                     </div>
                 </div>
