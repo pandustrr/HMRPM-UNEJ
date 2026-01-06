@@ -6,8 +6,9 @@ import { AnimatePresence } from "framer-motion";
 import { cn } from "../lib/utils";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import DetailAcademicModal from "./DetailAcademicModal";
 
-const Akademisi = ({ background }) => {
+const Akademisi = ({ background, academics }) => {
     useEffect(() => {
         AOS.init({
             duration: 1200,
@@ -16,43 +17,17 @@ const Akademisi = ({ background }) => {
         });
     }, []);
 
-    const lecturers = [
-        {
-            name: "Dr. Budi Santoso, M.Kom",
-            role: "Kaprodi",
-            nip: "19800101...",
-            photo: "/storage/logo/hmrpm.png",
-            instagram: "https://instagram.com",
-            email: "budi@example.com"
-        },
-        {
-            name: "Siti Aminah, S.T., M.T.",
-            role: "Dosen Pembimbing",
-            nip: "19850202...",
-            photo: "/storage/logo/hmrpm.png",
-            instagram: "https://instagram.com",
-            email: "siti@example.com"
-        },
-        {
-            name: "Rudi Hartono, M.Cs.",
-            role: "Dosen",
-            nip: "19900303...",
-            photo: "/storage/logo/hmrpm.png"
-        },
-    ];
+    const [hoveredLab, setHoveredLab] = useState(null);
+    const [selectedAcademic, setSelectedAcademic] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const technicians = [
-        {
-            name: "Ahmad Junaedi",
-            role: "Teknisi Lab RPL",
-            photo: "/storage/logo/hmrpm.png"
-        },
-        {
-            name: "Dewi Sartika",
-            role: "Laboran",
-            photo: "/storage/logo/hmrpm.png"
-        },
-    ];
+    const openModal = (academic) => {
+        setSelectedAcademic(academic);
+        setIsModalOpen(true);
+    };
+
+    const lecturers = academics.filter(a => a.type === 'dosen');
+    const technicians = academics.filter(a => a.type === 'teknisi');
 
     const laboratories = [
         {
@@ -95,8 +70,6 @@ const Akademisi = ({ background }) => {
             ]
         }
     ];
-
-    const [hoveredLab, setHoveredLab] = useState(null);
 
     return (
         <div className="bg-background min-h-screen pb-20">
@@ -181,11 +154,12 @@ const Akademisi = ({ background }) => {
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
                         {lecturers.map((person, index) => (
                             <motion.div
-                                key={index}
+                                key={person.id}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
+                                onClick={() => openModal(person)}
                                 className="group relative h-72 sm:h-96 bg-card rounded-3xl overflow-hidden border border-border/50 hover:border-brand-red/50 transition-all duration-500 shadow-lg hover:shadow-2xl cursor-pointer"
                                 onMouseEnter={(e) => {
                                     const vid = e.currentTarget.querySelector('video');
@@ -201,7 +175,7 @@ const Akademisi = ({ background }) => {
                             >
                                 {/* Background Image (Default) */}
                                 <img
-                                    src={person.photo || "/storage/logo/hmrpm.png"}
+                                    src={person.image || "/storage/logo/hmrpm.png"}
                                     alt={person.name}
                                     className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
                                     onError={(e) => e.target.src = "/storage/logo/hmrpm.png"}
@@ -226,36 +200,22 @@ const Akademisi = ({ background }) => {
                                     <h4 className="text-base sm:text-lg font-black tracking-tight mb-1 text-white group-hover:text-brand-red transition-colors duration-300 line-clamp-2">
                                         {person.name}
                                     </h4>
-                                    <p className="text-[10px] sm:text-xs font-bold text-brand-yellow uppercase tracking-wider mb-1">
-                                        {person.role}
+                                    <p className="text-[10px] sm:text-xs font-bold text-brand-yellow uppercase tracking-wider mb-1 line-clamp-1">
+                                        {person.position || 'Dosen'}
                                     </p>
                                     <p className="text-[10px] font-medium text-white/50 mb-4 group-hover:text-white/70 transition-colors font-mono">
-                                        {person.nip || ""}
+                                        {person.nidn || ""}
                                     </p>
 
                                     {/* Social Icons - Instagram & Email */}
                                     <div className="flex gap-3 opacity-80 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 transition-transform">
-                                        {person.instagram && (
-                                            <a
-                                                href={person.instagram}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
-                                                title="Instagram"
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                <Instagram size={14} className="text-white" />
-                                            </a>
-                                        )}
                                         {person.email && (
-                                            <a
-                                                href={`mailto:${person.email}`}
+                                            <div
                                                 className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
-                                                title="Email"
-                                                onClick={(e) => e.stopPropagation()}
+                                                title="Detail"
                                             >
-                                                <Mail size={14} className="text-white" />
-                                            </a>
+                                                <User size={14} className="text-white" />
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -279,11 +239,12 @@ const Akademisi = ({ background }) => {
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
                         {technicians.map((person, index) => (
                             <motion.div
-                                key={index}
+                                key={person.id}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
+                                onClick={() => openModal(person)}
                                 className="group relative h-72 sm:h-96 bg-card rounded-3xl overflow-hidden border border-border/50 hover:border-brand-red/50 transition-all duration-500 shadow-lg hover:shadow-2xl cursor-pointer"
                                 onMouseEnter={(e) => {
                                     const vid = e.currentTarget.querySelector('video');
@@ -299,7 +260,7 @@ const Akademisi = ({ background }) => {
                             >
                                 {/* Background Image (Default) */}
                                 <img
-                                    src={person.photo || "/storage/logo/hmrpm.png"}
+                                    src={person.image || "/storage/logo/hmrpm.png"}
                                     alt={person.name}
                                     className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
                                     onError={(e) => e.target.src = "/storage/logo/hmrpm.png"}
@@ -321,37 +282,21 @@ const Akademisi = ({ background }) => {
 
                                 {/* Content */}
                                 <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col items-center text-center z-10">
-                                    <h4 className="text-base sm:text-lg font-black tracking-tight mb-1 text-white group-hover:text-brand-red transition-colors duration-300">
+                                    <h4 className="text-base sm:text-lg font-black tracking-tight mb-1 text-white group-hover:text-brand-red transition-colors duration-300 line-clamp-2">
                                         {person.name}
                                     </h4>
-                                    <p className="text-[10px] sm:text-xs font-bold text-brand-yellow uppercase tracking-wider mb-1">
-                                        {person.role}
+                                    <p className="text-[10px] sm:text-xs font-bold text-brand-yellow uppercase tracking-wider mb-1 line-clamp-1">
+                                        {person.position || 'Teknisi'}
                                     </p>
 
                                     {/* Social Icons - Instagram & Email */}
-                                    <div className="flex gap-3 opacity-80 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 transition-transform">
-                                        {person.instagram && (
-                                            <a
-                                                href={person.instagram}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
-                                                title="Instagram"
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                <Instagram size={14} className="text-white" />
-                                            </a>
-                                        )}
-                                        {person.email && (
-                                            <a
-                                                href={`mailto:${person.email}`}
-                                                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
-                                                title="Email"
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                <Mail size={14} className="text-white" />
-                                            </a>
-                                        )}
+                                    <div className="flex gap-3 opacity-80 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 transition-transform mt-2">
+                                        <div
+                                            className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-brand-red hover:text-white transition-all cursor-pointer shadow-sm hover:shadow-md"
+                                            title="Detail"
+                                        >
+                                            <User size={14} className="text-white" />
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>
@@ -488,6 +433,12 @@ const Akademisi = ({ background }) => {
                     </div>
                 </div>
             </div>
+
+            <DetailAcademicModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                academic={selectedAcademic}
+            />
         </div>
     );
 };

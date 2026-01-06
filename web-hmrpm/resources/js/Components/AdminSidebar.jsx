@@ -76,6 +76,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
             href: "/admin/akademisi-setting",
             submenu: [
                 { name: "Hero Background", href: "/admin/akademisi-setting" },
+                { name: "Dosen & Teknisi", href: "/admin/academics" },
             ]
         },
     ];

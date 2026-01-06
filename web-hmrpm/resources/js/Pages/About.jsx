@@ -56,13 +56,6 @@ const About = ({ background, advisors = [] }) => {
             image: advisor.image,
             video: advisor.video
         };
-
-        return {
-            name: advisor.name,
-            details: details,
-            image: advisor.image,
-            video: advisor.video
-        };
     };
 
     const dynamicPembina = formatAdvisorData('pembina');
@@ -429,11 +422,11 @@ const About = ({ background, advisors = [] }) => {
                             </div>
                         </div>
 
-                        {(finalPembina || finalPendamping) && (
-                            <div className="space-y-24 items-center">
-                                {/* Pembina */}
-                                {finalPembina && (
-                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-4xl mx-auto">
+                        <div className="space-y-32 items-center">
+                            {/* Pembina Section */}
+                            <div className="max-w-4xl mx-auto w-full">
+                                {finalPembina ? (
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                                         <motion.div
                                             initial={{ opacity: 0, x: -50 }}
                                             whileInView={{ opacity: 1, x: 0 }}
@@ -505,11 +498,21 @@ const About = ({ background, advisors = [] }) => {
                                             </div>
                                         </motion.div>
                                     </div>
+                                ) : (
+                                    <div className="text-center py-16 px-8 rounded-4xl border border-dashed border-border bg-muted/5">
+                                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand-red/10 text-brand-red mb-4">
+                                            <User size={24} />
+                                        </div>
+                                        <h4 className="text-xl font-black tracking-tight text-foreground uppercase mb-2">Data Pembina</h4>
+                                        <p className="text-muted-foreground text-sm font-medium">Data pembina masih belum ada.</p>
+                                    </div>
                                 )}
+                            </div>
 
-                                {/* Pendamping */}
-                                {finalPendamping && (
-                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-4xl mx-auto">
+                            {/* Pendamping Section */}
+                            <div className="max-w-4xl mx-auto w-full">
+                                {finalPendamping ? (
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                                         <motion.div
                                             initial={{ opacity: 0, x: -50 }}
                                             whileInView={{ opacity: 1, x: 0 }}
@@ -583,9 +586,17 @@ const About = ({ background, advisors = [] }) => {
                                             </div>
                                         </motion.div>
                                     </div>
+                                ) : (
+                                    <div className="text-center py-16 px-8 rounded-4xl border border-dashed border-border bg-muted/5">
+                                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand-yellow/10 text-brand-yellow mb-4">
+                                            <User size={24} />
+                                        </div>
+                                        <h4 className="text-xl font-black tracking-tight text-foreground uppercase mb-2">Data Pendamping</h4>
+                                        <p className="text-muted-foreground text-sm font-medium">Data pendamping masih belum ada.</p>
+                                    </div>
                                 )}
                             </div>
-                        )}
+                        </div>
                     </div>
                 </section>
 

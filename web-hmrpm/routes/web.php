@@ -59,6 +59,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::delete('/blog-setting', [BlogSettingController::class, 'destroy'])->name('blog-setting.destroy');
     Route::resource('blog-types', BlogTypeController::class);
     Route::resource('blog', BlogController::class);
+    // Akademisi (Dosen & Teknisi)
+    Route::patch('academics/{academic}/toggle-active', [App\Http\Controllers\Admin\AcademicController::class, 'toggleActive'])->name('academics.toggleActive');
+    Route::resource('academics', App\Http\Controllers\Admin\AcademicController::class);
 });
 
 Route::get('/', function () {
@@ -117,7 +120,12 @@ Route::get('/blog/{blog:slug}', function (\App\Models\Blog $blog) {
 
 Route::get('/akademisi', function () {
     $background = \App\Models\AkademisiSetting::where('key', 'akademisi_hero_bg')->first();
+    $academics = \App\Models\Academic::where('is_active', true)
+        ->orderBy('name', 'asc')
+        ->get();
+
     return Inertia::render('Akademisi', [
-        'background' => $background
+        'background' => $background,
+        'academics' => $academics
     ]);
 });
