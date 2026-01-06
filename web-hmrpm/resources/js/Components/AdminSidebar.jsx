@@ -33,7 +33,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
 
     const menuItems = [
         { name: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
-        { name: "Beranda", icon: Home, href: "/admin/beranda" },
+        { name: "Beranda", icon: Home, href: "/admin/home" },
         {
             name: "About",
             icon: Info,
@@ -79,6 +79,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOp
                 { name: "Dosen & Teknisi", href: "/admin/academics" },
             ]
         },
+        { name: "Profil Saya", icon: Users, href: "/admin/profile" },
     ];
 
     const toggleSubmenu = (itemName) => {

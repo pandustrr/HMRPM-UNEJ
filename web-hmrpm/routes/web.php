@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogTypeController;
 use App\Http\Controllers\Admin\BlogSettingController;
 use App\Http\Controllers\Admin\AkademisiSettingController;
+use App\Http\Controllers\Admin\HomeSettingController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\ContactController;
@@ -23,6 +25,9 @@ Route::post('/admin/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/home', [HomeSettingController::class, 'index'])->name('home');
+    Route::post('/home', [HomeSettingController::class, 'update'])->name('home.update');
+    Route::delete('/home', [HomeSettingController::class, 'destroy'])->name('home.destroy');
     Route::get('/about', [AboutSettingController::class, 'index'])->name('about');
     Route::post('/about', [AboutSettingController::class, 'update'])->name('about.update');
     Route::delete('/about', [AboutSettingController::class, 'destroy'])->name('about.destroy');
@@ -63,10 +68,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Akademisi (Dosen & Teknisi)
     Route::patch('academics/{academic}/toggle-active', [App\Http\Controllers\Admin\AcademicController::class, 'toggleActive'])->name('academics.toggleActive');
     Route::resource('academics', App\Http\Controllers\Admin\AcademicController::class);
+
+    // Profile Management
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
 Route::get('/', function () {
-    $background = \App\Models\AboutSetting::where('key', 'about_hero_bg')->first();
+    $background = \App\Models\HomeSetting::where('key', 'home_hero_bg')->first();
     return Inertia::render('Home', [
         'background' => $background,
         'latestBlogs' => \App\Models\Blog::with('blogType')->where('is_published', true)->latest()->limit(3)->get(),
