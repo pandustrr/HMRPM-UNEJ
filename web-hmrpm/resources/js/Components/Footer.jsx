@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-import { Instagram, Mail, MapPin, Globe, ArrowUpRight } from "lucide-react";
+import { Instagram, Mail, MapPin, Globe, ArrowUpRight, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Footer = () => {
@@ -98,12 +98,16 @@ const Footer = () => {
                                 <div className="flex gap-3 items-start group cursor-crosshair">
                                     <MapPin size={18} className="text-brand-red shrink-0" />
                                     <p className="font-medium group-hover:text-foreground transition-colors leading-relaxed">
-                                        Kampus Tegalboto, Jl. Kalimantan No. 37, Jember, Jawa Timur
+                                        Jubung Lor, Jubung, Kec. Sukorambi, Kabupaten Jember, Jawa Timur 68151. Kotak Pos 159 Jember 68121
                                     </p>
                                 </div>
                                 <div className="flex gap-3 items-center group">
+                                    <Phone size={18} className="text-brand-red shrink-0" />
+                                    <p className="font-medium group-hover:text-foreground transition-colors">085194184911</p>
+                                </div>
+                                <div className="flex gap-3 items-center group">
                                     <Mail size={18} className="text-brand-red shrink-0" />
-                                    <p className="font-medium group-hover:text-foreground transition-colors">hmrpm@unej.ac.id</p>
+                                    <p className="font-medium group-hover:text-foreground transition-colors">hmrpm.teknik@unej.ac.id</p>
                                 </div>
                             </div>
                         </div>

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\BlogSettingController;
 use App\Http\Controllers\Admin\AkademisiSettingController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -67,7 +68,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 Route::get('/', function () {
     $background = \App\Models\AboutSetting::where('key', 'about_hero_bg')->first();
     return Inertia::render('Home', [
-        'background' => $background
+        'background' => $background,
+        'latestBlogs' => \App\Models\Blog::with('blogType')->where('is_published', true)->latest()->limit(3)->get(),
+        'featuredProkers' => \App\Models\ProgramKerja::latest()->limit(3)->get(),
+        'divisions' => \App\Models\Division::limit(4)->get()
     ]);
 });
 
@@ -129,3 +133,5 @@ Route::get('/akademisi', function () {
         'academics' => $academics
     ]);
 });
+
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

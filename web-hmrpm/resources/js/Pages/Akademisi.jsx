@@ -29,47 +29,7 @@ const Akademisi = ({ background, academics }) => {
     const lecturers = academics.filter(a => a.type === 'dosen');
     const technicians = academics.filter(a => a.type === 'teknisi');
 
-    const laboratories = [
-        {
-            id: 1,
-            name: "Laboratorium CAD/CAM",
-            role: "Kepala Lab: Dr. Eng. Ir. Sutrisno, M.T.",
-            image: "/storage/logo/hmrpm.png",
-            video: null,
-            details: [
-                { label: "Lokasi", value: "Gedung Laboratorium Terpadu Lt. 1", icon: MapPin },
-                { label: "Fasilitas Utama", value: "30 Workstations, CNC Simulator", icon: Zap },
-                { label: "Jenis Kegiatan", value: "Praktikum Desain & Manufaktur", icon: FlaskConical },
-                { label: "Kapasitas", value: "30 Mahasiswa", icon: User },
-            ]
-        },
-        {
-            id: 2,
-            name: "Laboratorium Material Teknik",
-            role: "Kepala Lab: Prof. Dr. Budiarto",
-            image: "/storage/logo/hmrpm.png",
-            video: null,
-            details: [
-                { label: "Lokasi", value: "Gedung Laboratorium Terpadu Lt. 2", icon: MapPin },
-                { label: "Fasilitas Utama", value: "Uji Tarik, Uji Kekerasan, Mikroskop", icon: Zap },
-                { label: "Jenis Kegiatan", value: "Pengujian Material & Metalurgi", icon: FlaskConical },
-                { label: "Kapasitas", value: "25 Mahasiswa", icon: User },
-            ]
-        },
-        {
-            id: 3,
-            name: "Laboratorium Mekatronika",
-            role: "Kepala Lab: Ir. Haryono, M.Eng.",
-            image: "/storage/logo/hmrpm.png",
-            video: null,
-            details: [
-                { label: "Lokasi", value: "Gedung Laboratorium Terpadu Lt. 3", icon: MapPin },
-                { label: "Fasilitas Utama", value: "PLC Training Kits, Robotic Arms", icon: Zap },
-                { label: "Jenis Kegiatan", value: "Otomasi Industri & Robotika", icon: FlaskConical },
-                { label: "Kapasitas", value: "20 Mahasiswa", icon: User },
-            ]
-        }
-    ];
+    const laboratories = [];
 
     return (
         <div className="bg-background min-h-screen pb-20">
@@ -317,7 +277,7 @@ const Akademisi = ({ background, academics }) => {
                     </div>
 
                     <div className="space-y-24 items-center">
-                        {laboratories.map((lab, idx) => (
+                        {laboratories.length > 0 ? laboratories.map((lab, idx) => (
                             <div key={lab.id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-5xl mx-auto">
                                 <motion.div
                                     initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
@@ -429,7 +389,11 @@ const Akademisi = ({ background, academics }) => {
                                     </div>
                                 </motion.div>
                             </div>
-                        ))}
+                        )) : (
+                            <div className="text-center py-20 border border-dashed border-border rounded-4xl bg-muted/5">
+                                <p className="text-muted-foreground font-medium italic">Masih belum ada data.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

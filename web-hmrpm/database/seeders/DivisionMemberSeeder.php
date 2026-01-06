@@ -12,7 +12,7 @@ class DivisionMemberSeeder extends Seeder
         $ph = Division::where('name', 'Pengurus Harian')->first();
         if ($ph) {
             $ph->members()->updateOrCreate(
-                ['name' => 'Antigravity'],
+                ['name' => 'Icikiwir'],
                 [
                     'role' => 'Ketua Umum HMRPM',
                     'prodi' => 'TRPM',

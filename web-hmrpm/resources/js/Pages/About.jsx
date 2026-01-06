@@ -189,16 +189,16 @@ const About = ({ background, advisors = [] }) => {
                     <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black"></div>
                 </motion.div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 flex flex-col items-center">
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-10 flex flex-col items-center">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-6 drop-shadow-xl uppercase">
+                        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tighter mb-4 drop-shadow-xl uppercase">
                             MENGENAL <span className="text-brand-yellow">HMRPM</span>
                         </h1>
-                        <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
+                        <p className="text-white/80 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
                             Membangun masa depan perancangan mekanik dengan integritas, inovasi, dan kolaborasi tanpa batas.
                         </p>
                     </motion.div>
@@ -225,7 +225,7 @@ const About = ({ background, advisors = [] }) => {
             </section>
 
             {/* Content Container */}
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-24 space-y-24 lg:space-y-36">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-28 space-y-20 lg:space-y-32">
 
                 {/* Logo Philosophy Section - Tentang Logo */}
                 <section className="relative">
@@ -233,7 +233,7 @@ const About = ({ background, advisors = [] }) => {
                     <div className="absolute -top-20 -left-20 w-64 h-64 bg-brand-red/5 rounded-full blur-3xl -z-10"></div>
                     <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-brand-yellow/5 rounded-full blur-3xl -z-10"></div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-24 items-center">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -242,14 +242,14 @@ const About = ({ background, advisors = [] }) => {
                             className="flex flex-col items-center lg:items-start text-center lg:text-left"
                         >
                             <span className="py-1 px-3 bg-brand-red/10 text-brand-red rounded-full text-[10px] font-black uppercase tracking-widest mb-4">Filosofi Eksklusif</span>
-                            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 leading-none tracking-tighter">
+                            <h3 className="text-xl sm:text-2xl lg:text-4xl font-black mb-3 leading-none tracking-tighter">
                                 Tentang <span className="text-brand-red">Logo</span>
                             </h3>
-                            <h4 className="text-lg md:text-xl font-bold text-foreground/80 mb-6">
+                            <h4 className="text-base sm:text-lg lg:text-xl font-bold text-foreground/80 mb-6">
                                 Himpunan Mahasiswa Rekayasa Perancangan Mekanik
                             </h4>
                             <div className="space-y-4">
-                                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                                <p className="text-sm sm:text-base lg:text-lg text-muted-foreground leading-relaxed">
                                     Semua yang ada di dalam logo Himpunan ini merepresentasikan sejarah terbentuknya Prodi D4 Rekayasa Perancangan Mekanik serta kondisi Mahasiswa dan logo ini dibuat sebagai identitas dari himpunan
                                 </p>
                             </div>
@@ -281,7 +281,7 @@ const About = ({ background, advisors = [] }) => {
                         <div className="mt-8 h-1 w-20 bg-linear-to-r from-brand-red to-brand-maroon rounded-full"></div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                         {logoElements.map((element, index) => (
                             <motion.div
                                 key={index}
@@ -291,17 +291,17 @@ const About = ({ background, advisors = [] }) => {
                                 transition={{ delay: index * 0.1 }}
                                 data-aos="fade-up"
                                 data-aos-delay={index * 100}
-                                className="group bg-card hover:bg-muted/30 p-6 rounded-3xl border border-border/50 hover:border-brand-red/30 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-brand-red/5 flex flex-col h-full"
+                                className="group bg-card hover:bg-muted/30 p-4 sm:p-6 rounded-3xl border border-border/50 hover:border-brand-red/30 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-brand-red/5 flex flex-col h-full"
                             >
-                                <div className="w-full aspect-square bg-brand-red/5 group-hover:bg-brand-red/10 rounded-xl flex items-center justify-center mb-6 transition-colors duration-500 overflow-hidden shrink-0">
+                                <div className="w-full aspect-square bg-brand-red/5 group-hover:bg-brand-red/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 transition-colors duration-500 overflow-hidden shrink-0">
                                     {element.image ? (
-                                        <img src={element.image} alt={element.title} className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-500" />
+                                        <img src={element.image} alt={element.title} className="w-full h-full object-contain p-3 sm:p-4 group-hover:scale-110 transition-transform duration-500" />
                                     ) : (
-                                        <div className="text-brand-red/20 font-black text-xl uppercase tracking-tighter">Placeholder</div>
+                                        <div className="text-brand-red/20 font-black text-xs sm:text-xl uppercase tracking-tighter">Placeholder</div>
                                     )}
                                 </div>
-                                <h4 className="text-lg font-bold mb-3 group-hover:text-brand-red transition-colors">{element.title}</h4>
-                                <p className="text-muted-foreground text-xs leading-relaxed outline-none grow">{element.description}</p>
+                                <h4 className="text-sm sm:text-lg font-bold mb-2 sm:mb-3 group-hover:text-brand-red transition-colors leading-tight">{element.title}</h4>
+                                <p className="text-muted-foreground text-[10px] sm:text-xs leading-relaxed outline-none grow">{element.description}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -376,7 +376,7 @@ const About = ({ background, advisors = [] }) => {
                             className="relative group lg:max-w-4xl lg:mx-auto"
                         >
                             <div className="absolute -inset-4 bg-linear-to-r from-brand-red/20 to-brand-yellow/20 rounded-4xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-                            <div className="relative bg-linear-to-br from-brand-red to-brand-maroon p-10 sm:p-16 rounded-4xl text-white shadow-xl overflow-hidden min-h-80 flex flex-col justify-center">
+                            <div className="relative bg-linear-to-br from-brand-red to-brand-maroon p-8 sm:p-12 lg:p-16 rounded-4xl text-white shadow-xl overflow-hidden min-h-64 sm:min-h-80 flex flex-col justify-center">
                                 <div className="absolute top-0 right-0 -mr-12 -mt-12 opacity-10 group-hover:scale-110 group-hover:rotate-12 transition-all duration-1000 select-none">
                                     <Target className="w-64 h-64" />
                                 </div>
@@ -481,16 +481,16 @@ const About = ({ background, advisors = [] }) => {
                                             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-red/5 border border-brand-red/10 rounded-full text-xs font-black uppercase tracking-widest text-brand-red">
                                                 Data Pembina
                                             </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                                                 {finalPembina.details.map((detail, idx) => (
-                                                    <div key={idx} className={`p-3 bg-card border border-border/50 rounded-xl hover:border-brand-red/30 transition-colors group ${detail.className || ''}`}>
-                                                        <div className="flex items-start gap-3">
-                                                            <div className="w-7 h-7 rounded-lg bg-brand-red/5 flex items-center justify-center shrink-0 group-hover:bg-brand-red group-hover:text-white transition-all">
-                                                                <detail.icon className="w-3.5 h-3.5" />
+                                                    <div key={idx} className={`p-2.5 sm:p-3 bg-card border border-border/50 rounded-xl hover:border-brand-red/30 transition-colors group ${detail.className || ''}`}>
+                                                        <div className="flex items-start gap-2.5 sm:gap-3">
+                                                            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-brand-red/5 flex items-center justify-center shrink-0 group-hover:bg-brand-red group-hover:text-white transition-all">
+                                                                <detail.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                                                             </div>
                                                             <div className="min-w-0">
-                                                                <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
-                                                                <p className={`text-xs font-bold text-foreground leading-tight wrap-break-word ${detail.valueClassName || ''}`} title={detail.value}>{detail.value}</p>
+                                                                <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
+                                                                <p className={`text-[11px] sm:text-xs font-bold text-foreground leading-tight wrap-break-word ${detail.valueClassName || ''}`} title={detail.value}>{detail.value}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -524,16 +524,16 @@ const About = ({ background, advisors = [] }) => {
                                                     Data Pendamping
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                                                 {finalPendamping.details.map((detail, idx) => (
-                                                    <div key={idx} className={`p-3 bg-card border border-border/50 rounded-xl hover:border-brand-yellow/30 transition-colors group ${detail.className || ''}`}>
-                                                        <div className="flex items-start gap-3">
-                                                            <div className="w-7 h-7 rounded-lg bg-brand-yellow/5 flex items-center justify-center shrink-0 group-hover:bg-brand-yellow group-hover:text-black transition-all">
-                                                                <detail.icon className="w-3.5 h-3.5" />
+                                                    <div key={idx} className={`p-2.5 sm:p-3 bg-card border border-border/50 rounded-xl hover:border-brand-yellow/30 transition-colors group ${detail.className || ''}`}>
+                                                        <div className="flex items-start gap-2.5 sm:gap-3">
+                                                            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-brand-yellow/5 flex items-center justify-center shrink-0 group-hover:bg-brand-yellow group-hover:text-black transition-all">
+                                                                <detail.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                                                             </div>
                                                             <div className="min-w-0">
-                                                                <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
-                                                                <p className={`text-xs font-bold text-foreground leading-tight wrap-break-word ${detail.valueClassName || ''}`} title={detail.value}>{detail.value}</p>
+                                                                <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">{detail.label}</p>
+                                                                <p className={`text-[11px] sm:text-xs font-bold text-foreground leading-tight wrap-break-word ${detail.valueClassName || ''}`} title={detail.value}>{detail.value}</p>
                                                             </div>
                                                         </div>
                                                     </div>
