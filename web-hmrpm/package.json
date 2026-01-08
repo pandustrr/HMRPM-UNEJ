@@ -1,0 +1,31 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@inertiajs/react": "^2.3.4",
+        "@tailwindcss/typography": "^0.5.19",
+        "@tailwindcss/vite": "^4.1.18",
+        "@vitejs/plugin-react": "^5.1.2",
+        "axios": "^1.6.4",
+        "laravel-vite-plugin": "^1.0",
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3",
+        "tailwindcss": "^4.1.18",
+        "vite": "^5.0"
+    },
+    "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+        "@ckeditor/ckeditor5-react": "^9.5.0",
+        "aos": "^2.3.4",
+        "clsx": "^2.1.1",
+        "framer-motion": "^12.23.26",
+        "lucide-react": "^0.562.0",
+        "react-advanced-cropper": "^0.20.1",
+        "react-easy-crop": "^5.5.6",
+        "tailwind-merge": "^3.4.0"
+    }
+}
