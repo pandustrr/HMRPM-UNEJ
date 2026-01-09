@@ -1,121 +1,136 @@
-# Panduan Deployment HMRPM UNEJ ke Arenhost (cPanel)
+# Panduan Deployment Manual HMRPM UNEJ (Tanpa Terminal)
 
-Panduan ini dibuat khusus untuk struktur project Anda (Laravel 11 + React Inertia) agar bisa berjalan di shared hosting cPanel.
+Panduan ini disesuaikan untuk hosting **Arenhost cPanel** dengan struktur folder: `/home/hmrpmune/repositories/hmrpm/web-hmrpm`.
 
-## 1. Persiapan di Komputer Lokal (Wajib)
+## 1. Persiapan di Laptop (Wajib)
 
-Karena di hosting cPanel (Shared) kita seringkali tidak bisa menjalankan `npm install` atau `npm run build`, kita harus melakukannya di lokal.
+Lakukan ini di komputer Anda sebelum upload.
 
-1.  **Matikan server lokal sementara** (Ctrl+C di terminal yang menjalankan `npm run dev`).
-2.  **Build Aset Frontend**:
-    Jalankan perintah ini di terminal VS Code:
+1.  **Build Frontend**:
     ```bash
     npm run build
     ```
-    _Tunggu sampai selesai. Ini akan membuat folder `public/build`._
-3.  **Upload ke GitHub**:
-    Saya sudah mengatur agar folder hasil build ini bisa di-upload.
-    ```bash
-    git add .
-    git commit -m "Persiapan deploy: build production assets"
-    git push origin main
-    ```
-
----
-
-## 2. Persiapan di cPanel (Arenhost)
-
-### Langkah A: Setup Database
-
-1.  Login ke cPanel.
-2.  Buka menu **MySQL ® Database Wizard**.
-3.  **Step 1**: Buat Database (contoh: `hmrpmune_db`).
-4.  **Step 2**: Buat User Database (contoh: `hmrpmune_user`) dan password yang kuat. **Catat password ini!**
-5.  **Step 3**: Centang **ALL PRIVILEGES** lalu klik Next/Make Changes.
-
-### Langkah B: Upload File Project
-
-Ada 2 cara, pilih salah satu:
-
-**Cara 1: Via Git Version Control (Direkomendasikan)**
-
-1.  Di cPanel, buka menu **Git™ Version Control**.
-2.  Klik **Create**.
-3.  **Clone URL**: `https://github.com/pandustrr/HMRPM-UNEJ.git`
-4.  **Repository Path**: Masukkan path folder baru, misal: `repositories/hmrpm` (Jangan arahkan langsung ke `public_html` agar lebih aman).
-5.  Klik **Create**.
-
-**Cara 2: Upload Manual (File Manager)**
-
-1.  Zip folder project Anda di komputer (kecuali `node_modules`).
-2.  Di cPanel **File Manager**, upload zip ke folder pilihan (misal `repositories/hmrpm`).
-3.  Extract file tersebut.
-
-### Langkah C: Install Dependencies (PHP)
-
-1.  Di cPanel, cari menu **Terminal** (jika ada).
-2.  Masuk ke folder project: `cd repositories/hmrpm/web-hmrpm` (sesuaikan struktur folder repo Anda).
-3.  Jalankan:
+2.  **Install Dependencies**:
     ```bash
     composer install --optimize-autoloader --no-dev
-    cp .env.example .env
-    php artisan key:generate
     ```
+    _Ini akan membuat folder `vendor` yang **WAJIB** ada._
+3.  **Export Database**:
+    Export database lokal Anda menjadi file `.sql`.
+
+
+## 2. Upload ke cPanel
+
+### A. Upload File
+
+1.  Zip seluruh folder project Anda (termasuk folder `vendor` dan `public/build`).
+    -   **PENTING**: Folder `node_modules` **JANGAN** di-upload.
+2.  Upload ke **File Manager** cPanel di: `/home/hmrpmune/repositories/hmrpm/`.
+3.  Extract file tersebut.
+4.  **CHECKLIST**: Pastikan struktur file Anda seperti ini:
+    -   `/home/hmrpmune/repositories/hmrpm/web-hmrpm/app`
+    -   `/home/hmrpmune/repositories/hmrpm/web-hmrpm/public`
+    -   `/home/hmrpmune/repositories/hmrpm/web-hmrpm/vendor` (**WAJIB ADA**)
+    -   `/home/hmrpmune/repositories/hmrpm/web-hmrpm/.env`
+
+### B. Setup Database
+
+1.  Buat Database & User di **MySQL Database Wizard**.
+2.  Import file `.sql` Anda di **phpMyAdmin**.
+
+### C. Konfigurasi .env
+
+Edit file `/home/hmrpmune/repositories/hmrpm/web-hmrpm/.env`:
+
+```env
+APP_NAME="HMRPM UNEJ"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://hmrpmunej.id
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=hmrpmune_nama_db_anda
+DB_USERNAME=hmrpmune_user_db_anda
+DB_PASSWORD=password_db_anda
+```
 
 ---
 
-## 3. Konfigurasi Akhir
+## 3. Menghubungkan Domain & Storage
 
-### Setting .env
+### A. Symlink Storage (Wajib agar gambar muncul)
 
-1.  Buka **File Manager**, masuk ke folder project Anda.
-2.  Edit file `.env` (klik kanan -> Edit).
-3.  Sesuaikan isinya:
+1.  Masuk ke folder `public`: `/home/hmrpmune/repositories/hmrpm/web-hmrpm/public`.
+2.  Buat file baru: `link.php`.
+3.  Isi kode berikut:
 
-    ```env
-    APP_NAME="HMRPM UNEJ"
-    APP_ENV=production
-    APP_DEBUG=false
-    APP_URL=https://hmrpmunej.id
+    ```php
+<?php
+$target = '/home/hmrpmune/repositories/hmrpm/web-hmrpm/storage/app/public';
+$shortcut = '/home/hmrpmune/repositories/hmrpm/web-hmrpm/public/storage';
 
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=hmrpmune_db (sesuaikan nama dari Langkah A)
-    DB_USERNAME=hmrpmune_user (sesuaikan nama user dari Langkah A)
-    DB_PASSWORD=password_anda
+if(file_exists($shortcut)){
+    echo "Shortcut sudah ada. Hapus dulu folder 'storage' di dalam public jika ingin buat ulang.";
+} else if(symlink($target, $shortcut)){
+    echo "<h1>SUKSES!</h1> Storage Link berhasil dibuat.";
+} else {
+    echo "<h1>GAGAL</h1> Cek path folder.";
+}
+?>
     ```
 
-4.  Simpan.
+4.  (Nanti jalankan ini setelah Langkah B).
 
-### Menghubungkan Domain ke Folder Public
+### B. Menghubungkan ke Public HTML (Agar web bisa diakses)
 
-Agar website bisa diakses, kita perlu mengarahkan domain ke folder `public` di dalam project Laravel.
+Karena file project Anda ada di folder rahasia (`repositories`), kita harus "memancingnya" dari `public_html`.
 
-**Metode Symlink (Paling Rapi)**:
-Jika Anda menaruh project di `repositories/hmrpm/web-hmrpm`, tapi domain Anda mengarah ke `public_html`:
+1.  Masuk ke folder **`public_html`** (folder utama website).
+2.  Hapus file `index.php` bawaan (jika ada).
+3.  Buat file **`index.php`** baru di situ.
+4.  Isi dengan kode ini:
 
-1.  Hapus folder `public_html` (atau isinya) jika kosong.
-2.  Buka **Terminal** cPanel.
-3.  Jalankan perintah symlink:
-    ```bash
-    ln -s /home/hmrpmune/repositories/hmrpm/web-hmrpm/public /home/hmrpmune/public_html
+    ```php
+    <?php
+
+    use Illuminate\Http\Request;
+
+    define('LARAVEL_START', microtime(true));
+
+    // Arahkan ke maintenance mode jika ada
+    if (file_exists($maintenance = __DIR__.'/../repositories/hmrpm/web-hmrpm/storage/framework/maintenance.php')) {
+        require $maintenance;
+    }
+
+    // Load Composer Autoload (Arahkan ke folder repositories)
+    require __DIR__.'/../repositories/hmrpm/web-hmrpm/vendor/autoload.php';
+
+    // Load App Bootstrap
+    $app = require_once __DIR__.'/../repositories/hmrpm/web-hmrpm/bootstrap/app.php';
+
+    $app->handleRequest(Request::capture());
     ```
-    _(Ganti `/home/hmrpmune` dengan path home direktori hosting Anda yang sebenarnya. Bisa dilihat di File Manager sebelah kiri)._
 
-**Metode Alternatif (Copy Index - Tidak Disarankan tapi Mudah)**:
-Jika tidak bisa symlink, Anda bisa memindahkan **ISI** folder `public` ke `public_html`, lalu edit `index.php` untuk memperbaiki path `require` ke `vendor/autoload.php` dll.
+5.  **Copy** juga file `.htaccess` dan `favicon.ico` dan folder `build` (dari `web-hmrpm/public`) ke dalam `public_html` agar aset terbaca.
 
-### Langkah Terakhir: Migrasi Database & Storage
+    -   **Alternatif Lebih Mudah (Symlink Folder Public)**:
+        Jika Anda bingung cara copy-copy diatas, cara paling bersih adalah membuat symlink folder public ke public_html (tapi butuh script PHP lain).
+        Karena Anda pemula, saya sarankan:
+        1.  Hapus `public_html` (folder kosong).
+        2.  Buat script `symlink_public.php` di folder root (`/home/hmrpmune/`).
+        3.  Isi: `<?php symlink('/home/hmrpmune/repositories/hmrpm/web-hmrpm/public', '/home/hmrpmune/public_html'); ?>`
+        4.  Akses file itu (agak tricky karena belum ada domain yang connect).
 
-Di Terminal cPanel:
+    **Saran Terbaik (Copy Paste Isi Public)**:
 
-```bash
-php artisan migrate --force
-php artisan storage:link
-```
+    1.  Buka folder `/home/hmrpmune/repositories/hmrpm/web-hmrpm/public`.
+    2.  **Select All** -> **Copy**.
+    3.  Tujuan Copy: `/public_html`.
+    4.  Lalu Edit `/public_html/index.php` sesuaikan path `require` seperti kode di langkah 4 di atas.
 
-## Troubleshooting
+### C. Finalisasi
 
--   **Error 500 / Blank**: Cek permission folder `storage`. Klik kanan folder `storage` -> Change Permissions -> set ke **775**.
--   **Vite Manifest not found**: Pastikan langkah **1. Persiapan Lokal** sudah dilakukan dan folder `public/build` ada di server.
+1.  Buka browser: `https://hmrpmunej.id/link.php`. Jika sukses ("SUKSES!"), selamat!
+2.  Hapus file `link.php` demi keamanan.
