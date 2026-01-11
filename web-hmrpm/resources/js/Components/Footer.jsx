@@ -31,7 +31,7 @@ const Footer = () => {
 
                         <div className="flex gap-4">
                             {[
-                                { icon: Instagram, href: "https://instagram.com/hmrpm_unej", label: "Instagram" },
+                                { icon: Instagram, href: "https://www.instagram.com/hmrpm.unej/", label: "Instagram" },
                                 { icon: Globe, href: "#", label: "Website" },
                                 { icon: Mail, href: "mailto:info@hmrpm.unej.ac.id", label: "Email" }
                             ].map((social, idx) => (
@@ -115,18 +115,9 @@ const Footer = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-border/50 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
-                    <p className="text-center md:text-left">
+                <div className="border-t border-border/50 pt-10 flex flex-col md:flex-row justify-center items-center gap-6 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                    <p className="text-center">
                         &copy; {currentYear} HMRPM Universitas Jember. <span className="text-brand-red/40 px-2">|</span> <span className="hover:text-foreground transition-colors cursor-pointer">Privacy Policy</span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                        Designed with
-                        <motion.span
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ repeat: Infinity, duration: 1.5 }}
-                            className="text-brand-red"
-                        >❤</motion.span>
-                        by Engineering Team
                     </p>
                 </div>
             </div>

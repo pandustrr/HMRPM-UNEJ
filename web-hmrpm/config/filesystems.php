@@ -36,10 +36,20 @@ return [
             'throw' => false,
         ],
 
+
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'root' => env('PUBLIC_HTML_PATH', storage_path('app/public')),
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        // DISK BARU KHUSUS CPANEL (Direct to public_html)
+        'cpanel_public' => [
+            'driver' => 'local',
+            'root' => '/home/hmrpmune/public_html/storage', // Path Absolut Hosting
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],

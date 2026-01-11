@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage, router } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { ArrowLeft, Save, Upload, X, FileText, Calendar, Tag } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -7,17 +7,64 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default function Create({ blogTypes }) {
+    const { url } = usePage();
     const { data, setData, post, processing, errors } = useForm({
         blog_type_id: '',
         title: '',
+        slug: '',
         date: new Date().toISOString().split('T')[0],
         image: null,
         content: '',
         excerpt: '',
+        excerpt: '',
         is_published: true,
+        _query_params: '',
     });
 
     const [preview, setPreview] = useState(null);
+
+    // Pre-select blog type dari URL params filter
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const typesParam = params.get('types');
+
+        // Set query params for redirection after submit
+        setData(data => ({
+            ...data,
+            _query_params: window.location.search
+        }));
+
+        if (typesParam) {
+            // Jika ada filter type, ambil yang pertama
+            const typeId = parseInt(typesParam.split(',')[0]);
+            if (!isNaN(typeId)) {
+                setData(data => ({
+                    ...data,
+                    blog_type_id: typeId.toString(),
+                    _query_params: window.location.search // Redundant but safe
+                }));
+            }
+        }
+    }, []);
+
+    // Auto-generate slug from title
+    const generateSlug = (title) => {
+        return title
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    };
+
+    const handleTitleChange = (e) => {
+        const newTitle = e.target.value;
+        setData('title', newTitle);
+        // Auto-generate slug if it's empty or was previously auto-generated
+        if (!data.slug || data.slug === generateSlug(data.title)) {
+            setData('slug', generateSlug(newTitle));
+        }
+    };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -40,7 +87,7 @@ export default function Create({ blogTypes }) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <Link
-                            href="/admin/blog"
+                            href={`/admin/blog${window.location.search}`}
                             className="p-2 bg-white border border-border rounded-xl hover:bg-muted transition-colors"
                         >
                             <ArrowLeft size={20} />
@@ -62,11 +109,24 @@ export default function Create({ blogTypes }) {
                                 <input
                                     type="text"
                                     value={data.title}
-                                    onChange={e => setData('title', e.target.value)}
+                                    onChange={handleTitleChange}
                                     placeholder="Masukkan judul blog..."
                                     className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all font-bold text-lg"
                                 />
                                 {errors.title && <p className="text-brand-red text-[10px] font-bold mt-1">{errors.title}</p>}
+                            </div>
+
+                            {/* Slug */}
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">URL Slug</label>
+                                <input
+                                    type="text"
+                                    value={data.slug}
+                                    onChange={e => setData('slug', e.target.value)}
+                                    placeholder="Otomatis dihasilkan dari judul..."
+                                    className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 transition-all font-medium text-sm"
+                                />
+                                {errors.slug && <p className="text-brand-red text-[10px] font-bold mt-1">{errors.slug}</p>}
                             </div>
 
                             {/* CKEditor Content */}

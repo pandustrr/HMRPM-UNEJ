@@ -1,14 +1,57 @@
-import { Head, Link, router, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Plus, Edit, Trash2, FileText, Calendar, Tag, ExternalLink, X, Save } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import ConfirmModal from "@/Components/ConfirmModal";
 
 export default function Index({ blogs, blogTypes }) {
-    const [activeTab, setActiveTab] = useState('types');
+    const { url } = usePage();
+    const [activeTab, setActiveTab] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('tab') || (params.has('types') ? 'blogs' : 'types');
+    });
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [blogToDelete, setBlogToDelete] = useState(null);
+    const [selectedBlogTypes, setSelectedBlogTypes] = useState([]);
+
+    const updateUrl = (newParams) => {
+        const search = newParams.toString();
+        const newUrl = search ? `${window.location.pathname}?${search}` : window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+    };
+
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+        const params = new URLSearchParams(window.location.search);
+        params.set('tab', tab);
+        updateUrl(params);
+    };
+
+    // Initialize filter dari URL query params
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const typesParam = params.get('types');
+        if (typesParam) {
+            setSelectedBlogTypes(typesParam.split(',').map(Number));
+        }
+    }, []);
+
+    // Update URL ketika filter berubah
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (selectedBlogTypes.length > 0) {
+            params.set('types', selectedBlogTypes.join(','));
+            // Auto switch to blogs tab if filtering
+            if (activeTab !== 'blogs') {
+                setActiveTab('blogs');
+                params.set('tab', 'blogs');
+            }
+        } else {
+            params.delete('types');
+        }
+        updateUrl(params);
+    }, [selectedBlogTypes]);
 
     // Blog Type Logic
     const [showTypeModal, setShowTypeModal] = useState(false);
@@ -19,6 +62,20 @@ export default function Index({ blogs, blogTypes }) {
     const { data: typeData, setData: setTypeData, post: postType, put: putType, processing: processingType, reset: resetType, errors: typeErrors } = useForm({
         name: '',
     });
+
+    // Toggle filter blog type (single select)
+    const toggleBlogTypeFilter = (typeId) => {
+        setSelectedBlogTypes(prev =>
+            prev.includes(typeId)
+                ? [] // Jika sudah aktif, deselect
+                : [typeId] // Jika belum aktif, set sebagai satu-satunya yang aktif
+        );
+    };
+
+    // Filter blogs berdasarkan selected types
+    const filteredBlogs = selectedBlogTypes.length > 0
+        ? blogs.filter(blog => selectedBlogTypes.includes(blog.blog_type_id))
+        : blogs;
 
     const handleOpenTypeModal = (type = null) => {
         if (type) {
@@ -70,6 +127,18 @@ export default function Index({ blogs, blogTypes }) {
         setShowDeleteModal(true);
     };
 
+    // Generate current URL Params from state
+    const getCurrentParams = () => {
+        const params = new URLSearchParams();
+        if (selectedBlogTypes.length > 0) {
+            params.set('types', selectedBlogTypes.join(','));
+        }
+        if (activeTab) {
+            params.set('tab', activeTab);
+        }
+        return params.toString() ? `?${params.toString()}` : '';
+    };
+
     const confirmDelete = () => {
         router.delete(`/admin/blog/${blogToDelete.id}`, {
             onSuccess: () => {
@@ -99,7 +168,7 @@ export default function Index({ blogs, blogTypes }) {
                         </button>
                     ) : (
                         <Link
-                            href="/admin/blog/create"
+                            href={`/admin/blog/create${getCurrentParams()}`}
                             className="flex items-center gap-2 bg-brand-red text-white px-4 py-2.5 rounded-xl font-bold hover:bg-brand-red/90 transition-all shadow-lg shadow-brand-red/20"
                         >
                             <Plus size={18} />
@@ -111,7 +180,7 @@ export default function Index({ blogs, blogTypes }) {
                 {/* Tabs */}
                 <div className="flex p-1 gap-1 bg-muted/30 rounded-2xl w-fit border border-border mx-auto">
                     <button
-                        onClick={() => setActiveTab('types')}
+                        onClick={() => handleTabChange('types')}
                         className={cn(
                             "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
                             activeTab === 'types' ? "bg-white shadow-sm text-brand-red" : "text-muted-foreground hover:bg-muted"
@@ -120,7 +189,7 @@ export default function Index({ blogs, blogTypes }) {
                         TIPE BLOG
                     </button>
                     <button
-                        onClick={() => setActiveTab('blogs')}
+                        onClick={() => handleTabChange('blogs')}
                         className={cn(
                             "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
                             activeTab === 'blogs' ? "bg-white shadow-sm text-brand-red" : "text-muted-foreground hover:bg-muted"
@@ -183,6 +252,45 @@ export default function Index({ blogs, blogTypes }) {
                     </div>
                 ) : (
                     <div className="bg-white rounded-3xl border border-border shadow-sm overflow-hidden">
+                        {/* Filter Blog Type */}
+                        <div className="px-6 py-5 border-b border-border bg-muted/30">
+                            <div className="space-y-3">
+                                <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Filter Tipe Blog</p>
+                                <div className="flex flex-wrap gap-2">
+                                    <button
+                                        onClick={() => setSelectedBlogTypes([])}
+                                        className={cn(
+                                            "px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all border",
+                                            selectedBlogTypes.length === 0
+                                                ? "bg-brand-red text-white border-brand-red shadow-md shadow-brand-red/30"
+                                                : "bg-white text-foreground border-border hover:border-brand-red/50 hover:bg-muted/50"
+                                        )}
+                                    >
+                                        Semua
+                                    </button>
+                                    {blogTypes.length > 0 ? (
+                                        blogTypes.map(type => (
+                                            <button
+                                                key={type.id}
+                                                onClick={() => toggleBlogTypeFilter(type.id)}
+                                                className={cn(
+                                                    "px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all border",
+                                                    selectedBlogTypes.includes(type.id)
+                                                        ? "bg-brand-red text-white border-brand-red shadow-md shadow-brand-red/30"
+                                                        : "bg-white text-foreground border-border hover:border-brand-red/50 hover:bg-muted/50"
+                                                )}
+                                            >
+                                                {type.name}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <p className="text-[10px] text-muted-foreground italic">Belum ada tipe blog</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Blog Table */}
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-muted/50 border-b border-border">
@@ -193,8 +301,8 @@ export default function Index({ blogs, blogTypes }) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
-                                {blogs.length > 0 ? (
-                                    blogs.map((blog) => (
+                                {filteredBlogs.length > 0 ? (
+                                    filteredBlogs.map((blog) => (
                                         <tr key={blog.id} className="hover:bg-muted/30 transition-colors group">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-4">
@@ -243,7 +351,7 @@ export default function Index({ blogs, blogTypes }) {
                                                         <ExternalLink size={16} />
                                                     </a>
                                                     <Link
-                                                        href={`/admin/blog/${blog.id}/edit`}
+                                                        href={`/admin/blog/${blog.id}/edit${getCurrentParams()}`}
                                                         className="p-2 flex items-center justify-center bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
                                                         title="Edit"
                                                     >
@@ -263,7 +371,9 @@ export default function Index({ blogs, blogTypes }) {
                                 ) : (
                                     <tr>
                                         <td colSpan="4" className="px-6 py-12 text-center text-muted-foreground italic">
-                                            Belum ada postingan blog.
+                                            {selectedBlogTypes.length > 0
+                                                ? 'Tidak ada postingan blog dengan tipe yang dipilih.'
+                                                : 'Belum ada postingan blog.'}
                                         </td>
                                     </tr>
                                 )}

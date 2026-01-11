@@ -25,7 +25,7 @@ const Home = ({ background, latestBlogs = [], featuredProkers = [], divisions = 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('contact.store'), {
+        post('/contact', {
             preserveScroll: true,
             onSuccess: () => reset(),
         });
