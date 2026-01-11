@@ -26,6 +26,15 @@ class DatabaseSeeder extends Seeder
             InitialDataSeeder::class,
             DivisionSeeder::class,
             DivisionMemberSeeder::class,
+            AdvisorSeeder::class,
+            ProgramKerjaSeeder::class,
+            ProkerSettingSeeder::class,
+            BlogTypeSeeder::class,
+            BlogSeeder::class,
+            BlogSettingSeeder::class,
+            AcademicSeeder::class,
+            AkademisiSettingSeeder::class,
+            HomeSettingSeeder::class,
         ]);
     }
 }

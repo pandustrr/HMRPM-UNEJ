@@ -55,7 +55,8 @@ class BlogController extends Controller
             'is_published' => $request->is_published ?? true,
         ]);
 
-        return redirect()->route('admin.blog.index')->with('success', 'Blog berhasil ditambahkan');
+        $queryParams = $request->input('_query_params', '');
+        return redirect('admin/blog' . $queryParams)->with('success', 'Blog berhasil ditambahkan');
     }
 
     public function edit(Blog $blog)
@@ -99,7 +100,8 @@ class BlogController extends Controller
             'is_published' => $request->is_published ?? true,
         ]);
 
-        return redirect()->route('admin.blog.index')->with('success', 'Blog berhasil diperbarui');
+        $queryParams = $request->input('_query_params', '');
+        return redirect('admin/blog' . $queryParams)->with('success', 'Blog berhasil diperbarui');
     }
 
     public function destroy(Blog $blog)

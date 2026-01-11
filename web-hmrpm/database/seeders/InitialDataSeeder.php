@@ -39,7 +39,7 @@ class InitialDataSeeder extends Seeder
                 'image' => 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800',
                 'color' => 'from-brand-red to-brand-maroon',
                 'members' => [
-                    ['name' => 'Antigravity', 'role' => 'Ketua Umum HMRPM 2024', 'prodi' => 'TRPM', 'angkatan' => '22', 'photo' => '/storage/logo/hmrpm.png', 'video' => 'https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4'],
+                    ['name' => 'Icikiriwr', 'role' => 'Ketua Umum HMRPM 2024', 'prodi' => 'TRPM', 'angkatan' => '22', 'photo' => '/storage/logo/hmrpm.png', 'video' => 'https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4'],
                     ['name' => 'Fulan bin Fulan', 'role' => 'Wakil Ketua Umum', 'prodi' => 'TRPM', 'angkatan' => '22', 'photo' => '/storage/logo/hmrpm.png', 'video' => null],
                     ['name' => 'Fulanah binti Fulan', 'role' => 'Sekretaris Umum', 'prodi' => 'TRPM', 'angkatan' => '23', 'photo' => '/storage/logo/hmrpm.png', 'video' => null],
                     ['name' => 'Fulanah binti Fulan', 'role' => 'Bendahara Umum', 'prodi' => 'TRPM', 'angkatan' => '23', 'photo' => '/storage/logo/hmrpm.png', 'video' => null],
